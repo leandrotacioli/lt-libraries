@@ -49,7 +49,7 @@ import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
  * Cria uma extensão de <i>AbstractTableModel</i>.
  * 
  * @author Leandro Tacioli
- * @version 4.0 - 11/Jul/2016
+ * @version 5.0 - 05/Out/2017
  */
 public class Table extends AbstractTableModel implements TableInterface, ActionListener {	
 	private static final long serialVersionUID = 755268795533847516L;
@@ -175,20 +175,25 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		objTable.getTableHeader().setFont(LTParameters.getInstance().getFontTableHeader());
 		objTable.putClientProperty("terminateEditOnFocusLost", Boolean.TRUE);
 		
-		objTable.getTableHeader().addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		    	int intIndexColumn = objTable.getTableHeader().columnAtPoint(e.getPoint());
-		    	intIndexColumn = objTable.convertColumnIndexToModel(intIndexColumn);
-		        
-		    	ArrayList<SortKey> sortKeys = new ArrayList<>(objTable.getRowSorter().getSortKeys());
-		    	
-		        if (sorter != null) {
-		        	sorter.setSortKeys(sortKeys);
-		        	sorter.sort();
-		        }
-		    }
-		});
+		// Configura ordenação da LTTable
+		setAllowSortedRows(blnAllowSortedRows);
+		
+		if (blnAllowSortedRows) {
+			objTable.getTableHeader().addMouseListener(new MouseAdapter() {
+			    @Override
+			    public void mouseClicked(MouseEvent e) {
+			    	int intIndexColumn = objTable.getTableHeader().columnAtPoint(e.getPoint());
+			    	intIndexColumn = objTable.convertColumnIndexToModel(intIndexColumn);
+			        
+			    	ArrayList<SortKey> sortKeys = new ArrayList<>(objTable.getRowSorter().getSortKeys());
+			    	
+			        if (sorter != null) {
+			        	sorter.setSortKeys(sortKeys);
+			        	sorter.sort();
+			        }
+			    }
+			});
+		}
 		
 		// Irá alterar o foco da célula quando uma tecla específica for pressionada
 		objTable.addKeyListener(new KeyListener() {
@@ -575,8 +580,10 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	@Override
 	public void addRow() {
-		sorter = new TableRowSorter<>(objTable.getModel());
-		objTable.setRowSorter(sorter);
+		if (blnAllowSortedRows) {
+			sorter = new TableRowSorter<>(objTable.getModel());
+			objTable.setRowSorter(sorter);
+		}
 		
 		lstColumnModel.add(new TableColumnModel(getColumnCount()));
 		
@@ -792,28 +799,30 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	@Override
 	public void orderColumnData(String strColumnName, boolean blnAscending) {
-		int intColumnIndex = 0;
-		
-		for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
-			if (lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
-				intColumnIndex = indexColumn;
-				break;
+		if (blnAllowSortedRows) {
+			int intColumnIndex = 0;
+			
+			for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
+				if (lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
+					intColumnIndex = indexColumn;
+					break;
+				}
 			}
+			
+			sorter = new TableRowSorter<>(objTable.getModel());
+			objTable.setRowSorter(sorter);
+			
+			List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+			
+			if (blnAscending) {
+				sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.ASCENDING));
+			} else {
+				sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.DESCENDING));
+			}
+			
+			sorter.setSortKeys(sortKeys);
+			sorter.sort();
 		}
-		
-		sorter = new TableRowSorter<>(objTable.getModel());
-		objTable.setRowSorter(sorter);
-		
-		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-		
-		if (blnAscending) {
-			sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.ASCENDING));
-		} else {
-			sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.DESCENDING));
-		}
-		
-		sorter.setSortKeys(sortKeys);
-		sorter.sort();
 	}
 	
 	@Override
@@ -970,7 +979,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 					updateCellValue(objValue, intRowIndex, intColumnIndex);
 				}
 		
-			} 
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -1066,7 +1076,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     	this.blnAllowSortedRows = blnAllowSortedRows;
     	
     	if (objTable != null) {
-	    	TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(objTable.getModel()) {
+	    	sorter = new TableRowSorter<TableModel>(objTable.getModel()) {
 	    	    @Override
 	    	    public boolean isSortable(int intColumn) {
 	    	    	return blnAllowSortedRows;

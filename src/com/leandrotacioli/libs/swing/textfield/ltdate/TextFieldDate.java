@@ -12,7 +12,7 @@ import com.leandrotacioli.libs.swing.textfield.ltstring.TextFieldStringDocument;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 07/Abr/2015
+ * @version 1.1 - 28/Dez/2018
  */
 public class TextFieldDate extends JFormattedTextField {
 	private static final long serialVersionUID = -2593674760196876116L;
@@ -60,7 +60,7 @@ public class TextFieldDate extends JFormattedTextField {
 		} else {
 			// Se o formato padrão da data for "dd/MM/yyyy"
 			if (objValue.toString().substring(2, 3).equals("/") && objValue.toString().substring(5, 6).equals("/")) {
-				//setDateFormat();
+				setDateFormat();
 				strDate = (String) objValue;
 				
 			// Se o formato padrão da data for "yyyy-MM-dd" (armazenado no banco de dados)

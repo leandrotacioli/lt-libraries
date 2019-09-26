@@ -227,12 +227,30 @@ public class LTTable extends JScrollPane implements TableInterface {
 	}
 	
 	/**
-	 * Retorna a linhas selecionadas na LTTable.
+	 * Retorna as linhas selecionadas na LTTable.
 	 * 
 	 * @return selectedRows
 	 */
 	public int[] getSelectedRows() {
 		return objTable.getSelectedRows();
+	}
+	
+	/**
+	 * Retorna a coluna selecionada na LTTable.
+	 * 
+	 * @return intSelectedColumn
+	 */
+	public int getSelectedColumn() {
+		return objTable.getSelectedColumn();
+	}
+	
+	/**
+	 * Retorna as colunas selecionadas na LTTable.
+	 * 
+	 * @return selectedColumns
+	 */
+	public int[] getSelectedColumns() {
+		return objTable.getSelectedColumns();
 	}
 	
 	/**
@@ -365,6 +383,15 @@ public class LTTable extends JScrollPane implements TableInterface {
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits) {
 		objTable.setColumnDoubleFractionDigits(strColumnName, intColumnDoubleFractionDigits);
 	}
+	
+	/**
+	 * Permite a remoção de linhas.
+	 * 
+	 * @param blnAllowDeleteRow
+	 */
+    public void setAllowDeleteRow(boolean blnAllowDeleteRow) {
+    	objTable.setAllowDeleteRow(blnAllowDeleteRow);
+    }
 	
 	/**
 	 * Permite a ordenação das linhas.

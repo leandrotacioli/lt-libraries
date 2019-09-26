@@ -15,6 +15,7 @@ import com.leandrotacioli.libs.swing.textfield.LTTextField;
 import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 import java.awt.event.ActionListener;
@@ -81,7 +82,7 @@ public class LTLibraries implements TableListener {
 	 * Initialize the contents of the frame.
 	 */
 	private void initialize() {
-		frame = new JFrame();
+		frame = new JFrame("LT Libraries");
 		frame.setBounds(100, 100, 1000, 600);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(new MigLayout("", "[grow]", "[grow]"));
@@ -187,6 +188,8 @@ public class LTLibraries implements TableListener {
 					
 					System.out.println("");
 				}
+				
+				//objTable.setEnabled(false);
 			}
 		});
 		
@@ -194,14 +197,29 @@ public class LTLibraries implements TableListener {
 		btnNewButton2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent event) {
 				txtInteger.setValue(Integer.MAX_VALUE - 200);
+				txtInteger.setLabel("Integer 2:");
+				
 				txtLong.setValue(Long.MAX_VALUE - 150);
+				txtLong.setLabel("Long 2:");
+				
 				txtDouble.setValue(12.23);
 				txtDouble.setFractionDigits(6);
+				txtDouble.setLabel("Double 2:");
+				
 				txtDate.setValue("05/05/2015");
+				txtDate.setLabel("Date 2:");
+				
 				txtString.setValue("String Alterado");
+				txtString.setLabel("String 2:");
+				
 				txtText.setValue("Text Alterado");
+				txtText.setLabel("Text 2:");
+				
 				txtBoolean.setValue(true);
+				txtBoolean.setLabel("Boolean 2:");
+				
 				comboBox.setValue("DEF");
+				comboBox.setLabel("Combo 2:");
 			}
 		});
 		
@@ -270,6 +288,7 @@ public class LTLibraries implements TableListener {
 		});
 		
 		objTable = new LTTable(false, true);
+		objTable.addColumn("image", "Imagem", LTDataTypes.BUTTON, 40, true);
 		objTable.addColumn("integer", "Integer", LTDataTypes.INTEGER, 80, true);
 		objTable.addColumn("long", "Long", LTDataTypes.LONG, 80, true);
 		objTable.addColumn("double", "Double", LTDataTypes.DOUBLE, 80, true);
@@ -285,7 +304,7 @@ public class LTLibraries implements TableListener {
 		objTable.setColumnStringMaximumLength("string", 10);
 		objTable.setColumnDoubleFractionDigits("double", 1);
 		objTable.setColumnDoubleFractionDigits("double_2", 3);
-		//objTable.setAllowSortedRows(false);
+		objTable.setAllowSortedRows(false);
 		objTable.showTable();
 		
 		addRows();
@@ -322,23 +341,25 @@ public class LTLibraries implements TableListener {
 	}
 	
 	/**
-	 * Cria um <i>MouseAdapter</i> responsável pelo
-	 * carregamento de uma biblioteca quando houver 
-	 * duplo clique em um registro.
+	 * Cria um <i>MouseAdapter</i> para quando clica em algum item da tabela.
 	 */
 	private class TableMouseAdapter extends MouseAdapter {
 		@Override
 	    public void mouseClicked(MouseEvent event) {
-			if (event.getClickCount() == 2) {
+			//if (event.getClickCount() == 2) {
 				if (objTable.getRowCount() > 0) {
+					int intIndexRow = objTable.getSelectedRow();
+					int intIndexColumn = objTable.getSelectedColumn();
 					
+					System.out.println("Linha " + intIndexRow + " | Coluna " + intIndexColumn + " clicada.");
 				}
-			}
+			//}
 	    }
 	}
 	
 	private void addRows() {
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 100);
 		objTable.addRowData("long", 1000);
 		objTable.addRowData("double", 10.10);
@@ -349,6 +370,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 200);
 		objTable.addRowData("long", 2000);
 		objTable.addRowData("double", 20.20);
@@ -359,6 +381,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
+		objTable.addRowData("image", "Teste");
 		objTable.addRowData("integer", 300);
 		objTable.addRowData("long", 3000);
 		objTable.addRowData("double", 30.30);
@@ -369,6 +392,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 400);
 		objTable.addRowData("long", 4000);
 		objTable.addRowData("double", 40.40);
@@ -378,6 +402,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 500);
 		objTable.addRowData("long", 5000);
 		objTable.addRowData("double", 50.50);
@@ -387,6 +412,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 600);
 		objTable.addRowData("long", 6000);
 		objTable.addRowData("double", 60.60);
@@ -396,6 +422,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 700);
 		objTable.addRowData("long", 7000);
 		objTable.addRowData("double", 70.70);
@@ -405,6 +432,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 800);
 		objTable.addRowData("long", 8000);
 		objTable.addRowData("double", 80.80);
@@ -416,6 +444,7 @@ public class LTLibraries implements TableListener {
 		objTable.setRowSelection(objTable.getRowCount() - 1);
 				
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 900);
 		objTable.addRowData("long", 9000);
 		objTable.addRowData("double", 90.90);
@@ -427,6 +456,7 @@ public class LTLibraries implements TableListener {
 		//objTable.setRowSelection(objTable.getRowCount() - 1);
 		
 		objTable.addRow();
+		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 1000);
 		objTable.addRowData("long", 10000);
 		objTable.addRowData("double", 100.00);
@@ -438,6 +468,8 @@ public class LTLibraries implements TableListener {
 		//objTable.setRowSelection(objTable.getRowCount() - 1);
 		
 		objTable.setRowSelection(3);
+		
+		System.out.println(objTable.getRowCount());
 		
 		//objTable.finishAddRows();
 	}

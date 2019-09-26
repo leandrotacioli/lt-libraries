@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
@@ -44,12 +45,13 @@ import com.leandrotacioli.libs.swing.table.renderers.TableRendererBoolean;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererDefault;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererDouble;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
+import com.leandrotacioli.libs.swing.table.renderers.TableRendererButton;
 
 /**
- * Cria uma extensão de <i>AbstractTableModel</i>.
+ * Cria uma extensão de <i>AbstractTableModel</i> responsável pela LTTable.
  * 
  * @author Leandro Tacioli
- * @version 5.0 - 05/Out/2017
+ * @version 6.0 - 26/Ago/2018
  */
 public class Table extends AbstractTableModel implements TableInterface, ActionListener {	
 	private static final long serialVersionUID = 755268795533847516L;
@@ -62,8 +64,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	private List<TableColumnModel> lstColumnModel;
 	private List<TableColumnParameters> lstColumnParameters;
 	
-	// Ler a descrição do método 'setTableRendererEditor()' para entender
-	// a criação dos Renderer e Editors abaixo
+	// Ler a descrição do método 'setTableRendererEditor()' para entender a criação dos Renderer e Editors abaixo
 	private TableRendererDefault objTableRendererInteger;
 	private TableRendererDefault objTableRendererLong;
 	private TableRendererDefault objTableRendererString;
@@ -77,7 +78,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	private TableEditorLong objTableEditorLong;
 	private TableEditorText objTableEditorText;
 	private TableEditorDate objTableEditorDate;
-
+	
 	private TableRowSorter<TableModel> sorter;
 	
 	private Collection<Object> collectionListener;
@@ -97,8 +98,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	private int[] rowsSelectionFixed;
 	
-	private SimpleDateFormat dateFormat;          // Formata de data padrão do LTLibraries
-	private SimpleDateFormat dateDatabaseFormat;  // Formato de data armazenado em bancos de dados
+	private SimpleDateFormat dateFormat;         // Formata de data padrão do LTLibraries
+	private SimpleDateFormat dateDatabaseFormat; // Formato de data armazenado em bancos de dados
 	
 	private final String ID_ROW_LT_TABLE = "ID_ROW_LT_TABLE";  // Nome da coluna de ID da LTTable
 	private int intIdRowTable;                                 // Última ID das linhas da LTTable
@@ -466,6 +467,12 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		} else if (objDataType == LTDataTypes.BOOLEAN) {
 			objTableRendererBoolean.setColorBackground(color);
 			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererBoolean);
+			
+		} else if (objDataType == LTDataTypes.BUTTON) {
+			TableRendererButton objTableRendererButton = new TableRendererButton(objTable, intColumnIndex);
+			
+			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererButton);
+			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableRendererButton); 
 		}
 	}
 	
@@ -768,6 +775,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	  		
 	    	} else if (objDataType == LTDataTypes.BOOLEAN) {
 	  			classType = Boolean.class;
+	  			
+	    	} else if (objDataType == LTDataTypes.BUTTON) {
+	  			classType = JButton.class;
 	  		}
     	}
   		
@@ -838,6 +848,16 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	@Override
 	public int[] getSelectedRows() {
 		return objTable.getSelectedRows();
+	}
+	
+	@Override
+	public int getSelectedColumn() {
+		return objTable.getSelectedColumn();
+	}
+	
+	@Override
+	public int[] getSelectedColumns() {
+		return objTable.getSelectedColumns();
 	}
 	
 	@Override
@@ -971,6 +991,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 					} else {
 						lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (boolean) objValue);
 					}
+					
+				} else if (objDataType == LTDataTypes.BUTTON) {
+					lstColumnModel.get(intRowIndex).setValue(intColumnIndex, objValue);
 				}
 				
 				fireTableCellUpdated(intRowIndex, intColumnIndex);
@@ -978,7 +1001,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				if (!blnCellValueUpdated) {
 					updateCellValue(objValue, intRowIndex, intColumnIndex);
 				}
-		
 			}
 			
 		} catch (Exception e) {
@@ -1070,6 +1092,11 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     		}
     	}
 	}
+    
+    @Override
+    public void setAllowDeleteRow(boolean blnAllowDeleteRow) {
+    	this.blnAllowDeleteRow = blnAllowDeleteRow;
+    }
     
     @Override
     public void setAllowSortedRows(boolean blnAllowSortedRows) {

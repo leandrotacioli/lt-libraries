@@ -9,7 +9,7 @@ import com.leandrotacioli.libs.LTDataTypes;
  * Interface com os métodos da LTTable.
  * 
  * @author Leandro Tacioli
- * @version 3.0 - 14/Jul/2016
+ * @version 4.0 - 26/Ago/2018
  */
 public interface TableInterface {
 	
@@ -152,11 +152,25 @@ public interface TableInterface {
 	public int getSelectedRow();
 	
 	/**
-	 * Retorna a linhas selecionadas na LTTable.
+	 * Retorna as linhas selecionadas na LTTable.
 	 * 
 	 * @return selectedRows
 	 */
 	public int[] getSelectedRows();
+	
+	/**
+	 * Retorna a coluna selecionada na LTTable.
+	 * 
+	 * @return intSelectedColumn
+	 */
+	public int getSelectedColumn();
+	
+	/**
+	 * Retorna as colunas selecionadas na LTTable.
+	 * 
+	 * @return selectedColumns
+	 */
+	public int[] getSelectedColumns();
 	
 	/**
 	 * Altera a cor de uma linha da LTTable.
@@ -262,6 +276,13 @@ public interface TableInterface {
 	 * @param intColumnDoubleFractionDigits - Quantidade de casas decimais
 	 */
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits);
+	
+	/**
+	 * Permite a remoção de linhas.
+	 * 
+	 * @param blnAllowDeleteRow
+	 */
+	public void setAllowDeleteRow(boolean blnAllowDeleteRow);
 	
 	/**
 	 * Permite a ordenação das linhas.

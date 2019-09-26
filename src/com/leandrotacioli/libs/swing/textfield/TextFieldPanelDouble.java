@@ -61,6 +61,11 @@ public class TextFieldPanelDouble extends TextField implements FocusListener {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextFieldPanel.setLabel(strLabel);
+	}
+	
+	@Override
 	protected void setFractionDigits(int intFractionDigits) {
 		txtDoubleField.setFractionDigits(intFractionDigits);
 	}

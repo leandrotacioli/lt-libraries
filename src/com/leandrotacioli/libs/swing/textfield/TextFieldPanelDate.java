@@ -61,6 +61,11 @@ public class TextFieldPanelDate extends TextField implements FocusListener {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextFieldPanel.setLabel(strLabel);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		if ((txtDateField.getDate() == null || txtDateField.getDate().length() == 0) && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);

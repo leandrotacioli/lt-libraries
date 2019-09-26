@@ -76,6 +76,11 @@ public class TextField extends JPanel implements TextFieldInterface {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		this.strLabel = strLabel;
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		return false;
 	}

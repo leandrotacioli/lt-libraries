@@ -61,6 +61,11 @@ public class TextFieldPanelBoolean extends TextField {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		txtBooleanField.setText(strLabel);
+	}
+	
+	@Override
 	public Object getValue() {
 		return txtBooleanField.isSelected();
 	}

@@ -48,6 +48,7 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	private boolean blnMandatoryField;
 	private boolean blnValueEmpty;
 	
+	private JLabel lblLabel;
 	private JLabel lblAlert;
 	private JComboBox<String> comboBox;
 	
@@ -94,7 +95,7 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 		this.blnEnabled = blnEnabled;
 		this.blnMandatoryField = blnMandatoryField;
 		
-		JLabel lblLabel = new JLabel(strLabel);
+		lblLabel = new JLabel(strLabel);
 		lblLabel.setFont(LTParameters.getInstance().getFontComponentLabel());
 		
 		ImageIcon iconAlert = new ImageIcon("res/images/alert.png");
@@ -205,6 +206,11 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	@Override
 	public String getLabel() {
 		return strLabel;
+	}
+	
+	@Override
+	public void setLabel(String strLabel) {
+		lblLabel.setText(strLabel);
 	}
 
 	@Override

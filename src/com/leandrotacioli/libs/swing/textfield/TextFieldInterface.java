@@ -13,11 +13,18 @@ import java.awt.event.KeyListener;
 public interface TextFieldInterface {
 	
 	/**
-	 * Retorna o nome do campo.
+	 * Retorna a descrição do campo.
 	 * 
 	 * @return strLabel
 	 */
 	public String getLabel();
+	
+	/**
+	 * Altera a descrição do campo.
+	 * 
+	 * @param strLabel
+	 */
+	public void setLabel(String strLabel);
 	
 	/**
 	 * Retorna o status de preenchimento do campo obrigatório.

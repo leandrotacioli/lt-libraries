@@ -14,11 +14,12 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 05/Abr/2015
+ * @version 1.1 - 28/Dez/2018
  */
 public class TextFieldPanel extends JPanel {
 	private static final long serialVersionUID = 3500342282829187859L;
 	
+	private JLabel lblLabel;
 	private JLabel lblAlert;
 	
 	/**
@@ -29,7 +30,7 @@ public class TextFieldPanel extends JPanel {
 	public TextFieldPanel(Component component, String strLabel) {
 		// Campo não é Boolean
 		if (!(component instanceof JCheckBox)) {
-			JLabel lblLabel = new JLabel(strLabel);
+			lblLabel = new JLabel(strLabel);
 			lblLabel.setFont(LTParameters.getInstance().getFontComponentLabel());
 			
 			ImageIcon iconAlert = new ImageIcon("res/images/alert.png");
@@ -54,12 +55,24 @@ public class TextFieldPanel extends JPanel {
 	}
 	
 	/**
+	 * Habilita/desabilita visualização da imagem de alerta.
 	 * 
 	 * @param blnVisible
 	 */
 	protected void setAlertVisible(boolean blnVisible) {
 		if (lblAlert != null) {
 			lblAlert.setVisible(blnVisible);
+		}
+	}
+	
+	/**
+	 * Altera a descrição do campo.
+	 * 
+	 * @param strLabel
+	 */
+	protected void setLabel(String strLabel) {
+		if (lblLabel != null) {
+			lblLabel.setText(strLabel);
 		}
 	}
 }

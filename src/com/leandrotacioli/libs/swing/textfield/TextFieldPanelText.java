@@ -77,6 +77,11 @@ public class TextFieldPanelText extends TextField implements FocusListener, KeyL
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextFieldPanel.setLabel(strLabel);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		if ((textArea.getText() == null || textArea.getText().length() == 0) && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);

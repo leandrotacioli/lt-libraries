@@ -8,16 +8,23 @@ import java.awt.event.KeyListener;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.5 - 24/Mai/2015
+ * @version 1.6 - 28/Dez/2018
  */
 public interface LTComboBoxFieldInterface {
 	
 	/**
-	 * Retorna o nome do campo.
+	 * Retorna a descrição do campo.
 	 * 
 	 * @return strLabel
 	 */
 	public String getLabel();
+	
+	/**
+	 * Altera a descrição do campo.
+	 * 
+	 * @return strLabel
+	 */
+	public void setLabel(String strLabel);
 	
 	/**
 	 * Retorna o status de preenchimento do campo obrigatório.

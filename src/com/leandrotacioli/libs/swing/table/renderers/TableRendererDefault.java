@@ -13,7 +13,7 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 06/Abr/2015
+ * @version 1.1 - 06/Ago/2018
  */
 public class TableRendererDefault extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 3585207723628352892L;
@@ -28,7 +28,7 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	/**
 	 * Altera o status de seleção para toda a linha da tabela.
 	 * 
-	 * @param blnFullRowSelection -
+	 * @param blnFullRowSelection
 	 */
 	public void setFullRowSelection(boolean blnFullRowSelection) {
 		this.blnFullRowSelection = blnFullRowSelection;
@@ -44,7 +44,7 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	}
 	
 	/**
-	 * Estabelece um <i>renderer</i> para as colunas do tipo <i>INTEGER</i>.
+	 * Estabelece um <i>renderer</i> padrão para as colunas da tabela.
 	 *  
 	 * @param blnReadOnly         - 
 	 * @param blnFullRowSelection - 

@@ -61,6 +61,11 @@ public class TextFieldPanelInteger extends TextField implements FocusListener {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextFieldPanel.setLabel(strLabel);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		if ((txtIntegerField.getText() == null || txtIntegerField.getText().length() == 0) && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);

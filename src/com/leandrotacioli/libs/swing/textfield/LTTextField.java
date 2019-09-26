@@ -118,6 +118,11 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextField.setLabel(strLabel);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		return objTextField.getIsMandatoryFieldEmpty();
 	}

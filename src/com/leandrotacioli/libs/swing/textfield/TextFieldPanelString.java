@@ -61,6 +61,11 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 	}
 	
 	@Override
+	public void setLabel(String strLabel) {
+		objTextFieldPanel.setLabel(strLabel);
+	}
+	
+	@Override
 	protected void setStringLength(int intMaximumLength) {
 		txtStringField.setMaximumLength(intMaximumLength);
 	}

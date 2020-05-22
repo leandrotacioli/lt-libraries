@@ -23,10 +23,15 @@ import org.w3c.dom.NodeList;
  * Cria os parâmetros necessários para a execução do </i>LT Libraries</i>. 
  * 
  * @author Leandro Tacioli
- * @version 3.0 - 08/Ago/2017
+ * @version 4.0 - 22/Mai/2020
  */
 public class LTParameters {
 	private static LTParameters objLTParameters;
+	
+	private String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
+	private String DEFAULT_DECIMAL_MARK = "COMMA";
+	private String DEFAULT_LOCALE_LANGUAGE = "en";
+	private String DEFAULT_LOCALE_COUNTRY = "US";
 	
 	private String strDateFormat;
 	private String strDecimalMark;
@@ -423,36 +428,46 @@ public class LTParameters {
 		try {
 			// Lê o XML
 			File fileXML = new File("LT-Properties.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document document = dBuilder.parse(fileXML);
 			
-			NodeList nodeList = document.getElementsByTagName("Config");
-
-			for (int intNode = 0; intNode < nodeList.getLength(); intNode++) {
-				Node node = nodeList.item(intNode);
+			if (fileXML.exists() && fileXML.isFile())
+		    {
+				DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+				Document document = dBuilder.parse(fileXML);
 				
-				if (node.getNodeType() == Node.ELEMENT_NODE) {
-					Element element = (Element) node;
+				NodeList nodeList = document.getElementsByTagName("Config");
 
-					strDateFormat = element.getElementsByTagName("DateFormat").item(0).getTextContent();
-					strDecimalMark = element.getElementsByTagName("DecimalMark").item(0).getTextContent();
-					strLocaleLanguage = element.getElementsByTagName("LocaleLanguage").item(0).getTextContent();
-					strLocaleCountry = element.getElementsByTagName("LocaleCountry").item(0).getTextContent();
+				for (int intNode = 0; intNode < nodeList.getLength(); intNode++) {
+					Node node = nodeList.item(intNode);
 					
-					locale = new Locale(strLocaleLanguage, strLocaleCountry);
-					
-					rsBundle = ResourceBundle.getBundle("com.leandrotacioli.libs.internationalization.LabelBundles", locale);
-					
-					decimalFormatSymbols = new DecimalFormatSymbols();
-					if (strDecimalMark.equals("COMMA")) {
-						decimalFormatSymbols.setDecimalSeparator(',');
-						decimalFormatSymbols.setGroupingSeparator('.');
-					} else if (strDecimalMark.equals("PERIOD")) {
-						decimalFormatSymbols.setDecimalSeparator('.');
-						decimalFormatSymbols.setGroupingSeparator(',');
+					if (node.getNodeType() == Node.ELEMENT_NODE) {
+						Element element = (Element) node;
+
+						strDateFormat = element.getElementsByTagName("DateFormat").item(0).getTextContent();
+						strDecimalMark = element.getElementsByTagName("DecimalMark").item(0).getTextContent();
+						strLocaleLanguage = element.getElementsByTagName("LocaleLanguage").item(0).getTextContent();
+						strLocaleCountry = element.getElementsByTagName("LocaleCountry").item(0).getTextContent();
 					}
 				}
+		    }
+			
+			if (strDateFormat == null     || strDateFormat.length()     == 0) strDateFormat     = DEFAULT_DATE_FORMAT;
+			if (strDecimalMark == null    || strDecimalMark.length()    == 0) strDecimalMark    = DEFAULT_DECIMAL_MARK;
+			if (strLocaleLanguage == null || strLocaleLanguage.length() == 0) strLocaleLanguage = DEFAULT_LOCALE_LANGUAGE;
+			if (strLocaleCountry == null  || strLocaleCountry.length()  == 0) strLocaleCountry  = DEFAULT_LOCALE_COUNTRY;
+			
+			locale = new Locale(strLocaleLanguage, strLocaleCountry);
+			
+			rsBundle = ResourceBundle.getBundle("com.leandrotacioli.libs.internationalization.LabelBundles", locale);
+			
+			decimalFormatSymbols = new DecimalFormatSymbols();
+			
+			if (strDecimalMark.equals("COMMA")) {
+				decimalFormatSymbols.setDecimalSeparator(',');
+				decimalFormatSymbols.setGroupingSeparator('.');
+			} else if (strDecimalMark.equals("PERIOD")) {
+				decimalFormatSymbols.setDecimalSeparator('.');
+				decimalFormatSymbols.setGroupingSeparator(',');
 			}
 			
 		} catch (Exception e) {

@@ -74,27 +74,34 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 		
 		setInputVerifier(new TextFieldDoubleVerifier(this, decimalFormat));
 		setDocument(new TextFieldDoubleDocument(intFractionDigits));
-		setText("" + getValue());
+		setValue(getValue());
 	}
 	
 	@Override
 	public Object getValue() {
-		return decimalFormat.format(dblValue);
+		return dblValue;
 	}
 	
 	@Override
 	public void setValue(Object objValue) {
 		try {
-			String strValue = objValue.toString();
-			
-			if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-				strValue = strValue.replace(".", "");   // Retira os separadores de milhar
-				strValue = strValue.replace(",", ".");
-			} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-				strValue = strValue.replace(",", "");   // Retira os separadores de milhar
+			if (objValue instanceof Double) {
+				dblValue = (double) objValue; 
+				
+			} else if (objValue instanceof String) {
+				String strValue = objValue.toString();
+				
+				if (!strValue.equals("0.0")) {
+					if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
+						strValue = strValue.replace(".", "");   // Retira os separadores de milhar
+						strValue = strValue.replace(",", ".");
+					} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
+						strValue = strValue.replace(",", "");   // Retira os separadores de milhar
+					}
+				}
+				
+				dblValue = StringTransformations.setStringToDouble(strValue);
 			}
-			
-			dblValue = StringTransformations.setStringToDouble(strValue);
 
 		} catch (Exception e) {
 			dblValue = 0.00;

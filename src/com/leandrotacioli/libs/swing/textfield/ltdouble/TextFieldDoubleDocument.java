@@ -45,8 +45,8 @@ public class TextFieldDoubleDocument extends PlainDocument {
 		// Permite apenas números e separadores ('.' e ',')
 		if (Character.isDigit(cChar) || cChar == '.' || cChar == ',') {
 			String strValue = getText(0, offset) + strString + getText(offset, getLength() - offset);
-			String strSeparated[] = getIntegerDecimalParts(strValue);
-
+			String[] strSeparated = getIntegerDecimalParts(strValue);
+			
 			strValue = strSeparated[0] + "." + strSeparated[1];
 			double dblValue = StringTransformations.setStringToDouble(strValue);
 			
@@ -111,9 +111,9 @@ public class TextFieldDoubleDocument extends PlainDocument {
 	 * @return strSeparated
 	 */
 	private String[] getIntegerDecimalParts(String strValue) {
-		String strSeparated[] = new String[2];
-		String strValues[] = new String[2];
-
+		String[] strSeparated = new String[2];
+		String[] strValues = new String[2];
+		
 		if (strValue.equals(".") || strValue.equals(",")) {
 			strSeparated[0] = "";
 			strSeparated[1] = "";

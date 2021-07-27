@@ -1,22 +1,68 @@
 package com.leandrotacioli.libs.swing.table;
 
+import java.awt.Color;
+
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
+
 import com.leandrotacioli.libs.LTDataTypes;
 
 /**
  * Estabelece as colunas que serão inseridas no LTTable.
  * 
  * @author Leandro Tacioli
- * @version 3.1 - 07/Jun/2016
+ * @version 4.0 - 09/Nov/2020
  */
 public class TableColumnParameters {
+	private TableCellRenderer objTableCellRenderer;
+	private TableCellEditor objTableCellEditor;
 	private String strColumnName;
 	private String strColumnDescription;
 	private LTDataTypes objColumnDataType;
 	private int intColumnWidth;
 	private boolean blnColumnEditable;
+	private boolean blnColumnShowZeroValues;
+	private int intColumnHorizonalAlignment;
+	private Color colorColumn;
 	private int intColumnStringMaximumLength;
 	private int intColumnDoubleFractionDigits;
-
+	
+	/**
+	 * Retorna o 'TableCellRenderer' da coluna.
+	 * 
+	 * @return objTableCellRenderer
+	 */
+	protected TableCellRenderer getTableCellRenderer() {
+		return objTableCellRenderer;
+	}
+	
+	/**
+	 * Altera o 'TableCellRenderer' da coluna.
+	 * 
+	 * @param objTableRenderer
+	 */
+	protected void setTableCellRenderer(TableCellRenderer objTableCellRenderer) {
+		this.objTableCellRenderer = objTableCellRenderer;
+	}
+	
+	/**
+	 * Retorna o 'TableCellEditor' da coluna.
+	 * 
+	 * @return objTableCellEditor
+	 */
+	protected TableCellEditor getTableCellEditor() {
+		return objTableCellEditor;
+	}
+	
+	/**
+	 * Altera o 'TableCellEditor' da coluna.
+	 * 
+	 * @param objTableCellEditor
+	 */
+	protected void setTableCellRenderer(TableCellEditor objTableCellEditor) {
+		this.objTableCellEditor = objTableCellEditor;
+	}
+	
 	/**
 	 * Retorna o nome da coluna.
 	 * 
@@ -63,14 +109,43 @@ public class TableColumnParameters {
 	}
 	
 	/**
-	 * Retorna o status das células da coluna. <br>
-	 * <i>True</i> - Editável <br>
+	 * Retorna o status das células da coluna. 
+	 * <br>
+	 * <i>True</i> - Editável 
+	 * <br>
 	 * <i>False</i> - Não Editável
 	 * 
 	 * @return blnColumnEditable
 	 */
 	protected boolean getColumnEditable() {
 		return blnColumnEditable;
+	}
+	
+	/**
+	 * Retorna o status se a coluna exibe valores zerados para campos numéricos (INTEGER, LONG, DOUBLE) 
+	 * 
+	 * @return blnColumnShowZeroValues
+	 */
+	protected boolean getColumnShowZeroValues() {
+		return blnColumnShowZeroValues;
+	}
+	
+	/**
+	 * Retorna a cor da coluna.
+	 * 
+	 * @return intColumnWidth
+	 */
+	protected Color getColumnColor() {
+		return colorColumn;
+	}
+	
+	/**
+	 * Altera a cor da coluna.
+	 * 
+	 * @param colorColumn
+	 */
+	protected void setColumnColor(Color colorColumn) {
+		this.colorColumn = colorColumn;
 	}
 
 	/**
@@ -110,36 +185,55 @@ public class TableColumnParameters {
 	}
 	
 	/**
-	 * Estabelece as colunas que serão inseridas no LTTable.
+	 * Retorna o alinhamento horizontal da coluna.
 	 * 
-	 * @param strColumnName                 - Nome da coluna 
-	 * @param strColumnDescription          - Descrição da coluna que será apresentada ao usuário
-	 * @param objColumnDataType             - Tipo de dado da coluna
-	 * @param intColumnWidth                - Comprimento da coluna na visualização da tabela
-	 * @param blnColumnEditable             - Status das células da coluna (True = Editável)
+	 * @return intColumnHorizonalAlignment
+	 * <br>
+	 * <i>0 - Centralizado | 2 - Esquerda | 4 - Direita</i>
 	 */
-	protected TableColumnParameters(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable) {
-		this(strColumnName, strColumnDescription, objColumnDataType, intColumnWidth, blnColumnEditable, 20, 2);
+	protected int getColumnHorizontalAlignment() {
+		return intColumnHorizonalAlignment;
+	}
+	
+	/**
+	 * Altera o alinhamento horizontal da coluna
+	 * 
+	 * @param intColumnHorizonalAlignment
+	 * <br>
+	 * <i>0 - Centralizado | 2 - Esquerda | 4 - Direita</i>
+	 */
+	protected void setColumnHorizontalAlignment(int intColumnHorizonalAlignment) {
+		this.intColumnHorizonalAlignment = intColumnHorizonalAlignment;
 	}
 	
 	/**
 	 * Estabelece as colunas que serão inseridas no LTTable.
 	 * 
-	 * @param strColumnName                 - Nome da coluna 
-	 * @param strColumnDescription          - Descrição da coluna que será apresentada ao usuário
-	 * @param objColumnDataType             - Tipo de dado da coluna
-	 * @param intColumnWidth                - Comprimento da coluna na visualização da tabela
-	 * @param blnColumnEditable             - Status das células da coluna (True = Editável)
-	 * @param intColumnStringMaximumLength  - Quantidade máxima de caracteres (Válido apenas para colunas do tipo <i>STRING</i>).
-	 * @param intColumnDoubleFractionDigits - Quantidade de casas decimais (Válido apenas para colunas do tipo <i>DOUBLE</i>).
+	 * @param objTableCellRenderer  - Renderer das células da coluna
+	 * @param objTableCellEditor    - Editor das células da coluna
+	 * @param strColumnName         - Nome da coluna 
+	 * @param strColumnDescription  - Descrição da coluna que será apresentada ao usuário
+	 * @param objColumnDataType     - Tipo de dado da coluna
+	 * @param intColumnWidth        - Comprimento da coluna na visualização da tabela
+	 * @param blnColumnEditable     - Status das células da coluna (True = Editável)
+	 * @param blnColumnMandatory    - Status das células da coluna (True = Editável)
+	 * @param colorColumn           - Cor da coluna
 	 */
-	private TableColumnParameters(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, int intColumnStringMaximumLength, int intColumnDoubleFractionDigits) {
+	protected TableColumnParameters(TableCellRenderer objTableCellRenderer, TableCellEditor objTableCellEditor, String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, boolean blnColumnShowZeroValues, int intColumnHorizonalAlignment, Color colorColumn) {
+		this.objTableCellRenderer = objTableCellRenderer;
+		this.objTableCellEditor = objTableCellEditor;
 		this.strColumnName = strColumnName;
 		this.strColumnDescription = strColumnDescription;
 		this.objColumnDataType = objColumnDataType;
 		this.intColumnWidth = intColumnWidth;
 		this.blnColumnEditable = blnColumnEditable;
-		this.intColumnStringMaximumLength = intColumnStringMaximumLength;
-		this.intColumnDoubleFractionDigits = intColumnDoubleFractionDigits;
+		this.blnColumnShowZeroValues = blnColumnShowZeroValues;
+		this.intColumnHorizonalAlignment = intColumnHorizonalAlignment;
+		this.colorColumn = colorColumn;
+		
+		// Campos DOUBLE tem 2 casas decimais como padrão
+		if (objColumnDataType == LTDataTypes.DOUBLE) {
+			this.intColumnDoubleFractionDigits = 2;
+		}
 	}
 }

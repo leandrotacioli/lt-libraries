@@ -117,8 +117,12 @@ public class TextFieldPanelLong extends TextField implements FocusListener {
 	// Implementa FocusListener
 	@Override
 	public void focusGained(FocusEvent event) {
-		txtLongField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
-		txtLongField.select(0, txtLongField.getText().length());
+		if (getEnabled()) {
+			txtLongField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+			txtLongField.select(0, txtLongField.getText().length());
+		} else {
+			txtLongField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
+		}
 	}
 
 	@Override

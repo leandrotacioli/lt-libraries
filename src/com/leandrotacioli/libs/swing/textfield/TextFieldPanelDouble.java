@@ -122,19 +122,13 @@ public class TextFieldPanelDouble extends TextField implements FocusListener {
 	// Implementa FocusListener
 	@Override
 	public void focusGained(FocusEvent event) {
-		txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
-
-		// Retira os caracteres de separador de milhares
-		String strDouble = txtDoubleField.getText();
-		
-		if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-			strDouble = strDouble.replace(".", "");
-		} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-			strDouble = strDouble.replace(",", "");
+		if (getEnabled()) {
+			txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+			txtDoubleField.setText(txtDoubleField.getText());
+			txtDoubleField.select(0, txtDoubleField.getText().length());
+		} else {
+			txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
 		}
-		
-		txtDoubleField.setText(strDouble);
-		txtDoubleField.select(0, txtDoubleField.getText().length());
 	}
 
 	@Override

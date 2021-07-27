@@ -62,6 +62,7 @@ public class LTParameters {
 	private Color colorComponentBackgroundFocus;
 	private Color colorComponentBackgroundDisabled;
 	
+	private Color colorTable;
 	private Color colorTableGrid;
 	private Color colorTableGridDisabled;
 	private Color colorTableRowSelected;
@@ -311,6 +312,15 @@ public class LTParameters {
 	}
 	
 	/**
+	 * Cor da LTTable.
+	 * 
+	 * @return colorTable
+	 */
+	public Color getColorTable() {
+		return colorTable;
+	}
+	
+	/**
 	 * Cor do grid da LTTable.
 	 * 
 	 * @return colorTableGrid
@@ -426,6 +436,12 @@ public class LTParameters {
 	 */
 	private void loadPropertiesXML() {
 		try {
+			// Valores padrão
+			strDateFormat     = DEFAULT_DATE_FORMAT;
+			strDecimalMark    = DEFAULT_DECIMAL_MARK;
+			strLocaleLanguage = DEFAULT_LOCALE_LANGUAGE;
+			strLocaleCountry  = DEFAULT_LOCALE_COUNTRY;
+			
 			// Lê o XML
 			File fileXML = new File("LT-Properties.xml");
 			
@@ -450,11 +466,6 @@ public class LTParameters {
 					}
 				}
 		    }
-			
-			if (strDateFormat == null     || strDateFormat.length()     == 0) strDateFormat     = DEFAULT_DATE_FORMAT;
-			if (strDecimalMark == null    || strDecimalMark.length()    == 0) strDecimalMark    = DEFAULT_DECIMAL_MARK;
-			if (strLocaleLanguage == null || strLocaleLanguage.length() == 0) strLocaleLanguage = DEFAULT_LOCALE_LANGUAGE;
-			if (strLocaleCountry == null  || strLocaleCountry.length()  == 0) strLocaleCountry  = DEFAULT_LOCALE_COUNTRY;
 			
 			locale = new Locale(strLocaleLanguage, strLocaleCountry);
 			
@@ -498,6 +509,7 @@ public class LTParameters {
 		colorComponentBackgroundFocus = new Color(255, 255, 125);
 		colorComponentBackgroundDisabled = new Color(240, 240, 240);
 		
+		colorTable = new Color(255, 255, 255);
 		colorTableGrid = new Color(200, 200, 200);
 		colorTableGridDisabled = new Color(240, 240, 240);
 		colorTableRowSelected = new Color(120, 200, 250);

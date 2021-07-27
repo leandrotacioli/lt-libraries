@@ -249,6 +249,16 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	}
 	
 	@Override
+	public void setValue(int intKeyValue) {
+		setValue("" + intKeyValue);
+	}
+	
+	@Override
+	public void setValue(Long lgnKeyValue) {
+		setValue("" + lgnKeyValue);
+	}
+	
+	@Override
 	public void setValue(String strKeyValue) {
 		try {
 			if (strKeyValue != null && strKeyValue.length() > 0) {
@@ -420,6 +430,9 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 			comboBox.setRenderer(new ComboBoxCellRenderer());
 			addPopupMouseListener();
 			comboBox.showPopup();
+		} else {
+			comboBox.setOpaque(false);
+			lblAlert.setVisible(false);
 		}
 	}
 

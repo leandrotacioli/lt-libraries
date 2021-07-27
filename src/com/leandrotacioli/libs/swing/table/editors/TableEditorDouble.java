@@ -12,43 +12,50 @@ import com.leandrotacioli.libs.swing.textfield.ltdouble.TextFieldDouble;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 11/Set/2015
+ * @version 1.2 - 21/Nov/2020
  */
 public class TableEditorDouble extends DefaultCellEditor {
 	private static final long serialVersionUID = 8304313692833448805L;
 	
 	private int intColumnDoubleFractionDigits;
 	
+	private static TextFieldDouble txtFieldDouble = new TextFieldDouble();
+	
 	/**
 	 * 
 	 */
 	public TableEditorDouble(int intColumnDoubleFractionDigits) {
-		super(new TextFieldDouble());
+		super(txtFieldDouble);
 		
 		this.intColumnDoubleFractionDigits = intColumnDoubleFractionDigits;
+		
+		txtFieldDouble.setFractionDigits(intColumnDoubleFractionDigits);
 	}	
 	
 	//*************************************************************************
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object aValue, boolean isSelected, int rowIndex, int columnIndex) {
-		TextFieldDouble textFieldEditor = (TextFieldDouble) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
-		textFieldEditor.setFont(LTParameters.getInstance().getFontComponentTextField());
-		textFieldEditor.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
-		textFieldEditor.setFractionDigits(intColumnDoubleFractionDigits);
+		txtFieldDouble = (TextFieldDouble) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+		txtFieldDouble.setFont(LTParameters.getInstance().getFontComponentTextField());
+		txtFieldDouble.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
+		txtFieldDouble.setFractionDigits(intColumnDoubleFractionDigits);
 		
-		String strValue = StringTransformations.setDoubleToString((double) aValue, intColumnDoubleFractionDigits);
+		String strValue = "";
 		
-		// Retira os caracteres de separador de milhares
-		// e altera o separador para o padrão configurado nos parâmetros
-		if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-			strValue = strValue.replace(".", "");
-			strValue.replace(".", ",");
-		} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-			strValue = strValue.replace(",", "");
+		if (aValue != null && !aValue.equals("")) {
+			strValue = StringTransformations.setDoubleToString((double) aValue, intColumnDoubleFractionDigits);
+			
+			// Retira os caracteres de separador de milhares e altera o separador para o padrão configurado nos parâmetros
+			if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
+				strValue = strValue.replace(".", "");
+				strValue.replace(".", ",");
+			} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
+				strValue = strValue.replace(",", "");
+			}
 		}
 		
-		textFieldEditor.setText("" + strValue);
+		txtFieldDouble.setText("" + strValue);
 
-		return textFieldEditor;
+		return txtFieldDouble;
 	}
 }

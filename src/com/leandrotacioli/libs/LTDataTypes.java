@@ -4,7 +4,7 @@ package com.leandrotacioli.libs;
  * Define os tipos de campos que podem ser utilizadas na LT Libraries.
  * 
  * @author Leandro Tacioli
- * @version 3.0 - 26/Ago/2018
+ * @version 4.0 - 09/Jun/2020
  */
 public enum LTDataTypes {
 	INTEGER,
@@ -13,6 +13,7 @@ public enum LTDataTypes {
 	STRING,
 	TEXT,       // Textos sem limite de caracteres
 	DATE,
+	HOUR,       // HH:mm:ss
 	BOOLEAN,
 	BUTTON      // Botões serão utilizadas apenas na LTTable
 }

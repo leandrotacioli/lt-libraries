@@ -6,7 +6,6 @@ import javax.swing.JTable;
 import java.awt.Component;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.swing.textfield.ltdate.TextFieldDate;
@@ -14,10 +13,12 @@ import com.leandrotacioli.libs.swing.textfield.ltdate.TextFieldDate;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 15/Abr/2015
+ * @version 2.0 - 11/Nov/2020
  */
 public class TableEditorDate extends DefaultCellEditor {
 	private static final long serialVersionUID = -9025778248402406514L;
+	
+	private static TextFieldDate txtFieldDate = new TextFieldDate();
 	
 	private SimpleDateFormat dateFormat;
 	
@@ -25,7 +26,7 @@ public class TableEditorDate extends DefaultCellEditor {
 	 * 
 	 */
     public TableEditorDate() {
-        super(new TextFieldDate());
+        super(txtFieldDate);
         
         dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat());
         dateFormat.setLenient(false);
@@ -35,27 +36,17 @@ public class TableEditorDate extends DefaultCellEditor {
     //Override to invoke setValue on the formatted text field.
     @Override
     public Component getTableCellEditorComponent(JTable table, Object aValue, boolean isSelected, int rowIndex, int columnIndex) {
-    	TextFieldDate textFieldEditor = (TextFieldDate) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
-    	textFieldEditor.setFont(LTParameters.getInstance().getFontComponentTextField());
-		textFieldEditor.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
-		//textFieldEditor.setValue((String) aValue);
-		
-		
-		//if ((textFieldEditor.getDate() == null || textFieldEditor.getDate().length() == 0)) {
-		//	textFieldEditor.setDateFormat();
-			
-		//}
-		
-		//textFieldEditor.setInputVerifier(null);
+    	txtFieldDate = (TextFieldDate) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+    	txtFieldDate.setFont(LTParameters.getInstance().getFontComponentTextField());
+    	txtFieldDate.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
 
-        return textFieldEditor;
+        return txtFieldDate;
     }
    
 	//*************************************************************************
     //Override to ensure that the value remains a Date
     @Override
     public Object getCellEditorValue() {
-    	TextFieldDate txtFieldDate = (TextFieldDate) getComponent();
     	txtFieldDate.setInputVerifier(null);
     	
     	String strDate = txtFieldDate.getText();
@@ -63,7 +54,7 @@ public class TableEditorDate extends DefaultCellEditor {
         
         try {
         	if (strDate.length() == 0) {
-        		return null;
+        		return "";
         		
         	} else if (strDate.substring(0, 1).equals("/") && strDate.substring(3, 4).equals("/")) {
         		String strDateTemp = strDate.replace("/", "");
@@ -71,37 +62,32 @@ public class TableEditorDate extends DefaultCellEditor {
         		
         		// Foi preenchido fora do padrão
         		if (strDateTemp.length() > 0) {
-        			return false;
+        			return "";
         			
         		// Campo está vazio
         		} else {
-            		return null;
+            		return "";
         		}
 
         	} else {
             	if (strDate.length() == 7 || strDate.length() == 9) {
-            		return false;
+            		return "";
             		
             	} else if (strDate.length() == 8) {
             		strDate = strDate.substring(0, 6) + "20" + strDate.substring(6, 8);
             		
-					@SuppressWarnings("unused")
-					Date date = dateFormat.parse(strDate);
+					dateFormat.parse(strDate);
 	                
             	} else if (strDate.length() == 10) {
-					@SuppressWarnings("unused")
-					Date date = dateFormat.parse(strDate);
+					dateFormat.parse(strDate);
 					
             	} else {
-					@SuppressWarnings("unused")
-					Date date = dateFormat.parse(strDate);
+					dateFormat.parse(strDate);
             	}
         	}
         	
         } catch (ParseException e) {
-        	txtFieldDate.setBorder(LTParameters.getInstance().getBorderTableTextFieldError());
-			
-        	return "20/20";
+        	return "";
         }
         
         return strDate;

@@ -29,6 +29,8 @@ import javax.swing.SortOrder;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
+import javax.swing.table.TableCellEditor;
+import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
@@ -37,21 +39,21 @@ import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorDate;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorDouble;
+import com.leandrotacioli.libs.swing.table.editors.TableEditorHour;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorInteger;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorLong;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorString;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorText;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererBoolean;
-import com.leandrotacioli.libs.swing.table.renderers.TableRendererDefault;
-import com.leandrotacioli.libs.swing.table.renderers.TableRendererDouble;
-import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererButton;
+import com.leandrotacioli.libs.swing.table.renderers.TableRendererDefault;
+import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
 
 /**
  * Cria uma extensão de <i>AbstractTableModel</i> responsável pela LTTable.
  * 
  * @author Leandro Tacioli
- * @version 6.0 - 26/Ago/2018
+ * @version 7.0 - 11/Nov/2020
  */
 public class Table extends AbstractTableModel implements TableInterface, ActionListener {	
 	private static final long serialVersionUID = 755268795533847516L;
@@ -63,21 +65,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	private List<TableColumnModel> lstColumnModel;
 	private List<TableColumnParameters> lstColumnParameters;
-	
-	// Ler a descrição do método 'setTableRendererEditor()' para entender a criação dos Renderer e Editors abaixo
-	private TableRendererDefault objTableRendererInteger;
-	private TableRendererDefault objTableRendererLong;
-	private TableRendererDefault objTableRendererString;
-	private TableRendererDefault objTableRendererText;
-	private TableRendererDefault objTableRendererDate;
-	private TableRendererBoolean objTableRendererBoolean;
-	
-	private List<TableRendererDouble> lstTableRendererDouble;
-	
-	private TableEditorInteger objTableEditorInteger;
-	private TableEditorLong objTableEditorLong;
-	private TableEditorText objTableEditorText;
-	private TableEditorDate objTableEditorDate;
 	
 	private TableRowSorter<TableModel> sorter;
 	
@@ -91,15 +78,11 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	private boolean blnFullRowSelection;
 	
-	private boolean blnSetTableColumnsFormat;    // Determina se as colunas da tabela devem ser reformatadas
 	private boolean blnCellValueUpdated;         // Utilizado exclusivamente para notificar o 'TableAbstractListener' de uma atualização do valor em alguma célula
 	private boolean blnTableRowSelection;        // A seleção foi feita através da tabela normal
 	private boolean blnTableFixedRowSelection;   // A seleção foi feita através da tabela fixa
 	
 	private int[] rowsSelectionFixed;
-	
-	private SimpleDateFormat dateFormat;         // Formata de data padrão do LTLibraries
-	private SimpleDateFormat dateDatabaseFormat; // Formato de data armazenado em bancos de dados
 	
 	private final String ID_ROW_LT_TABLE = "ID_ROW_LT_TABLE";  // Nome da coluna de ID da LTTable
 	private int intIdRowTable;                                 // Última ID das linhas da LTTable
@@ -108,7 +91,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	/**
 	 * Retorna a LTTable.
 	 * 
-	 * @return jtbTable
+	 * @return objTable
 	 */
 	protected TableExtension getTable() {
 		return objTable;
@@ -138,9 +121,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 
 		collectionListener = new ArrayList<Object>();
 		
-		dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat());
-		dateDatabaseFormat = new SimpleDateFormat("yyyy-MM-dd");
-		
 		// Adiciona uma coluna que servirá de ID para manipulação das linhas da tabela
 		addColumn(ID_ROW_LT_TABLE, ID_ROW_LT_TABLE, LTDataTypes.INTEGER, 0, false);
 		
@@ -155,9 +135,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	protected void createTable() {
 		setTableProperties();
 		setTableFixedProperties();
-		setTableRendererEditor();
 		setTableColumnDescriptions();
 		setTableColumnWidth();
+		setTableRenderersEditors();
 	}
 	
 	/**
@@ -246,15 +226,11 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		objTable.addMouseListener(new MouseAdapter() {
 			@Override
 		    public void mouseClicked(MouseEvent event) {
-				objTableRendererString.setFullRowSelection(false);
-				
 				allowFullRowSelection(blnReadOnly);
 		    }
 
 			@Override
 			public void mousePressed(MouseEvent event) {
-				objTableRendererString.setFullRowSelection(false);
-				
 				allowFullRowSelection(blnReadOnly);
 			}
 		});
@@ -373,117 +349,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		    }
 		});
 	}
-
-	/**
-	 * Estabelece os renderizadores e editores das colunas da tabela.<br>
-	 * <br>
-	 * Alguns tipos de dados podem utilizar o mesmo objeto <i>renderer</i>/<i>editor</i> para todos seus campos na tabela.<br>
-	 * <br>
-	 * <b>No caso do <i>renderer</i></b>: <br>
-	 * Apenas para o tipo de dado <i>DOUBLE</i> é criada uma lista com os objetos de cada coluna, pois a quantidade de casas decimais pode variar de coluna para coluna.<br>
-	 * <br>
-	 * <b>No caso do <i>editor</i></b>: <br>
-	 * O tipo de dado <i>DOUBLE</i> cria um novo objeto devido a quantidade de casas decimais;<br>
-	 * O tipo de dado <i>STRING</i> cria um novo objeto devido a quantidade máxima de caracteres;<br>
-	 * O tipo de dado <i>BOOLEAN</i> não utiliza nenhum objeto para o <i>editor</i>.<br>
-	 * <br>
-	 * Quando há a necessidade de novos objetos, serão criados diretamente no método <i>setTableColumnRendererEditor()</i>
-	 */
-	private void setTableRendererEditor() {
-		objTableRendererInteger = new TableRendererDefault(LTDataTypes.INTEGER, blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		objTableRendererLong = new TableRendererDefault(LTDataTypes.LONG, blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		objTableRendererString = new TableRendererDefault(LTDataTypes.STRING, blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		objTableRendererText = new TableRendererDefault(LTDataTypes.TEXT, blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		objTableRendererDate = new TableRendererDefault(LTDataTypes.DATE, blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		objTableRendererBoolean = new TableRendererBoolean(blnReadOnly, blnFullRowSelection, objTable.getBackground());
-		
-		lstTableRendererDouble = new ArrayList<TableRendererDouble>();
-		
-		objTableEditorInteger = new TableEditorInteger();
-		objTableEditorLong = new TableEditorLong();
-		objTableEditorText = new TableEditorText();
-		objTableEditorDate = new TableEditorDate();
-	}
-	
-	/**
-	 * Estabelece a renderização de uma coluna da tabela.
-	 * 
-	 * @param intColumnIndex - Índice da coluna
-	 * @param color          - Cor
-	 */
-	private void setTableColumnRendererEditor(int intColumnIndex, Color color) {
-		LTDataTypes objDataType = lstColumnParameters.get(intColumnIndex).getColumnDataType();
-		
-		if (objDataType == LTDataTypes.INTEGER) {
-			objTableRendererInteger.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererInteger);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableEditorInteger);
-			
-		} else if (objDataType == LTDataTypes.LONG) {
-			objTableRendererLong.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererLong);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableEditorLong);
-		
-		} else if (objDataType == LTDataTypes.DOUBLE) {
-			boolean blnHasRenderer = false;
-			
-			// Cria o 'renderer' da coluna
-			TableRendererDouble objTableRendererDouble = new TableRendererDouble(lstColumnParameters.get(intColumnIndex).getColumnName(), blnReadOnly, blnFullRowSelection, lstColumnParameters.get(intColumnIndex).getColumnDoubleFractionDigits(), color);
-			
-			// Verifica se já existe o 'renderer' para o coluna
-			for (int indexRendererDouble = 0; indexRendererDouble < lstTableRendererDouble.size(); indexRendererDouble++) {
-				if (lstTableRendererDouble.get(indexRendererDouble).getColumnName() == lstColumnParameters.get(intColumnIndex).getColumnName()) {
-					lstTableRendererDouble.get(indexRendererDouble).setColumnDoubleFractionDigits(lstColumnParameters.get(intColumnIndex).getColumnDoubleFractionDigits());
-					objTableRendererDouble = lstTableRendererDouble.get(indexRendererDouble);
-					blnHasRenderer = true;
-					
-					break;
-				}
-			}
-			
-			// Caso não haja nenhum renderer atribuído à coluna, adiciona a lista de renderers 'DOUBLE'
-			if (!blnHasRenderer) {
-				lstTableRendererDouble.add(objTableRendererDouble);
-			}
-			
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererDouble);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(new TableEditorDouble(lstColumnParameters.get(intColumnIndex).getColumnDoubleFractionDigits()));
-
-		} else if (objDataType == LTDataTypes.STRING) {
-			objTableRendererString.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererString);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(new TableEditorString(lstColumnParameters.get(intColumnIndex).getColumnStringMaximumLength()));
-			
-		} else if (objDataType == LTDataTypes.TEXT) {
-			objTableRendererText.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererText);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableEditorText);
-		
-		} else if (objDataType == LTDataTypes.DATE) {
-			objTableRendererDate.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererDate);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableEditorDate); 
-			
-		} else if (objDataType == LTDataTypes.BOOLEAN) {
-			objTableRendererBoolean.setColorBackground(color);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererBoolean);
-			
-		} else if (objDataType == LTDataTypes.BUTTON) {
-			TableRendererButton objTableRendererButton = new TableRendererButton(objTable, intColumnIndex);
-			
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererButton);
-			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableRendererButton); 
-		}
-	}
-	
-	/**
-	 * Estabelece a renderização / editor de todas as colunas da tabela.
-	 */
-	private void setTableColumnFormat() {
-		for (int intColumnIndex = 0; intColumnIndex < getColumnCount(); intColumnIndex++) {
-			setTableColumnRendererEditor(intColumnIndex, objTable.getBackground());
-		}
-	}
 	
 	/**
 	 * Atualiza as descrições das colunas da tabela.
@@ -509,6 +374,136 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				objTable.getColumnModel().getColumn(columnIndex).setPreferredWidth(lstColumnParameters.get(columnIndex).getColumnWidth());
 			}
 		}
+	}
+	
+	/**
+	 * Estabelece os renderers e editor da tabela.
+	 */
+	private void setTableRenderersEditors() {
+		for (int intColumnIndex = 0; intColumnIndex < getColumnCount(); intColumnIndex++) {
+			TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+			TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(intColumnIndex));
+			
+			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
+			objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableCellEditor);
+			
+			if (lstColumnParameters.get(intColumnIndex).getColumnDataType() == LTDataTypes.BUTTON) {
+				TableRendererButton objTableRendererButton = new TableRendererButton(objTable, intColumnIndex);
+				
+				objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableRendererButton);
+				objTable.getColumnModel().getColumn(intColumnIndex).setCellEditor(objTableRendererButton);
+			}
+    	}
+	}
+	
+	/**
+	 * Cria os renderizadores das colunas da tabela.
+	 */
+	private TableCellRenderer setCellRenderer(int intColumnIndex, LTDataTypes objDataType) {
+		TableCellRenderer objTableCellRenderer = null;
+		
+		if (objDataType == LTDataTypes.INTEGER) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.INTEGER, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.INTEGER), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.LONG) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.LONG, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.LONG), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.DOUBLE) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.DOUBLE), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.STRING) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.STRING, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.STRING), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.TEXT) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TEXT, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.TEXT), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.DATE) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.DATE, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.DATE), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.HOUR) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.HOUR, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.HOUR), LTParameters.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.BOOLEAN) {
+			objTableCellRenderer = new TableRendererBoolean(blnReadOnly, blnFullRowSelection, LTParameters.getInstance().getColorTable());
+		}
+		
+		return objTableCellRenderer;
+	}
+	
+	/**
+	 * Altera os renderizadores das colunas da tabela.
+	 */
+	private TableCellRenderer setCellRenderer(int intColumnIndex, TableColumnParameters objTableColumnParameters) {
+		TableCellRenderer objTableCellRenderer = null;
+		
+		if (objTableColumnParameters.getColumnDataType() == LTDataTypes.INTEGER) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.INTEGER, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.LONG) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.LONG, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DOUBLE) {
+			TableRendererDefault objTableRendererDefault = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+			objTableRendererDefault.setColumnDoubleFractionDigits(objTableColumnParameters.getColumnDoubleFractionDigits());
+			objTableCellRenderer = objTableRendererDefault;
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.STRING) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.STRING, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TEXT) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TEXT, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.DATE, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.HOUR) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.HOUR, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.BOOLEAN) {
+			objTableCellRenderer = new TableRendererBoolean(blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnColor());
+		}
+		
+		return objTableCellRenderer;
+	}
+	
+	/**
+	 * Cria os editores das colunas da tabela.
+	 */
+	private TableCellEditor setCellEditor(LTDataTypes objDataType) {
+		TableCellEditor objTableCellEditor = null;
+		
+		if (objDataType == LTDataTypes.INTEGER) {
+			objTableCellEditor = new TableEditorInteger();
+		} else if (objDataType == LTDataTypes.LONG) {
+			objTableCellEditor = new TableEditorLong();
+		} else if (objDataType == LTDataTypes.DOUBLE) {
+			objTableCellEditor = new TableEditorDouble(2);
+		} else if (objDataType == LTDataTypes.STRING) {
+			objTableCellEditor = new TableEditorString(20);
+		} else if (objDataType == LTDataTypes.TEXT) {
+			objTableCellEditor = new TableEditorText();
+		} else if (objDataType == LTDataTypes.DATE) {
+			objTableCellEditor = new TableEditorDate();
+		} else if (objDataType == LTDataTypes.HOUR) {
+			objTableCellEditor = new TableEditorHour();
+		} else if (objDataType == LTDataTypes.BOOLEAN) {
+			objTableCellEditor = null;
+		}
+		
+		return objTableCellEditor;
+	}
+	
+	/**
+	 * Altera os editores de uma coluna da tabela.
+	 */
+	private TableCellEditor setCellEditor(TableColumnParameters objTableColumnParameters) {
+		TableCellEditor objTableCellEditor = null;
+		
+		if (objTableColumnParameters.getColumnDataType() == LTDataTypes.INTEGER) {
+			objTableCellEditor = new TableEditorInteger();
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.LONG) {
+			objTableCellEditor = new TableEditorLong();
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DOUBLE) {
+			objTableCellEditor = new TableEditorDouble(objTableColumnParameters.getColumnDoubleFractionDigits());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.STRING) {
+			objTableCellEditor = new TableEditorString(objTableColumnParameters.getColumnStringMaximumLength());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TEXT) {
+			objTableCellEditor = new TableEditorText();
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {
+			objTableCellEditor = new TableEditorDate();
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.HOUR) {
+			objTableCellEditor = new TableEditorHour();
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.BOOLEAN) {
+			objTableCellEditor = null;
+		}
+		
+		return objTableCellEditor;
 	}
 	
 	/**
@@ -539,28 +534,55 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		objTable.setRowSelectionAllowed(blnFullRowSelection);
 		objTableFixed.setRowSelectionAllowed(blnFullRowSelection);
 		
+		setTableRenderersEditors();
+		/*
 		objTableRendererInteger.setFullRowSelection(blnFullRowSelection);
 		objTableRendererLong.setFullRowSelection(blnFullRowSelection);
 		objTableRendererString.setFullRowSelection(blnFullRowSelection);
 		objTableRendererText.setFullRowSelection(blnFullRowSelection);
 		objTableRendererDate.setFullRowSelection(blnFullRowSelection);
-		objTableRendererBoolean.setFullRowSelection(blnFullRowSelection);
+		//objTableRendererBoolean.setFullRowSelection(blnFullRowSelection);
+		*/
+		//for (int indexRendererDouble = 0; indexRendererDouble < lstTableRendererDouble.size(); indexRendererDouble++) {
+		//	lstTableRendererDouble.get(indexRendererDouble).setFullRowSelection(blnFullRowSelection);
+		//}
+	}
+	
+	/**
+	 * Retorna o alinhamento padrão para as colunas da tabela. 
+	 * 
+	 * @param objColumnDataType
+	 * 
+	 * @return intHorizontalAlignment
+	 */
+	private int getColumnHorizontalAlignment(LTDataTypes objColumnDataType) {
+		int intHorizontalAlignment = 2;  // Esquerda
 		
-		for (int indexRendererDouble = 0; indexRendererDouble < lstTableRendererDouble.size(); indexRendererDouble++) {
-			lstTableRendererDouble.get(indexRendererDouble).setFullRowSelection(blnFullRowSelection);
+		if (objColumnDataType == LTDataTypes.INTEGER || objColumnDataType == LTDataTypes.LONG || objColumnDataType == LTDataTypes.DOUBLE) {
+			intHorizontalAlignment = 4;  // Direita
 		}
+		
+		return intHorizontalAlignment;
 	}
 	
 	// *********************************************************************
 	// Implementa TableInterface
-	@Override
 	public void addColumn(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable) {
+		addColumn(strColumnName, strColumnDescription, objColumnDataType, intColumnWidth, blnColumnEditable, true);
+	}
+	
+	@Override
+	public void addColumn(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, boolean blnColumnShowZeroValues) {
 		try {
 			if (strColumnName.equals(ID_ROW_LT_TABLE) && getColumnCount() != 0) {
 				 throw new Exception("Cannot create column named: " + ID_ROW_LT_TABLE + ". Try another column name.");
 			} else {
-				lstColumnParameters.add(new TableColumnParameters(strColumnName, strColumnDescription, objColumnDataType, intColumnWidth, blnColumnEditable));
-			
+				TableCellRenderer objTableCellRenderer = setCellRenderer(getColumnCount(), objColumnDataType);
+				TableCellEditor objTableCellEditor = setCellEditor(objColumnDataType);
+				TableColumnParameters objTableColumnParameters = new TableColumnParameters(objTableCellRenderer, objTableCellEditor, strColumnName, strColumnDescription, objColumnDataType, intColumnWidth, blnColumnEditable, blnColumnShowZeroValues, getColumnHorizontalAlignment(objColumnDataType), LTParameters.getInstance().getColorTable());
+				
+				lstColumnParameters.add(objTableColumnParameters);
+				
 				// Caso a tabela já tenha sido criada, faz os ajustes nos modelos e colunas
 				if (objTable != null) {
 					objTable.getColumnModel().addColumn(new TableColumn(getColumnCount() - 1));
@@ -575,7 +597,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 						setValueAt(null, indexRow, getColumnCount() - 1);
 					}
 		
-					setTableColumnFormat();
 					setTableColumnDescriptions();
 					setTableColumnWidth();
 				}
@@ -604,12 +625,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		}
 		
 		objTableFixedModel.setRowCount(getRowCount());
-		
-		if (!blnSetTableColumnsFormat) {
-			setTableColumnFormat();
-			
-			blnSetTableColumnsFormat = true;
-		}
 		
 		// Atribui um ID para a linha nova
 		addRowData(ID_ROW_LT_TABLE, intIdRowTable);
@@ -693,7 +708,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 						
 						fireTableStructureChanged();
 						
-						setTableColumnFormat();
 						setTableColumnDescriptions();
 						setTableColumnWidth();
 						
@@ -712,7 +726,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		
 		lstColumnModel = new ArrayList<TableColumnModel>();
 		lstColumnParameters = new ArrayList<TableColumnParameters>();
-		lstTableRendererDouble = new ArrayList<TableRendererDouble>();
 		
 		// Adiciona a coluna de ID novamente
 		addColumn(ID_ROW_LT_TABLE, ID_ROW_LT_TABLE, LTDataTypes.INTEGER, 0, false);
@@ -757,25 +770,20 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 
 	    	if (objDataType == LTDataTypes.INTEGER) {
 	    		classType = Integer.class;
-	    		
 	    	} else if (objDataType == LTDataTypes.LONG) {
 	        	classType = Long.class;
-	    	
 	    	} else if (objDataType == LTDataTypes.DOUBLE) {
 	  			classType = Double.class;
-	    	
 	    	} else if (objDataType == LTDataTypes.STRING) {
 	  			classType = String.class;
-	    	
 	    	} else if (objDataType == LTDataTypes.TEXT) {
 	  			classType = String.class;
-	  		
 	    	} else if (objDataType == LTDataTypes.DATE) {
 	  			classType = String.class;
-	  		
+	    	} else if (objDataType == LTDataTypes.HOUR) {
+	  			classType = String.class;
 	    	} else if (objDataType == LTDataTypes.BOOLEAN) {
 	  			classType = Boolean.class;
-	  			
 	    	} else if (objDataType == LTDataTypes.BUTTON) {
 	  			classType = JButton.class;
 	  		}
@@ -786,24 +794,25 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	@Override
 	public void setColumnColor(int intColumnIndex, Color color) {
-		setTableColumnRendererEditor(intColumnIndex, color);
+		lstColumnParameters.get(intColumnIndex).setColumnColor(color);
 		
-		fireTableDataChanged();
+		if (objTable != null) {
+			TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+			
+			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
+			
+			fireTableDataChanged();	
+		}
 	}
 			
 	@Override
 	public void setColumnColor(String strColumnName, Color color) {
-		int intColumnIndex = -1;
-		
-		for (int columnIndex = 0; columnIndex < getColumnCount(); columnIndex++) {
-			if (lstColumnParameters.get(columnIndex).getColumnName().equals(strColumnName)) {
-				intColumnIndex = columnIndex; 
+		for (int intColumnIndex = 0; intColumnIndex < getColumnCount(); intColumnIndex++) {
+			if (lstColumnParameters.get(intColumnIndex).getColumnName().equals(strColumnName)) {
+				setColumnColor(intColumnIndex, color);
+				
 				break;
 			}
-		}
-
-		if (intColumnIndex != -1) {
-			setColumnColor(intColumnIndex, color);
 		}
 	}
 	
@@ -920,51 +929,69 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				throw new Exception("Cannot set values for column: " + ID_ROW_LT_TABLE + ".");
 			} else {
 				LTDataTypes objDataType = lstColumnParameters.get(intColumnIndex).getColumnDataType();
+				boolean blnShowZeroValues = lstColumnParameters.get(intColumnIndex).getColumnShowZeroValues();
+				
+				lstColumnModel.get(intRowIndex).setValue(intColumnIndex, "");
 				
 				if (objDataType == LTDataTypes.INTEGER) {
-					if (objValue == null || objValue.equals("")) {
-						objValue = 0;
+					if (blnShowZeroValues) {
+						if (objValue == null || objValue.equals("")) {
+							objValue = 0;
+						}
+						
+						lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Integer.parseInt(objValue.toString()));
+					} else {
+						if (objValue != null && !objValue.equals("")) {
+							lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Integer.parseInt(objValue.toString()));
+						}
 					}
-					
-					lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Integer.parseInt(objValue.toString()));
 					
 				} else if (objDataType == LTDataTypes.LONG) {
-					if (objValue == null || objValue.equals("")) {
-						objValue = 0;
+					if (blnShowZeroValues) {
+						if (objValue == null || objValue.equals("")) {
+							objValue = 0;
+						}
+						
+						lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Long.parseLong(objValue.toString()));
+					} else {
+						if (objValue != null && !objValue.equals("")) {
+							lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Long.parseLong(objValue.toString()));
+						}
 					}
-					
-					lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Long.parseLong(objValue.toString()));
 			    	
 			    } else if (objDataType == LTDataTypes.DOUBLE) {
-			    	if (objValue == null || objValue.equals("")) {
-			    		objValue = 0;
+			    	if (blnShowZeroValues) {
+				    	if (objValue == null || objValue.equals("")) {
+				    		objValue = 0;
+				    	} else {
+			    			String strDouble = objValue.toString();
+			    			strDouble = strDouble.replace(",", ".");
+			    			objValue = strDouble;
+				    	}
+				    	
+				    	lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
 			    	} else {
-		    			String strDouble = objValue.toString();
-		    			strDouble = strDouble.replace(",", ".");
-		    			objValue = strDouble;
+			    		if (objValue != null && !objValue.equals("")) {
+			    			String strDouble = objValue.toString();
+			    			strDouble = strDouble.replace(",", ".");
+			    			objValue = strDouble;
+			    			
+			    			lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
+						}
 			    	}
 			    	
-			    	lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
-			    	
 			    } else if (objDataType == LTDataTypes.STRING) {
-			    	if (objValue == null || objValue.equals("")) {
-			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, "");
-			    	} else {
+			    	if (objValue != null && !objValue.equals("")) {
 			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (String) objValue);
 			    	}
 			    	
 			    } else if (objDataType == LTDataTypes.TEXT) {
-			    	if (objValue == null || objValue.equals("")) {
-			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, "");
-			    	} else {
+			    	if (objValue != null && !objValue.equals("")) {
 			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (String) objValue);
 			    	}
 					
 			    } else if (objDataType == LTDataTypes.DATE) {
-			    	if (objValue == null || objValue.equals("")) {
-			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, "");
-			    		
-			    	} else {
+			    	if (objValue != null && !objValue.equals("")) {
 			    		try {
 				    		// Se o formato padrão da data for "dd/MM/yyyy"
 				    		if (objValue.toString().substring(2, 3).equals("/") && objValue.toString().substring(5, 6).equals("/")) {
@@ -973,6 +1000,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 							// Se o formato padrão da data for "yyyy-MM-dd" (armazenado no banco de dados)
 							} else if (objValue.toString().substring(4, 5).equals("-") && objValue.toString().substring(7, 8).equals("-")) {
 								String strValue = (String) objValue;
+								
+								SimpleDateFormat dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat());
+								SimpleDateFormat dateDatabaseFormat = new SimpleDateFormat("yyyy-MM-dd");
 								
 								Date date = dateDatabaseFormat.parse(strValue);
 								strValue = dateFormat.format(date);
@@ -984,7 +1014,12 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			    			lstColumnModel.get(intRowIndex).setValue(intColumnIndex, "");
 			    		}
 			    	}
-					
+			    	
+			    } else if (objDataType == LTDataTypes.HOUR) {
+			    	if (objValue != null && !objValue.equals("")) {
+			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (String) objValue);
+			    	}
+			    	
 				} else if (objDataType == LTDataTypes.BOOLEAN) {
 					if (objValue == null || objValue.equals("")) {
 						lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (boolean) false);
@@ -1066,13 +1101,15 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     @Override
     public void setColumnStringMaximumLength(String strColumnName, int intColumnStringMaximumLength) {
     	for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
-    		if (lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
+    		if (lstColumnParameters.get(indexColumn).getColumnDataType() == LTDataTypes.STRING && lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
     			lstColumnParameters.get(indexColumn).setColumnMaximumLength(intColumnStringMaximumLength);
-
-    			if (objTable != null) {
-    				setTableColumnRendererEditor(indexColumn, objTable.getBackground());
-    			}
     			
+				if (objTable != null) {
+					TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(indexColumn));
+					
+					objTable.getColumnModel().getColumn(indexColumn).setCellEditor(objTableCellEditor);
+				}
+				
     			break;
     		}
     	}
@@ -1081,11 +1118,34 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     @Override
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits) {
     	for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
-    		if (lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
+    		if (lstColumnParameters.get(indexColumn).getColumnDataType() == LTDataTypes.DOUBLE && lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
     			lstColumnParameters.get(indexColumn).setColumnDoubleFractionDigits(intColumnDoubleFractionDigits);
+    			
+				if (objTable != null) {
+					TableRendererDefault objTableRendererDefault = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, lstColumnParameters.get(indexColumn).getColumnHorizontalAlignment(), lstColumnParameters.get(indexColumn).getColumnColor());
+					objTableRendererDefault.setColumnDoubleFractionDigits(lstColumnParameters.get(indexColumn).getColumnDoubleFractionDigits());
+					
+					TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(indexColumn));
+					
+					objTable.getColumnModel().getColumn(indexColumn).setCellRenderer(objTableRendererDefault);
+					objTable.getColumnModel().getColumn(indexColumn).setCellEditor(objTableCellEditor);
+				}
+    			
+    			break;
+    		}
+    	}
+	}
+    
+    @Override
+	public void setColumnHorizontalAlignment(String strColumnName, int intHorizontalAlignment) {
+    	for (int intColumnIndex = 0; intColumnIndex < getColumnCount(); intColumnIndex++) {
+    		if (lstColumnParameters.get(intColumnIndex).getColumnName().equals(strColumnName)) {
+    			lstColumnParameters.get(intColumnIndex).setColumnHorizontalAlignment(intHorizontalAlignment);
     			 
     			if (objTable != null) {
-    				setTableColumnRendererEditor(indexColumn, objTable.getBackground());
+    				TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+    				
+    				objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
     			}
     			
     			break;
@@ -1117,7 +1177,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     @Override
 	public void updateTableData() {
 		fireTableDataChanged();
-		setTableColumnFormat();
+
 		setTableColumnDescriptions();
 		setTableColumnWidth();
 	}

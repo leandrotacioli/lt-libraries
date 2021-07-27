@@ -143,7 +143,7 @@ public class TableExtension extends JTable {
 			// Altera a cor de background da linha
 			if (blnReadOnly) {
 				if (!isRowSelected(rowIndex)) {
-					component.setBackground(rowIndex % 2 == 0 ? getBackground() : Color.LIGHT_GRAY);
+					component.setBackground(rowIndex % 2 == 0 ? getBackground() : new Color(220, 220, 220));
 				}
 				
 			} else {
@@ -155,7 +155,7 @@ public class TableExtension extends JTable {
 			}
 			
 		} catch (Exception e) {
-			
+			e.printStackTrace();
 		}
 		
 		return component;

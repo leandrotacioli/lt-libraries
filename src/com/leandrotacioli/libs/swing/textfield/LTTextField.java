@@ -17,7 +17,7 @@ import net.miginfocom.swing.MigLayout;
  * Campos.
  * 
  * @author Leandro Tacioli
- * @version 2.2 - 01/Jul/2016
+ * @version 2.3 - 09/Jun/2020
  */
 public class LTTextField extends JPanel implements TextFieldInterface {
 	private static final long serialVersionUID = 7550401382977332304L;
@@ -86,6 +86,9 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 
 			} else if (objDataType == LTDataTypes.DATE) {
 				objTextField = new TextFieldPanelDate(strLabel, blnEnabled, blnMandatoryField);
+				
+			} else if (objDataType == LTDataTypes.HOUR) {
+				objTextField = new TextFieldPanelHour(strLabel, blnEnabled, blnMandatoryField);
 
 			} else if (objDataType == LTDataTypes.BOOLEAN) {
 				objTextField = new TextFieldPanelBoolean(strLabel, blnEnabled, blnMandatoryField);

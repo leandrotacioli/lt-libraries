@@ -141,9 +141,15 @@ public class TextFieldPanelText extends TextField implements FocusListener, KeyL
 	// Implementa FocusListener
 	@Override
 	public void focusGained(FocusEvent event) {
-		textArea.setCaretPosition(0);
-		textArea.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
-		txtTextField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+		if (getEnabled()) {
+			textArea.setCaretPosition(0);
+			textArea.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+			txtTextField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+		} else {
+			textArea.setForeground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
+			textArea.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
+			txtTextField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
+		}
 	}
 
 	@Override

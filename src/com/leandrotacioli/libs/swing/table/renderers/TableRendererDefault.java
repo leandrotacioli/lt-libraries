@@ -2,9 +2,9 @@ package com.leandrotacioli.libs.swing.table.renderers;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.text.DecimalFormat;
 
 import javax.swing.JTable;
-import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 
 import com.leandrotacioli.libs.LTDataTypes;
@@ -13,7 +13,7 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 06/Ago/2018
+ * @version 2.0 - 21/Nov/2020
  */
 public class TableRendererDefault extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 3585207723628352892L;
@@ -24,59 +24,62 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	private boolean blnFullRowSelection;
 
 	private Color colorBackground;
-
+	
+	private DecimalFormat decimalFormat;
+	
 	/**
-	 * Altera o status de seleção para toda a linha da tabela.
+	 * Altera a quantidade de casas decimais.
 	 * 
-	 * @param blnFullRowSelection
+	 * @param intColumnDoubleFractionDigits
 	 */
-	public void setFullRowSelection(boolean blnFullRowSelection) {
-		this.blnFullRowSelection = blnFullRowSelection;
-	}
-
-	/**
-	 * Altera a cor de background da coluna <i>INTEGER</i>.
-	 * 
-	 * @param colorBackground
-	 */
-	public void setColorBackground(Color colorBackground) {
-		this.colorBackground = colorBackground;
+	public void setColumnDoubleFractionDigits(int intColumnDoubleFractionDigits) {
+		decimalFormat = new DecimalFormat();
+		decimalFormat.setMinimumFractionDigits(intColumnDoubleFractionDigits);
+		decimalFormat.setMaximumFractionDigits(intColumnDoubleFractionDigits);
+		decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
 	}
 	
 	/**
 	 * Estabelece um <i>renderer</i> padrão para as colunas da tabela.
-	 *  
-	 * @param blnReadOnly         - 
-	 * @param blnFullRowSelection - 
-	 * @param colorBackground     - Cor de background
+	 * 
+	 * @param blnReadOnly           - Apenas leitura
+	 * @param blnFullRowSelection   - Linha inteira da tabela está sendo selecionada
+	 * @param intHorizonalAlignment - Alinhamento horizonal
+	 * @param colorBackground       - Cor de background
 	 */
-	public TableRendererDefault(LTDataTypes objDataType, boolean blnReadOnly, boolean blnFullRowSelection, Color colorBackground) {
+	public TableRendererDefault(LTDataTypes objDataType, boolean blnReadOnly, boolean blnFullRowSelection, int intHorizonalAlignment, Color colorBackground) {
 		this.objDataType = objDataType;
 		this.blnReadOnly = blnReadOnly;
 		this.blnFullRowSelection = blnFullRowSelection;
 		this.colorBackground = colorBackground;
 		
-		if (this.objDataType == LTDataTypes.INTEGER) {
-			setHorizontalAlignment(SwingConstants.RIGHT);
-		} else if (this.objDataType == LTDataTypes.LONG) {
-			setHorizontalAlignment(SwingConstants.RIGHT);
-		} else if (this.objDataType == LTDataTypes.DOUBLE) {
-			setHorizontalAlignment(SwingConstants.RIGHT);
-		} else if (this.objDataType == LTDataTypes.STRING) {
-			setHorizontalAlignment(SwingConstants.LEFT);
-		} else if (this.objDataType == LTDataTypes.TEXT) {
-			setHorizontalAlignment(SwingConstants.LEFT);
-		} else if (this.objDataType == LTDataTypes.DATE) {
-			setHorizontalAlignment(SwingConstants.LEFT);
-		}
-		
+		setHorizontalAlignment(intHorizonalAlignment);
 		setFont(LTParameters.getInstance().getFontTableTextField());
 		setBackground(colorBackground);
+		
+		if (objDataType == LTDataTypes.DOUBLE) {
+			decimalFormat = new DecimalFormat();
+			decimalFormat.setMinimumFractionDigits(2);
+			decimalFormat.setMaximumFractionDigits(2);
+			decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
+		}
 	}
 
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object aValue, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex) {
-		setValue(aValue);
+		if (objDataType == LTDataTypes.DOUBLE) {
+			if (aValue != null && !aValue.equals("")) {
+				setValue(decimalFormat.format((Number) aValue));
+			} else {
+				setValue("");
+			}
+		} else {
+			if (aValue != null && !aValue.equals("")) {
+				setValue(aValue);
+			} else {
+				setValue("");
+			}
+		}
 		
 		if (hasFocus) {
 			setBorder(LTParameters.getInstance().getBorderTableTextFieldFocus());

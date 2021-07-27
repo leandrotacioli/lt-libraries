@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Component;
 
 import javax.swing.JCheckBox;
-import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.table.TableCellRenderer;
 
@@ -13,7 +12,7 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 22/Abr/2015
+ * @version 2.0 - 09/Nov/2020
  */
 public class TableRendererBoolean extends JCheckBox implements TableCellRenderer {
 	private static final long serialVersionUID = -3981049152248920887L;
@@ -22,24 +21,6 @@ public class TableRendererBoolean extends JCheckBox implements TableCellRenderer
 	private boolean blnFullRowSelection;
 	
 	private Color colorBackground;
-	
-	/**
-	 * Altera o status de seleção para toda a linha da tabela.
-	 * 
-	 * @param blnFullRowSelection -
-	 */
-	public void setFullRowSelection(boolean blnFullRowSelection) {
-		this.blnFullRowSelection = blnFullRowSelection;
-	}
-	
-	/**
-	 * Altera a cor de background da coluna <i>INTEGER</i>.
-	 * 
-	 * @param colorBackground
-	 */
-	public void setColorBackground(Color colorBackground) {
-		this.colorBackground = colorBackground;
-	}
 
 	/**
 	 * 
@@ -51,8 +32,8 @@ public class TableRendererBoolean extends JCheckBox implements TableCellRenderer
 		this.blnReadOnly = blnReadOnly;
 		this.blnFullRowSelection = blnFullRowSelection;
 		this.colorBackground = colorBackground;
-
-		setHorizontalAlignment(JLabel.CENTER);
+		
+		setHorizontalAlignment(0);      // Centralizado
 		setBackground(colorBackground);
 		setBorderPainted(true);
 		setOpaque(true);

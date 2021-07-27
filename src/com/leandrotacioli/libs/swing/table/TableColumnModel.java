@@ -5,9 +5,7 @@ import java.util.List;
 
 /**
  * Estabelece o modelo da LTTable. <br>
- * Como os objetos da tabela serão dinâmicos,
- * o desenvolvedor que irá estabelecer que 
- * tipo de dado será atribuído à cada coluna.
+ * Como os objetos da tabela serão dinâmicos, o desenvolvedor que irá estabelecer que tipo de dado será atribuído à cada coluna.
  * 
  * @author Leandro Tacioli
  * @version 3.0 - 05/Set/2015
@@ -38,9 +36,7 @@ public class TableColumnModel {
 	
 	/**
 	 * Estabelece o modelo da LTTable. <br>
-	 * Como os objetos da tabela serão dinâmicos,
-	 * o desenvolvedor que irá estabelecer que 
-	 * tipo de dado será atribuído à cada coluna.
+	 * Como os objetos da tabela serão dinâmicos, o desenvolvedor que irá estabelecer que tipo de dado será atribuído à cada coluna.
 	 * 
 	 * @param intTotalColumns - Total de colunas da tabela
 	 */

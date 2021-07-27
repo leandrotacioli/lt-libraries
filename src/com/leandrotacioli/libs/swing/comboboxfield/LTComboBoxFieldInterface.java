@@ -52,6 +52,20 @@ public interface LTComboBoxFieldInterface {
 	/**
 	 * Altera o valor do campo.
 	 * 
+	 * param intKeyValue
+	 */
+	public void setValue(int intKeyValue);
+	
+	/**
+	 * Altera o valor do campo.
+	 * 
+	 * param lgnKeyValue
+	 */
+	public void setValue(Long lgnKeyValue);
+	
+	/**
+	 * Altera o valor do campo.
+	 * 
 	 * param strKeyValue
 	 */
 	public void setValue(String strKeyValue);

@@ -128,7 +128,11 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 	// Implementa FocusListener
 	@Override
 	public void focusGained(FocusEvent event) {
-		txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+		if (getEnabled()) {
+			txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+		} else {
+			txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
+		}
 	}
 	
 	@Override

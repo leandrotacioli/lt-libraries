@@ -25,6 +25,18 @@ public interface TableInterface {
 	public void addColumn(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable);
 	
 	/**
+	 * Adiciona uma nova coluna à LTTable.
+	 * 
+     * @param strColumnName           - Nome da coluna
+     * @param strColumnDescription    - Descrição da coluna que será apresentada ao usuário
+     * @param objColumnDataType       - Tipo de dado da coluna
+     * @param intColumnWidth          - Comprimento da coluna na visualização da tabela
+     * @param blnColumnEditable       - Status das células da coluna (True = Editável)
+     * @param blnColumnShowZeroValues - Exibe valores zerados para campos numéricos (INTEGER, LONG, DOUBLE)
+	 */
+	public void addColumn(String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, boolean blnColumnShowZeroValues);
+	
+	/**
 	 * Adiciona uma nova linha à LTTable.<br>
 	 * <br>
 	 * IMPORTANTE: É necessário chamar o método <i>finishAddRow</i>
@@ -276,6 +288,16 @@ public interface TableInterface {
 	 * @param intColumnDoubleFractionDigits - Quantidade de casas decimais
 	 */
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits);
+	
+	/**
+	 * Altera o alinhamento horizonal de uma coluna da tabela.
+	 * 
+	 * @param strColumnName          - Nome da coluna
+	 * @param intHorizontalAlignment - Alinhamento Horizonal
+	 * <br>
+	 * <i>0 - Centralizado | 2 - Esquerda | 4 - Direita</i>
+	 */
+	public void setColumnHorizontalAlignment(String strColumnName, int intHorizontalAlignment);
 	
 	/**
 	 * Permite a remoção de linhas.

@@ -1,5 +1,6 @@
 package com.leandrotacioli.libs.swing.table.renderers;
 
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,11 +13,11 @@ import javax.swing.BorderFactory;
 import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JTable;
-import javax.swing.UIManager;
 import javax.swing.border.Border;
 import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
+import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.swing.table.TableExtension;
 
 /**
@@ -27,7 +28,7 @@ import com.leandrotacioli.libs.swing.table.TableExtension;
  * 'http://www.camick.com/java/source/ButtonColumn.java'
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 26/Ago/2018
+ * @version 1.1 - 21/Nov/2020
  */
 public class TableRendererButton extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
 	private static final long serialVersionUID = 3542107700428307692L;
@@ -88,13 +89,11 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
 		if (isSelected) {
-			btnRenderer.setForeground(table.getSelectionForeground());
-			btnRenderer.setBackground(table.getSelectionBackground());
+			btnRenderer.setBackground(LTParameters.getInstance().getColorTableRowSelected());
 		} else {
-			btnRenderer.setForeground(table.getForeground());
-			btnRenderer.setBackground(UIManager.getColor("Button.background"));
+			btnRenderer.setBackground(Color.WHITE);
 		}
-
+		
 		if (hasFocus) {
 			btnRenderer.setBorder(focusBorder);
 		} else {
@@ -115,6 +114,8 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 			btnRenderer.setIcon(null);
 			btnRenderer.setContentAreaFilled(true);
 		}
+		
+		btnRenderer.setOpaque(true);
 		
 		return btnRenderer;
 	}

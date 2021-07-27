@@ -90,8 +90,6 @@ public class TextFieldPanelDate extends TextField implements FocusListener {
 	public void setEnabled(boolean blnEnabled) {
 		super.setEnabled(blnEnabled);
 		
-		objTextFieldPanel.setAlertVisible(false);
-		
 		setDateProperties();
 	}
 	
@@ -119,12 +117,14 @@ public class TextFieldPanelDate extends TextField implements FocusListener {
 	// Implementa FocusListener
 	@Override
 	public void focusGained(FocusEvent event) {
-		txtDateField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
-		
-		if ((txtDateField.getDate() == null || txtDateField.getDate().length() == 0)) {
-			txtDateField.setDateFormat();
-		//} else {
-		//	txtDateField.select(0, txtDateField.getText().length());
+		if (getEnabled()) {
+			txtDateField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+			
+			if ((txtDateField.getDate() == null || txtDateField.getDate().length() == 0)) {
+				txtDateField.setDateFormat();
+			}
+		} else {
+			txtDateField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
 		}
 	}
 
@@ -150,10 +150,5 @@ public class TextFieldPanelDate extends TextField implements FocusListener {
 			txtDateField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
 			objTextFieldPanel.setAlertVisible(false);
 		}
-		
-		//objTextFieldPanel.setBackground(new Color(50, 50, 50, 50));
-		
-		//txtDateField.revalidate();
-		//objTextFieldPanel.revalidate();
 	}
 }

@@ -26,6 +26,7 @@ import javax.swing.KeyStroke;
 import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
+import javax.swing.SwingConstants;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.AbstractTableModel;
@@ -465,7 +466,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		} else if (objDataType == LTDataTypes.DOUBLE) {
 			objTableCellEditor = new TableEditorDouble(2);
 		} else if (objDataType == LTDataTypes.STRING) {
-			objTableCellEditor = new TableEditorString(20);
+			objTableCellEditor = new TableEditorString(20, SwingConstants.LEFT);
 		} else if (objDataType == LTDataTypes.TEXT) {
 			objTableCellEditor = new TableEditorText();
 		} else if (objDataType == LTDataTypes.DATE) {
@@ -492,7 +493,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DOUBLE) {
 			objTableCellEditor = new TableEditorDouble(objTableColumnParameters.getColumnDoubleFractionDigits());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.STRING) {
-			objTableCellEditor = new TableEditorString(objTableColumnParameters.getColumnStringMaximumLength());
+			objTableCellEditor = new TableEditorString(objTableColumnParameters.getColumnStringMaximumLength(), SwingConstants.LEFT);
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TEXT) {
 			objTableCellEditor = new TableEditorText();
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {

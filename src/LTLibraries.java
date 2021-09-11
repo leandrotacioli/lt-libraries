@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.SwingConstants;
 
 import net.miginfocom.swing.MigLayout;
 
@@ -40,6 +41,7 @@ public class LTLibraries implements TableListener {
 	
 	private JPanel panelFields;
 	private LTTextField txtString;
+	private LTTextField txtStringDireita;
 	private LTTextField txtInteger;
 	private LTTextField txtLong;
 	private LTTextField txtDouble;
@@ -152,6 +154,9 @@ public class LTLibraries implements TableListener {
 			}
 		});
 		
+		txtStringDireita = new LTTextField("StringDireita", LTDataTypes.STRING, false, true, 100);
+		txtStringDireita.setHorizontalAlignment(SwingConstants.RIGHT);
+		
 		txtText = new LTTextField("Text", LTDataTypes.TEXT, true, true);
 		txtDate = new LTTextField("Date", LTDataTypes.DATE, true, true);
 		txtHour = new LTTextField("Hour", LTDataTypes.HOUR, true, true);
@@ -168,6 +173,7 @@ public class LTLibraries implements TableListener {
 		panelFields.add(txtDouble, "cell 0 0, grow, width 200");
 	    
 		panelFields.add(txtString, "cell 0 1, grow, width 400");
+		panelFields.add(txtStringDireita, "cell 0 1, grow, width 400");
 		
 		panelFields.add(txtText, "cell 0 2, grow");
 		
@@ -225,6 +231,7 @@ public class LTLibraries implements TableListener {
 				System.out.println("Long: " + txtLong.getValue());
 				System.out.println("Double: " + txtDouble.getValue());
 				System.out.println("String: " + txtString.getValue());
+				System.out.println("String Direita: " + txtStringDireita.getValue());
 				System.out.println("Text: " + txtText.getValue());
 				System.out.println("Date: " + txtDate.getValue());
 				System.out.println("Hour: " + txtHour.getValue());
@@ -268,6 +275,9 @@ public class LTLibraries implements TableListener {
 				
 				txtString.setValue("String Alterado");
 				txtString.setLabel("String 2:");
+				
+				txtStringDireita.setValue("String Direita Alterado");
+				txtStringDireita.setLabel("String 2 Direita:");
 				
 				txtText.setValue("Text Alterado");
 				txtText.setLabel("Text 2:");

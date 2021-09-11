@@ -17,7 +17,7 @@ import net.miginfocom.swing.MigLayout;
  * Campos.
  * 
  * @author Leandro Tacioli
- * @version 2.3 - 09/Jun/2020
+ * @version 2.4 - 11/Set/2021
  */
 public class LTTextField extends JPanel implements TextFieldInterface {
 	private static final long serialVersionUID = 7550401382977332304L;
@@ -102,6 +102,15 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 		} catch(Exception e) {
         	e.printStackTrace();
         }
+	}
+	
+	/**
+	 * Atualiza o alinhamento horizontal do campo.
+	 * 
+	 * @param intFractionDigits
+	 */
+	public void setHorizontalAlignment(int intHorizontalAlignment) {
+		objTextField.setHorizontalAlignment(intHorizontalAlignment);
 	}
 	
 	/**

@@ -2,7 +2,7 @@
 
 Do you need help on handling fields and tables in Java? LT Libraries is here for you!
 
-LT Libraries allows you to easily insert custom fields (Integer, Long, Double, String, Text, Date, Boolean) and to manipulate tables for graphical user interface (GUI) Java programs.
+LT Libraries allows you to easily insert custom fields (Integer, Long, Double, String, Text, Date, Hour, Boolean) and to manipulate tables for graphical user interface (GUI) Java programs.
 
 ----------------------------------------------------------------------------------
 

@@ -71,6 +71,11 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 	}
 	
 	@Override
+	protected void setHorizontalAlignment(int intHorizontalAlignment) {
+		txtStringField.setHorizontalAlignment(intHorizontalAlignment);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		if ((txtStringField.getText() == null || txtStringField.getText().length() == 0) && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);

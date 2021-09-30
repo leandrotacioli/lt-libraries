@@ -13,7 +13,6 @@ import com.leandrotacioli.libs.swing.textfield.ltstring.TextFieldString;
 /**
  * 
  * @author Leandro Tacioli
- * @version 2.1 - 02/Mai/2016
  */
 public class TextFieldPanelString extends TextField implements FocusListener {
 	private static final long serialVersionUID = -3560423536369302757L;

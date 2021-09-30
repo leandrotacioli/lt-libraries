@@ -124,7 +124,7 @@ public class LTLibraries implements TableListener {
 		txtDouble = new LTTextField("Double", LTDataTypes.DOUBLE, true, true);
 		txtDouble.setFractionDigits(4);
 		
-		txtString = new LTTextField("String", LTDataTypes.STRING, false, true, 40);
+		txtString = new LTTextField("String", LTDataTypes.STRING, true, true, 40);
 		txtString.addKeyListener(new KeyListener() {
 			@Override
 			public void keyTyped(KeyEvent e) {
@@ -154,7 +154,7 @@ public class LTLibraries implements TableListener {
 			}
 		});
 		
-		txtStringDireita = new LTTextField("StringDireita", LTDataTypes.STRING, false, true, 100);
+		txtStringDireita = new LTTextField("StringDireita", LTDataTypes.STRING, true, true, 100);
 		txtStringDireita.setHorizontalAlignment(SwingConstants.RIGHT);
 		
 		txtText = new LTTextField("Text", LTDataTypes.TEXT, true, true);
@@ -200,6 +200,7 @@ public class LTLibraries implements TableListener {
 		objTable.addColumn("double", "Double", LTDataTypes.DOUBLE, 90, true, false);
 		objTable.addColumn("double_show", "Double Exibe Tudo", LTDataTypes.DOUBLE, 90, true, true);
 		objTable.addColumn("string", "String", LTDataTypes.STRING, 170, true);
+		objTable.addColumn("string_right", "String Direita", LTDataTypes.STRING, 170, true);
 		objTable.addColumn("string_editable", "String Editable", LTDataTypes.STRING, 140, true);
 		objTable.addColumn("string_not_editable", "String Not Editable", LTDataTypes.STRING, 140, false);
 		objTable.addColumn("text", "Text", LTDataTypes.TEXT, 140, true);
@@ -211,6 +212,7 @@ public class LTLibraries implements TableListener {
 		objTable.setColumnStringMaximumLength("string", 10);
 		objTable.setColumnDoubleFractionDigits("double", 1);
 		//objTable.setColumnDoubleFractionDigits("double_show", 3);
+		objTable.setColumnHorizontalAlignment("string_right", 4);
 		objTable.setColumnHorizontalAlignment("double", 2);
 		objTable.setColumnHorizontalAlignment("date", 0);
 		objTable.setColumnColor("integer", Color.RED);
@@ -371,6 +373,7 @@ public class LTLibraries implements TableListener {
 		//objTable.addRowData("double", 20.20);
 		objTable.addRowData("double_show", 22.22);
 		objTable.addRowData("string", "Segundo");
+		objTable.addRowData("string_right", "Segundo Direita");
 		objTable.addRowData("string_not_editable", "Segundo Fixo");
 		objTable.addRowData("text", "Segundo livre");
 		objTable.addRowData("date", "02/02/2002");

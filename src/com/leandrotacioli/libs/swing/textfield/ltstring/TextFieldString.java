@@ -1,18 +1,15 @@
 package com.leandrotacioli.libs.swing.textfield.ltstring;
 
 import javax.swing.JTextField;
-import javax.swing.SwingConstants;
 
 /**
  * 
  * @author Leandro Tacioli
- * @version 2.0 - 11/Sep/2021
  */
 public class TextFieldString extends JTextField {
 	private static final long serialVersionUID = 3190372699935806445L;
 
 	private int intMaximumLength;
-	private int intHorizontalAlignment;
 	
 	/**
 	 * 
@@ -28,38 +25,23 @@ public class TextFieldString extends JTextField {
 	 */
 	public void setMaximumLength(int intMaximumLength) {
 		this.intMaximumLength = intMaximumLength;
-	}
-	
-	/**
-	 * 
-	 * @return intHorizontalAlignment
-	 */
-	public int getHorizontalAlignment() {
-		return intHorizontalAlignment;
-	}
-
-	/**
-	 * 
-	 * @param intHorizontalAlignment
-	 */
-	public void setHorizontalAlignment(int intHorizontalAlignment) {
-		this.intHorizontalAlignment = intHorizontalAlignment;
+		
+		setStringFormat();
 	}
 
 	/**
 	 * 
 	 */
 	public TextFieldString() {
-		this(20, SwingConstants.LEFT);
+		this(20);
 	}
 	
 	/**
 	 * 
 	 * @param intMaximumLength
 	 */
-	public TextFieldString(int intMaximumLength, int intHorizontalAlignment) {
+	public TextFieldString(int intMaximumLength) {
 		this.intMaximumLength = intMaximumLength;
-		this.intHorizontalAlignment = intHorizontalAlignment;
 		
 		setStringFormat();
 	}
@@ -68,7 +50,6 @@ public class TextFieldString extends JTextField {
 	 * Estabelece o formato padrão da string.
 	 */
 	private void setStringFormat() {
-		setHorizontalAlignment(intHorizontalAlignment);
-		setDocument(new TextFieldStringDocument(intMaximumLength));
+		this.setDocument(new TextFieldStringDocument(intMaximumLength));
 	}
 }

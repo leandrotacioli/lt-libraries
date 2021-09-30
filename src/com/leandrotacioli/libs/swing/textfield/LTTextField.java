@@ -17,7 +17,6 @@ import net.miginfocom.swing.MigLayout;
  * Campos.
  * 
  * @author Leandro Tacioli
- * @version 2.4 - 11/Set/2021
  */
 public class LTTextField extends JPanel implements TextFieldInterface {
 	private static final long serialVersionUID = 7550401382977332304L;

@@ -86,7 +86,10 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	public void setValue(Object objValue) {
 		try {
 			if (objValue instanceof Double) {
-				dblValue = (double) objValue; 
+				dblValue = (double) objValue;
+			
+			} else if (objValue instanceof Integer) {
+				dblValue = Integer.valueOf(objValue.toString());
 				
 			} else if (objValue instanceof String) {
 				String strValue = objValue.toString();

@@ -265,7 +265,7 @@ public class LTLibraries implements TableListener {
 				txtLong.setValue(Long.MAX_VALUE - 150);
 				txtLong.setLabel("Long 2:");
 				
-				txtDouble.setValue(12.23);
+				txtDouble.setValue(12);
 				txtDouble.setFractionDigits(6);
 				txtDouble.setLabel("Double 2:");
 				
@@ -384,7 +384,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("image", new ImageIcon("res/images/search.png"));
 		objTable.addRowData("integer", 300);
 		objTable.addRowData("long", 3000);
-		objTable.addRowData("double", 30.30);
+		objTable.addRowData("double", 30);
 		objTable.addRowData("string", "Terceiro");
 		objTable.addRowData("string_not_editable", "Terceiro Fixo");
 		objTable.addRowData("text", "Terceiro livre");

@@ -54,7 +54,6 @@ import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
  * Cria uma extensão de <i>AbstractTableModel</i> responsável pela LTTable.
  * 
  * @author Leandro Tacioli
- * @version 7.0 - 11/Nov/2020
  */
 public class Table extends AbstractTableModel implements TableInterface, ActionListener {	
 	private static final long serialVersionUID = 755268795533847516L;
@@ -685,6 +684,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 
 		objTableFixedModel.setRowCount(getRowCount());
 		
+		objTable.clearRowColor();
+		
 		// Zera o ID das linhas
 		intIdRowTable = 0;
 		
@@ -872,7 +873,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	@Override
 	public void setRowColor(int intRowIndex, Color color) {
-		objTable.setRowColor(intRowIndex, color);
+		int intRowId = (int) getValue(intRowIndex, "ID_ROW_LT_TABLE");
+		
+		objTable.setRowColor(intRowId, color);
 	}
 	
 	@Override

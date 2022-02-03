@@ -35,7 +35,6 @@ import com.leandrotacioli.libs.LTParameters;
  * Combobox.
  * 
  * @author Leandro Tacioli
- * @version 2.3 - 24/Mai/2016
  */
 public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface, MouseListener, FocusListener, KeyListener, ItemListener {
 	private static final long serialVersionUID = -2715899779863536880L;
@@ -139,7 +138,7 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	 * Adiciona valores ao campo.
 	 * 
 	 * @param strKeyValue
-	 * @param strLabel
+	 * @param strKeyValueDescription
 	 */
 	public void addValues(String strKeyValue, String strKeyValueDescription) {
 		try {
@@ -148,8 +147,8 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 			} else {
 				lstComboBoxValues.add(new LTComboBoxFieldValues(strKeyValue, strKeyValueDescription));
 				
-				comboBox.addItem(lstComboBoxValues.get(lstComboBoxValues.size() - 1).getKeyValueDescription());
-				comboBox.setSelectedItem(null);	
+				comboBox.addItem(strKeyValueDescription);
+				comboBox.setSelectedItem(null);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

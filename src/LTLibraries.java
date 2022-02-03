@@ -163,10 +163,10 @@ public class LTLibraries implements TableListener {
 		txtBoolean = new LTTextField("Boolean", LTDataTypes.BOOLEAN, true, true);
 		
 		comboBox = new LTComboBoxField("Combo Box", true, true);
-		comboBox.addValues("ABC-1", "ABC");
-		comboBox.addValues("DEF-2", "DEF");
-		comboBox.addValues("GHI-3", "GHI");
-		comboBox.setValue("GHI-3AA");
+		comboBox.addValues("ABC", "ABC-1");
+		comboBox.addValues("DEF", "DEF-2");
+		comboBox.addValues("GHI", "GHI-3");
+		comboBox.setValue("DEF");
 		
 		panelFields.add(txtInteger, "cell 0 0, grow, width 200");
 		panelFields.add(txtLong, "cell 0 0, grow, width 200");
@@ -287,8 +287,12 @@ public class LTLibraries implements TableListener {
 				txtBoolean.setValue(true);
 				txtBoolean.setLabel("Boolean 2:");
 				
-				comboBox.setValue("DEF");
 				comboBox.setLabel("Combo 2:");
+				comboBox.removeValues();
+				comboBox.addValues("JKL", "JKL-4");
+				comboBox.addValues("MNO", "MNO-5");
+				comboBox.addValues("PQR", "PQR-6");
+				comboBox.setValue("MNO");
 			}
 		});
 		
@@ -325,6 +329,7 @@ public class LTLibraries implements TableListener {
 				objTable.addRowData("nova_string", "AAA " + 1);
 				objTable.addRowData("nova_integer", 1 * 100);
 				objTable.addRowData("nova_double", 1 * 0.5);
+				//objTable.setRowColor(objTable.getRowCount() - 1, Color.LIGHT_GRAY);
 				
 				objTable.addRow();
 				objTable.addRowData("nova_string", "BBB " + 1);
@@ -469,7 +474,10 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("hour", "10:10");
 		objTable.addRowData("boolean", false);
 		
-		objTable.setRowSelection(3);
+		objTable.setRowColor(1, Color.LIGHT_GRAY);
+		objTable.setRowColor(7, Color.LIGHT_GRAY);
+		
+		objTable.setRowSelection(5);
 	}
 	
 	private void setComponentEnabled(Container container, boolean blnEnabled) {

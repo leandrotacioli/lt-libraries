@@ -20,7 +20,6 @@ import javax.swing.text.JTextComponent;
  * Fornece uma extensão para a <i>JTable</i> padrão.
  * 
  * @author Leandro Tacioli
- * @version 2.1 - 11/Set/2015
  */
 public class TableExtension extends JTable {
 	private static final long serialVersionUID = 6023069067252460359L;
@@ -49,15 +48,22 @@ public class TableExtension extends JTable {
 
     	this.lstRowColor = new ArrayList<TableExtensionRowColor>();
     }
+	
+	/**
+	 * Limpa as cores das linhas da table.
+	 */
+	protected void clearRowColor() {
+		lstRowColor = new ArrayList<TableExtensionRowColor>();
+	}
     
     /**
      * Altera a cor de uma linha da table.
      * 
-	 * @param intRowIndex - Índice da linha
+     * @param intRowId    - ID da linha
 	 * @param color       - Cor
      */
-    protected void setRowColor(int intRowIndex, Color color) {
-    	lstRowColor.add(new TableExtensionRowColor(intRowIndex, color));
+    protected void setRowColor(int intRowId, Color color) {
+    	lstRowColor.add(new TableExtensionRowColor(intRowId, color));
     }
     
     @Override
@@ -139,7 +145,7 @@ public class TableExtension extends JTable {
 		
 		try {
 			component = super.prepareRenderer(renderer, rowIndex, columnIndex);
-	
+			
 			// Altera a cor de background da linha
 			if (blnReadOnly) {
 				if (!isRowSelected(rowIndex)) {
@@ -148,7 +154,7 @@ public class TableExtension extends JTable {
 				
 			} else {
 				for (int indexRowColor = 0; indexRowColor < lstRowColor.size(); indexRowColor++) {
-					if (lstRowColor.get(indexRowColor).getRowIndex() == rowIndex) {
+					if (lstRowColor.get(indexRowColor).getRowId() == (int) getValueAt(rowIndex, 0)) {
 						component.setBackground(lstRowColor.get(indexRowColor).getColor());
 					}
 				}
@@ -165,18 +171,17 @@ public class TableExtension extends JTable {
 /**
  *
  * @author Leandro Tacioli
- * @version 1.0 - 06/Abr/2015
  */
 class TableExtensionRowColor {
-	private int intRowIndex;
+	private int intRowId;
 	private Color color;
 	
-	protected int getRowIndex() {
-		return intRowIndex;
+	protected int getRowId() {
+		return intRowId;
 	}
 
-	protected void setRowIndex(int intRowIndex) {
-		this.intRowIndex = intRowIndex;
+	protected void setRowId(int intRowId) {
+		this.intRowId = intRowId;
 	}
 
 	protected Color getColor() {
@@ -187,8 +192,8 @@ class TableExtensionRowColor {
 		this.color = color;
 	}
 
-	protected TableExtensionRowColor(int intRowIndex, Color color) {
-		this.intRowIndex = intRowIndex;
+	protected TableExtensionRowColor(int intRowId, Color color) {
+		this.intRowId = intRowId;
 		this.color = color;
 	}
 }

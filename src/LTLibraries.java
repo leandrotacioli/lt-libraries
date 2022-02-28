@@ -103,7 +103,7 @@ public class LTLibraries implements TableListener {
 		borderFields.setTitle("Campos:");
 		
 		panelFields = new JPanel();
-		panelFields.setLayout(new MigLayout("insets 5", "[grow]", "[][][grow][]"));
+		panelFields.setLayout(new MigLayout("insets 5", "[grow]", "[][][100.00][]"));
 		panelFields.setBorder(borderFields);
 		
 		txtInteger = new LTTextField("Integer", LTDataTypes.INTEGER, true, true);
@@ -281,7 +281,10 @@ public class LTLibraries implements TableListener {
 				txtStringDireita.setValue("String Direita Alterado");
 				txtStringDireita.setLabel("String 2 Direita:");
 				
-				txtText.setValue("Text Alterado");
+				txtText.setValue("In publishing and graphic design, Lorem ipsum is a placeholder text commonly used to demonstrate the visual form of a document or a typeface without relying on meaningful content. Lorem ipsum may be used as a placeholder before the final copy is available. It is also used to temporarily replace text in a process called greeking, which allows designers to consider the form of a webpage or publication, without the meaning of the text influencing the design." + 
+						         "\r\n" + 
+						         "\r\n" + 
+						         "Lorem ipsum is typically a corrupted version of De finibus bonorum et malorum, a 1st-century BC text by the Roman statesman and philosopher Cicero, with words altered, added, and removed to make it nonsensical and improper Latin.");
 				txtText.setLabel("Text 2:");
 				
 				txtBoolean.setValue(true);
@@ -329,7 +332,6 @@ public class LTLibraries implements TableListener {
 				objTable.addRowData("nova_string", "AAA " + 1);
 				objTable.addRowData("nova_integer", 1 * 100);
 				objTable.addRowData("nova_double", 1 * 0.5);
-				//objTable.setRowColor(objTable.getRowCount() - 1, Color.LIGHT_GRAY);
 				
 				objTable.addRow();
 				objTable.addRowData("nova_string", "BBB " + 1);

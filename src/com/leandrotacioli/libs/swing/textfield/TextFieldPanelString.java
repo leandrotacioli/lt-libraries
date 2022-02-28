@@ -99,6 +99,8 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 		} else {
 			txtStringField.setText(strValue.trim());
 		}
+		
+		txtStringField.setCaretPosition(0);
 	}
 	
 	@Override
@@ -134,6 +136,7 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 	public void focusGained(FocusEvent event) {
 		if (getEnabled()) {
 			txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
+			txtStringField.setCaretPosition(txtStringField.getText().length());
 		} else {
 			txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
 		}
@@ -143,7 +146,7 @@ public class TextFieldPanelString extends TextField implements FocusListener {
 	public void focusLost(FocusEvent event) {
 		txtStringField.setText(txtStringField.getText().trim());
 		txtStringField.setBackground(LTParameters.getInstance().getColorComponentBackground());
-		txtStringField.setCaretPosition(txtStringField.getText().length());
+		txtStringField.setCaretPosition(0);
 		
 		if (getEnabled()) {
 			if (getIsMandatoryFieldEmpty()) {

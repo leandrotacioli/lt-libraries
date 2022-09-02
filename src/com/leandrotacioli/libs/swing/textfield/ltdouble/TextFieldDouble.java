@@ -12,7 +12,6 @@ import com.leandrotacioli.libs.StringTransformations;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 07/Abr/2015
  */
 public class TextFieldDouble extends JFormattedTextField implements KeyListener {
 	private static final long serialVersionUID = 8041888551259051911L;
@@ -27,6 +26,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	private double dblValue;
 
 	private int intFractionDigits;
+	private boolean blnShowAsPercentage;
 	
 	private String strValueBeforeDeleted;
 	private boolean blnDeleteKey;
@@ -50,16 +50,44 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 		
 		setDoubleFormat();
 	}
+	
+	/**
+	 * Retorna o status de exibiçao do campo com uma máscara de porcentagem.
+	 * 
+	 * @param blnShowAsPercentage
+	 */
+	public boolean getShowAsPercentage() {
+		return blnShowAsPercentage;
+	}
+	
+	/**
+	 * Altera o status de exibição do campo com uma máscara de porcentagem.
+	 * <br>
+	 * OBS: O cálculo de porcentagem não é realizado automaticamente.
+	 * 
+	 * @param blnShowAsPercentage
+	 */
+	public void setShowAsPercentage(boolean blnShowAsPercentage) {
+		this.blnShowAsPercentage = blnShowAsPercentage;
+		
+		setValue(getValue());
+	}
 
 	/**
 	 * 
 	 */
 	public TextFieldDouble() {
-		intFractionDigits = 2;
-
+		this(2, false);
+	}
+	
+	public TextFieldDouble(int intFractionDigits, boolean blnShowAsPercentage) {
+		this.intFractionDigits = intFractionDigits;
+		this.blnShowAsPercentage = blnShowAsPercentage;
+		
 		setHorizontalAlignment(JFormattedTextField.RIGHT);
 		setDoubleFormat();
-		setValue(0.00);
+		setValue(0.00d);
+		
 		addKeyListener(this);
 	}
 	
@@ -110,7 +138,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 			dblValue = 0.00;
 		}
 		
-		setText(decimalFormat.format(dblValue));
+		setText(decimalFormat.format(dblValue) + (blnShowAsPercentage ? "%" : ""));
 	}
 
 	// Implementa KeyListener
@@ -132,11 +160,11 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	public void keyTyped(KeyEvent event) {
 		if (blnDeleteKey) {
 			String strValue = getText();
-
+			
 			if (strValue != null && strValue.length() > 0) {
 				// Insere zero se não houver nenhum número antes da vírgula
 				if (strValue.substring(0, 1).equals(",")) {
-					setText("0" + strValue);
+					setText("0" + strValue + (blnShowAsPercentage ? "%" : ""));
 					setCaretPosition(1);
 				}
 				
@@ -144,7 +172,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 				double dblValue = StringTransformations.setStringToDouble(strValue);
 				
 				if (dblValue > MAX_VALUE) {
-					setText(strValueBeforeDeleted);
+					setText(strValueBeforeDeleted + (blnShowAsPercentage ? "%" : ""));
 				}
 			}
 			

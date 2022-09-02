@@ -99,7 +99,7 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 		
 		ImageIcon iconAlert = new ImageIcon("res/images/alert.png");
 		lblAlert = new JLabel(iconAlert, JLabel.CENTER);
-		lblAlert.setToolTipText(LTParameters.getInstance().getBundle().getString("text_field_panel_mandatory_field"));
+		lblAlert.setToolTipText(LTParameters.getInstance().getBundle().getString("mandatory_field"));
 		lblAlert.setVisible(false);
 		
 		comboBox = new JComboBox<String>();

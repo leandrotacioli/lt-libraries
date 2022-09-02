@@ -19,6 +19,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.leandrotacioli.libs.internationalization.Locales;
+
 /**
  * Cria os parâmetros necessários para a execução do </i>LT Libraries</i>. 
  * 
@@ -30,8 +32,8 @@ public class LTParameters {
 	
 	private String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 	private String DEFAULT_DECIMAL_MARK = "COMMA";
-	private String DEFAULT_LOCALE_LANGUAGE = "en";
-	private String DEFAULT_LOCALE_COUNTRY = "US";
+	private String DEFAULT_LOCALE_LANGUAGE = Locales.LOCALE_COUNTRY_USA;
+	private String DEFAULT_LOCALE_COUNTRY = Locales.LOCALE_COUNTRY_USA;
 	
 	private String strDateFormat;
 	private String strDecimalMark;

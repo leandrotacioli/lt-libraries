@@ -13,7 +13,6 @@ import com.leandrotacioli.libs.swing.textfield.ltdouble.TextFieldDouble;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 02/Mai/2016
  */
 public class TextFieldPanelDouble extends TextField implements FocusListener {
 	private static final long serialVersionUID = 2873124544129027700L;
@@ -71,6 +70,11 @@ public class TextFieldPanelDouble extends TextField implements FocusListener {
 	}
 	
 	@Override
+	protected void setShowAsPercentage(boolean blnShowAsPercentage) {
+		txtDoubleField.setShowAsPercentage(blnShowAsPercentage);
+	}
+	
+	@Override
 	public boolean getIsMandatoryFieldEmpty() {
 		if ((txtDoubleField.getText() == null || txtDoubleField.getText().length() == 0) && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);
@@ -124,7 +128,7 @@ public class TextFieldPanelDouble extends TextField implements FocusListener {
 	public void focusGained(FocusEvent event) {
 		if (getEnabled()) {
 			txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundFocus());
-			txtDoubleField.setText(txtDoubleField.getText());
+			txtDoubleField.setText(txtDoubleField.getText().replace("%", ""));
 			txtDoubleField.select(0, txtDoubleField.getText().length());
 		} else {
 			txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());
@@ -140,7 +144,7 @@ public class TextFieldPanelDouble extends TextField implements FocusListener {
 				objTextFieldPanel.setAlertVisible(true);
 			} else {
 				objTextFieldPanel.setAlertVisible(false);
-				setValue(txtDoubleField.getText());
+				setValue(txtDoubleField.getText().replace("%", ""));
 			}
 		} else {
 			txtDoubleField.setBackground(LTParameters.getInstance().getColorComponentBackgroundDisabled());

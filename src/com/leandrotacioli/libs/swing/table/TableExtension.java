@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.table.JTableHeader;
 import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableModel;
 import javax.swing.text.JTextComponent;
@@ -65,13 +66,22 @@ public class TableExtension extends JTable {
     protected void setRowColor(int intRowId, Color color) {
     	lstRowColor.add(new TableExtensionRowColor(intRowId, color));
     }
-    
-    @Override
-	public Object getValueAt(int intRowIndex, int intColumnIndex) {
-    	return getModel().getValueAt(convertRowIndexToModel(intRowIndex), convertColumnIndexToModel(intColumnIndex));
-    }
 
     //***************************************************************************************************
+    @Override
+	protected JTableHeader createDefaultTableHeader() {
+		return new JTableHeader(columnModel) {
+			private static final long serialVersionUID = 6589880105462434748L;
+			
+			public String getToolTipText(MouseEvent e) {
+				Point point = e.getPoint();
+				int columnIndex = columnModel.getColumnIndexAtX(point.x);
+	            
+				return columnModel.getColumn(columnIndex).getHeaderValue().toString();
+			}
+		};
+	}
+    
     @Override
 	public boolean editCellAt(int indexRow, int columnIndex, EventObject event) {
 		boolean result = super.editCellAt(indexRow, columnIndex, event);
@@ -80,21 +90,6 @@ public class TableExtension extends JTable {
 		
 		return result;
 	}
-    
-    @Override
-    public String getToolTipText(MouseEvent event) {
-        String strTipText = null;
-        Point point = event.getPoint();
-        
-        try {
-        	strTipText = getValueAt(rowAtPoint(point), columnAtPoint(point)).toString();
-        	
-        } catch (RuntimeException e) {
-            //catch null pointer exception if mouse is over an empty line
-        }
-
-        return strTipText;
-    }
 
     //***************************************************************************************************
     // Seleciona o texto quando houver edição de uma célula

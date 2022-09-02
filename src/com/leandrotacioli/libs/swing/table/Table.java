@@ -1,6 +1,7 @@
 package com.leandrotacioli.libs.swing.table;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.DataFlavor;
@@ -15,15 +16,17 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComponent;
+import javax.swing.JLabel;
 import javax.swing.JTable;
 import javax.swing.KeyStroke;
-import javax.swing.RowSorter;
 import javax.swing.RowSorter.SortKey;
 import javax.swing.SortOrder;
 import javax.swing.SwingConstants;
@@ -65,8 +68,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	
 	private List<TableColumnModel> lstColumnModel;
 	private List<TableColumnParameters> lstColumnParameters;
-	
-	private TableRowSorter<TableModel> sorter;
 	
 	private Collection<Object> collectionListener;
 	
@@ -158,23 +159,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		
 		// Configura ordenação da LTTable
 		setAllowSortedRows(blnAllowSortedRows);
-		
-		if (blnAllowSortedRows) {
-			objTable.getTableHeader().addMouseListener(new MouseAdapter() {
-			    @Override
-			    public void mouseClicked(MouseEvent e) {
-			    	int intIndexColumn = objTable.getTableHeader().columnAtPoint(e.getPoint());
-			    	intIndexColumn = objTable.convertColumnIndexToModel(intIndexColumn);
-			        
-			    	ArrayList<SortKey> sortKeys = new ArrayList<>(objTable.getRowSorter().getSortKeys());
-			    	
-			        if (sorter != null) {
-			        	sorter.setSortKeys(sortKeys);
-			        	sorter.sort();
-			        }
-			    }
-			});
-		}
 		
 		// Irá alterar o foco da célula quando uma tecla específica for pressionada
 		objTable.addKeyListener(new KeyListener() {
@@ -377,11 +361,11 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	}
 	
 	/**
-	 * Estabelece os renderers e editor da tabela.
+	 * Estabelece os renderers e editors da tabela.
 	 */
 	private void setTableRenderersEditors() {
 		for (int intColumnIndex = 0; intColumnIndex < getColumnCount(); intColumnIndex++) {
-			TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+			TableCellRenderer objTableCellRenderer = setCellRenderer(lstColumnParameters.get(intColumnIndex));
 			TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(intColumnIndex));
 			
 			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
@@ -395,11 +379,15 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			}
     	}
 	}
-	
+
 	/**
 	 * Cria os renderizadores das colunas da tabela.
+	 *
+	 * @param objDataType
+	 *
+	 * @return objTableCellRenderer
 	 */
-	private TableCellRenderer setCellRenderer(int intColumnIndex, LTDataTypes objDataType) {
+	private TableCellRenderer setCellRenderer(LTDataTypes objDataType) {
 		TableCellRenderer objTableCellRenderer = null;
 		
 		if (objDataType == LTDataTypes.INTEGER) {
@@ -422,11 +410,15 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		
 		return objTableCellRenderer;
 	}
-	
+
 	/**
 	 * Altera os renderizadores das colunas da tabela.
+	 *
+	 * @param objTableColumnParameters
+	 *
+	 * @return objTableCellRenderer
 	 */
-	private TableCellRenderer setCellRenderer(int intColumnIndex, TableColumnParameters objTableColumnParameters) {
+	private TableCellRenderer setCellRenderer(TableColumnParameters objTableColumnParameters) {
 		TableCellRenderer objTableCellRenderer = null;
 		
 		if (objTableColumnParameters.getColumnDataType() == LTDataTypes.INTEGER) {
@@ -436,6 +428,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DOUBLE) {
 			TableRendererDefault objTableRendererDefault = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
 			objTableRendererDefault.setColumnDoubleFractionDigits(objTableColumnParameters.getColumnDoubleFractionDigits());
+			objTableRendererDefault.setColumnDoubleShowAsPercentage(objTableColumnParameters.getColumnDoubleShowAsPercentage());
 			objTableCellRenderer = objTableRendererDefault;
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.STRING) {
 			objTableCellRenderer = new TableRendererDefault(LTDataTypes.STRING, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
@@ -463,9 +456,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		} else if (objDataType == LTDataTypes.LONG) {
 			objTableCellEditor = new TableEditorLong();
 		} else if (objDataType == LTDataTypes.DOUBLE) {
-			objTableCellEditor = new TableEditorDouble(2);
+			objTableCellEditor = new TableEditorDouble();
 		} else if (objDataType == LTDataTypes.STRING) {
-			objTableCellEditor = new TableEditorString(20, SwingConstants.LEFT);
+			objTableCellEditor = new TableEditorString();
 		} else if (objDataType == LTDataTypes.TEXT) {
 			objTableCellEditor = new TableEditorText();
 		} else if (objDataType == LTDataTypes.DATE) {
@@ -486,24 +479,58 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		TableCellEditor objTableCellEditor = null;
 		
 		if (objTableColumnParameters.getColumnDataType() == LTDataTypes.INTEGER) {
-			objTableCellEditor = new TableEditorInteger();
+			objTableCellEditor = new TableEditorInteger(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.LONG) {
-			objTableCellEditor = new TableEditorLong();
+			objTableCellEditor = new TableEditorLong(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DOUBLE) {
-			objTableCellEditor = new TableEditorDouble(objTableColumnParameters.getColumnDoubleFractionDigits());
+			objTableCellEditor = new TableEditorDouble(objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnDoubleFractionDigits(), objTableColumnParameters.getColumnDoubleShowAsPercentage());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.STRING) {
-			objTableCellEditor = new TableEditorString(objTableColumnParameters.getColumnStringMaximumLength(), SwingConstants.LEFT);
+			objTableCellEditor = new TableEditorString(objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnStringMaximumLength());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TEXT) {
-			objTableCellEditor = new TableEditorText();
+			objTableCellEditor = new TableEditorText(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {
-			objTableCellEditor = new TableEditorDate();
+			objTableCellEditor = new TableEditorDate(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.HOUR) {
-			objTableCellEditor = new TableEditorHour();
+			objTableCellEditor = new TableEditorHour(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.BOOLEAN) {
 			objTableCellEditor = null;
 		}
 		
 		return objTableCellEditor;
+	}
+
+	private TableRowSorter<TableModel> setTableSorter() {
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(objTable.getModel());
+
+		for (int intIndex = 0; intIndex < getColumnCount(); intIndex++) {
+			Comparator<?> sorterComparator = setTableColumnSorterComparator(sorter, intIndex, lstColumnParameters.get(intIndex).getColumnDataType());
+
+			if (sorterComparator != null) {
+				sorter.setComparator(intIndex, sorterComparator);
+			}
+		}
+
+		return sorter;
+	}
+
+	/**
+	 * Cria um comparador para ordenar corretamente as colunas que tiverem valores nulos.
+	 *
+	 * @param intColumnIndex
+	 * @param objDataType
+	 *
+	 * @return
+	 */
+	private Comparator<?> setTableColumnSorterComparator(TableRowSorter<TableModel> sorter, int intColumnIndex, LTDataTypes objDataType) {
+		if (objDataType == LTDataTypes.INTEGER) {
+			return new TableComparatorEmptyRow<Integer>(sorter, intColumnIndex);
+		} else if (objDataType == LTDataTypes.LONG) {
+			return new TableComparatorEmptyRow<Long>(sorter, intColumnIndex);
+		} else if (objDataType == LTDataTypes.DOUBLE) {
+			return new TableComparatorEmptyRow<Double>(sorter, intColumnIndex);
+		}
+
+		return null;
 	}
 	
 	/**
@@ -535,17 +562,6 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		objTableFixed.setRowSelectionAllowed(blnFullRowSelection);
 		
 		setTableRenderersEditors();
-		/*
-		objTableRendererInteger.setFullRowSelection(blnFullRowSelection);
-		objTableRendererLong.setFullRowSelection(blnFullRowSelection);
-		objTableRendererString.setFullRowSelection(blnFullRowSelection);
-		objTableRendererText.setFullRowSelection(blnFullRowSelection);
-		objTableRendererDate.setFullRowSelection(blnFullRowSelection);
-		//objTableRendererBoolean.setFullRowSelection(blnFullRowSelection);
-		*/
-		//for (int indexRendererDouble = 0; indexRendererDouble < lstTableRendererDouble.size(); indexRendererDouble++) {
-		//	lstTableRendererDouble.get(indexRendererDouble).setFullRowSelection(blnFullRowSelection);
-		//}
 	}
 	
 	/**
@@ -556,10 +572,10 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	 * @return intHorizontalAlignment
 	 */
 	private int getColumnHorizontalAlignment(LTDataTypes objColumnDataType) {
-		int intHorizontalAlignment = 2;  // Esquerda
+		int intHorizontalAlignment = SwingConstants.LEFT;
 		
 		if (objColumnDataType == LTDataTypes.INTEGER || objColumnDataType == LTDataTypes.LONG || objColumnDataType == LTDataTypes.DOUBLE) {
-			intHorizontalAlignment = 4;  // Direita
+			intHorizontalAlignment = SwingConstants.RIGHT;
 		}
 		
 		return intHorizontalAlignment;
@@ -577,7 +593,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			if (strColumnName.equals(ID_ROW_LT_TABLE) && getColumnCount() != 0) {
 				 throw new Exception("Cannot create column named: " + ID_ROW_LT_TABLE + ". Try another column name.");
 			} else {
-				TableCellRenderer objTableCellRenderer = setCellRenderer(getColumnCount(), objColumnDataType);
+				TableCellRenderer objTableCellRenderer = setCellRenderer(objColumnDataType);
 				TableCellEditor objTableCellEditor = setCellEditor(objColumnDataType);
 				TableColumnParameters objTableColumnParameters = new TableColumnParameters(objTableCellRenderer, objTableCellEditor, strColumnName, strColumnDescription, objColumnDataType, intColumnWidth, blnColumnEditable, blnColumnShowZeroValues, getColumnHorizontalAlignment(objColumnDataType), LTParameters.getInstance().getColorTable());
 				
@@ -609,7 +625,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	@Override
 	public void addRow() {
 		if (blnAllowSortedRows) {
-			sorter = new TableRowSorter<>(objTable.getModel());
+			TableRowSorter<TableModel> sorter = setTableSorter();
+
 			objTable.setRowSorter(sorter);
 		}
 		
@@ -799,7 +816,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		lstColumnParameters.get(intColumnIndex).setColumnColor(color);
 		
 		if (objTable != null) {
-			TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+			TableCellRenderer objTableCellRenderer = setCellRenderer(lstColumnParameters.get(intColumnIndex));
 			
 			objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
 			
@@ -819,30 +836,34 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	}
 	
 	@Override
+	public void orderColumnData(int intColumnIndex, boolean blnAscending) {
+		if (blnAllowSortedRows) {
+			List<SortKey> sortKeys = new ArrayList<SortKey>();
+
+			if (blnAscending) {
+				sortKeys.add(new SortKey(intColumnIndex, SortOrder.ASCENDING));
+			} else {
+				sortKeys.add(new SortKey(intColumnIndex, SortOrder.DESCENDING));
+			}
+
+			TableRowSorter<TableModel> sorter = setTableSorter();
+			sorter.setSortKeys(sortKeys);
+			sorter.sort();
+
+			objTable.setRowSorter(sorter);
+		}
+	}
+	
+	@Override
 	public void orderColumnData(String strColumnName, boolean blnAscending) {
 		if (blnAllowSortedRows) {
-			int intColumnIndex = 0;
-			
 			for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
 				if (lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
-					intColumnIndex = indexColumn;
+					orderColumnData(indexColumn, blnAscending);
+					
 					break;
 				}
 			}
-			
-			sorter = new TableRowSorter<>(objTable.getModel());
-			objTable.setRowSorter(sorter);
-			
-			List<RowSorter.SortKey> sortKeys = new ArrayList<>();
-			
-			if (blnAscending) {
-				sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.ASCENDING));
-			} else {
-				sortKeys.add(new RowSorter.SortKey(intColumnIndex, SortOrder.DESCENDING));
-			}
-			
-			sorter.setSortKeys(sortKeys);
-			sorter.sort();
 		}
 	}
 	
@@ -970,6 +991,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				    	} else {
 			    			String strDouble = objValue.toString();
 			    			strDouble = strDouble.replace(",", ".");
+			    			strDouble = strDouble.replace("%", "");
 			    			objValue = strDouble;
 				    	}
 				    	
@@ -978,6 +1000,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			    		if (objValue != null && !objValue.equals("")) {
 			    			String strDouble = objValue.toString();
 			    			strDouble = strDouble.replace(",", ".");
+			    			strDouble = strDouble.replace("%", "");
 			    			objValue = strDouble;
 			    			
 			    			lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
@@ -1128,11 +1151,34 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				if (objTable != null) {
 					TableRendererDefault objTableRendererDefault = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, lstColumnParameters.get(indexColumn).getColumnHorizontalAlignment(), lstColumnParameters.get(indexColumn).getColumnColor());
 					objTableRendererDefault.setColumnDoubleFractionDigits(lstColumnParameters.get(indexColumn).getColumnDoubleFractionDigits());
+					objTableRendererDefault.setColumnDoubleShowAsPercentage(lstColumnParameters.get(indexColumn).getColumnDoubleShowAsPercentage());
 					
 					TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(indexColumn));
 					
 					objTable.getColumnModel().getColumn(indexColumn).setCellRenderer(objTableRendererDefault);
 					objTable.getColumnModel().getColumn(indexColumn).setCellEditor(objTableCellEditor);
+				}
+    			
+    			break;
+    		}
+    	}
+	}
+    
+    @Override
+    public void setColumnDoubleShowAsPercentage(String strColumnName, boolean blnShowAsPercentage) {
+    	for (int indexColumn = 0; indexColumn < getColumnCount(); indexColumn++) {
+    		if (lstColumnParameters.get(indexColumn).getColumnDataType() == LTDataTypes.DOUBLE && lstColumnParameters.get(indexColumn).getColumnName().equals(strColumnName)) {
+    			lstColumnParameters.get(indexColumn).setColumnDoubleShowAsPercentage(blnShowAsPercentage);
+    			
+    			if (objTable != null) {
+					TableRendererDefault objTableRendererDefault = new TableRendererDefault(LTDataTypes.DOUBLE, blnReadOnly, blnFullRowSelection, lstColumnParameters.get(indexColumn).getColumnHorizontalAlignment(), lstColumnParameters.get(indexColumn).getColumnColor());
+					objTableRendererDefault.setColumnDoubleFractionDigits(lstColumnParameters.get(indexColumn).getColumnDoubleFractionDigits());
+					objTableRendererDefault.setColumnDoubleShowAsPercentage(lstColumnParameters.get(indexColumn).getColumnDoubleShowAsPercentage());
+					
+					TableCellEditor objTableCellEditor = setCellEditor(lstColumnParameters.get(indexColumn));
+					
+					objTable.getColumnModel().getColumn(indexColumn).setCellRenderer(objTableRendererDefault);
+					objTable.getColumnModel().getColumn(indexColumn).setCellEditor(objTableCellEditor);				
 				}
     			
     			break;
@@ -1147,7 +1193,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     			lstColumnParameters.get(intColumnIndex).setColumnHorizontalAlignment(intHorizontalAlignment);
     			 
     			if (objTable != null) {
-    				TableCellRenderer objTableCellRenderer = setCellRenderer(intColumnIndex, lstColumnParameters.get(intColumnIndex));
+    				TableCellRenderer objTableCellRenderer = setCellRenderer(lstColumnParameters.get(intColumnIndex));
     				
     				objTable.getColumnModel().getColumn(intColumnIndex).setCellRenderer(objTableCellRenderer);
     			}
@@ -1166,16 +1212,23 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     public void setAllowSortedRows(boolean blnAllowSortedRows) {
     	this.blnAllowSortedRows = blnAllowSortedRows;
     	
-    	if (objTable != null) {
-	    	sorter = new TableRowSorter<TableModel>(objTable.getModel()) {
-	    	    @Override
-	    	    public boolean isSortable(int intColumn) {
-	    	    	return blnAllowSortedRows;
-	    	    };
-	    	};
-	    	
-	    	objTable.setRowSorter(sorter);
-    	}
+    	if (blnAllowSortedRows) {
+			objTable.getTableHeader().addMouseListener(new MouseAdapter() {
+			    @Override
+			    public void mouseClicked(MouseEvent e) {
+			    	int intIndexColumn = objTable.getTableHeader().columnAtPoint(e.getPoint());
+			    	intIndexColumn = objTable.convertColumnIndexToModel(intIndexColumn);
+			        
+			    	ArrayList<SortKey> sortKeys = new ArrayList<>(objTable.getRowSorter().getSortKeys());
+
+					TableRowSorter<TableModel> sorter = setTableSorter();
+					sorter.setSortKeys(sortKeys);
+					sorter.sort();
+
+					objTable.setRowSorter(sorter);
+			    }
+			});
+		}
     }
     
     @Override
@@ -1193,32 +1246,31 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 		// Copia conteúdo da LTTable
 		if (event.getActionCommand().compareTo("Copy_Table") == 0) {
 			StringBuffer stringBuffer = new StringBuffer();
-			
-			int intNumColumns = objTable.getSelectedColumnCount();
-			int intNumRows = objTable.getSelectedRowCount();
-			
+
 			int[] rowsSelected = objTable.getSelectedRows();
 			int[] columnsSelected = objTable.getSelectedColumns();
-			
-			if (!((intNumRows - 1 == rowsSelected[rowsSelected.length - 1] - rowsSelected[0] && intNumRows == rowsSelected.length) &&
-					(intNumColumns - 1 == columnsSelected[columnsSelected.length - 1] - columnsSelected[0] && intNumColumns == columnsSelected.length))) {
-        	 		return;
-			}
-			
-			for (int indexRow = 0; indexRow < intNumRows; indexRow++) {
-				for (int indexColumn = 0; indexColumn < intNumColumns; indexColumn++) {
-					stringBuffer.append(objTable.getValueAt(rowsSelected[indexRow], columnsSelected[indexColumn]));
+
+			for (int indexRow = 0; indexRow < rowsSelected.length; indexRow++) {
+				for (int indexColumn = 0; indexColumn < columnsSelected.length; indexColumn++) {
+					TableCellRenderer renderer = objTable.getCellRenderer(rowsSelected[indexRow], columnsSelected[indexColumn]);
+					Component component = objTable.prepareRenderer(renderer, rowsSelected[indexRow], columnsSelected[indexColumn]);
 					
-					if (indexColumn < intNumColumns - 1) {
+					if (component instanceof JLabel) {
+						stringBuffer.append(((JLabel) component).getText());
+					} else if (component instanceof JCheckBox) {
+						stringBuffer.append(((JCheckBox) component).isSelected());
+					}
+
+					if (indexColumn < columnsSelected.length - 1) {
 						stringBuffer.append("\t");
 					}
 				}
-				
+
 				stringBuffer.append("\n");
 			}
-			
+
 			StringSelection stringSelection = new StringSelection(stringBuffer.toString());
-			
+
 			Clipboard systemClipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
 			systemClipboard.setContents(stringSelection, stringSelection);
 			

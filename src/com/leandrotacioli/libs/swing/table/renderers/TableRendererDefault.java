@@ -13,7 +13,6 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 2.0 - 21/Nov/2020
  */
 public class TableRendererDefault extends DefaultTableCellRenderer {
 	private static final long serialVersionUID = 3585207723628352892L;
@@ -27,8 +26,10 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	
 	private DecimalFormat decimalFormat;
 	
+	private boolean blnColumnDoubleShowAsPercentage;
+	
 	/**
-	 * Altera a quantidade de casas decimais.
+	 * Altera a quantidade de casas decimais (Tipo de dados DOUBLE).
 	 * 
 	 * @param intColumnDoubleFractionDigits
 	 */
@@ -37,6 +38,15 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 		decimalFormat.setMinimumFractionDigits(intColumnDoubleFractionDigits);
 		decimalFormat.setMaximumFractionDigits(intColumnDoubleFractionDigits);
 		decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
+	}
+	
+	/**
+	 * Altera o status de exibição do campo com uma máscara de porcentagem (Tipo de dados DOUBLE).
+	 * 
+	 * @param blnColumnDoubleShowAsPercentage
+	 */
+	public void setColumnDoubleShowAsPercentage(boolean blnColumnDoubleShowAsPercentage) {
+		this.blnColumnDoubleShowAsPercentage = blnColumnDoubleShowAsPercentage;
 	}
 	
 	/**
@@ -58,10 +68,8 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 		setBackground(colorBackground);
 		
 		if (objDataType == LTDataTypes.DOUBLE) {
-			decimalFormat = new DecimalFormat();
-			decimalFormat.setMinimumFractionDigits(2);
-			decimalFormat.setMaximumFractionDigits(2);
-			decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
+			setColumnDoubleFractionDigits(2);
+			setColumnDoubleShowAsPercentage(false);
 		}
 	}
 
@@ -69,22 +77,28 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	public Component getTableCellRendererComponent(JTable table, Object aValue, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex) {
 		if (objDataType == LTDataTypes.DOUBLE) {
 			if (aValue != null && !aValue.equals("")) {
-				setValue(decimalFormat.format((Number) aValue));
+				setValue(decimalFormat.format((Number) aValue) + (blnColumnDoubleShowAsPercentage ? "%" : ""));
+				setToolTipText(decimalFormat.format((Number) aValue) + (blnColumnDoubleShowAsPercentage ? "%" : ""));
 			} else {
 				setValue("");
+				setToolTipText(null);
 			}
 		} else {
 			if (aValue != null && !aValue.equals("")) {
 				setValue(aValue);
+				setToolTipText(aValue.toString());
 			} else {
 				setValue("");
+				setToolTipText(null);
 			}
 		}
+		
+		setBackground(colorBackground);
+		setBorder(table.getBorder());
 		
 		if (hasFocus) {
 			setBorder(LTParameters.getInstance().getBorderTableTextFieldFocus());
 		} else {
-			setBackground(colorBackground);
             setBorder(table.getBorder());
 		}
 		

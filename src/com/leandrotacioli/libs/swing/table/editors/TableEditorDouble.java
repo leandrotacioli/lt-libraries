@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.StringTransformations;
@@ -12,33 +13,35 @@ import com.leandrotacioli.libs.swing.textfield.ltdouble.TextFieldDouble;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.2 - 21/Nov/2020
  */
 public class TableEditorDouble extends DefaultCellEditor {
 	private static final long serialVersionUID = 8304313692833448805L;
 	
+	private int intHorizontalAlignment;
 	private int intColumnDoubleFractionDigits;
+	private boolean blnColumnDoubleShowAsPercentage;
 	
-	private static TextFieldDouble txtFieldDouble = new TextFieldDouble();
+	public TableEditorDouble() {
+		this(SwingConstants.LEFT, 2, false);
+	}
 	
-	/**
-	 * 
-	 */
-	public TableEditorDouble(int intColumnDoubleFractionDigits) {
-		super(txtFieldDouble);
+	public TableEditorDouble(int intHorizontalAlignment, int intColumnDoubleFractionDigits, boolean blnColumnDoubleShowAsPercentage) {
+		super(new TextFieldDouble(intColumnDoubleFractionDigits, blnColumnDoubleShowAsPercentage));
 		
+		this.intHorizontalAlignment = intHorizontalAlignment;
 		this.intColumnDoubleFractionDigits = intColumnDoubleFractionDigits;
-		
-		txtFieldDouble.setFractionDigits(intColumnDoubleFractionDigits);
-	}	
+		this.blnColumnDoubleShowAsPercentage = blnColumnDoubleShowAsPercentage;
+	}
 	
 	//*************************************************************************
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object aValue, boolean isSelected, int rowIndex, int columnIndex) {
-		txtFieldDouble = (TextFieldDouble) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+		TextFieldDouble txtFieldDouble = (TextFieldDouble) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+		txtFieldDouble.setHorizontalAlignment(intHorizontalAlignment);
+		txtFieldDouble.setFractionDigits(intColumnDoubleFractionDigits);
+		txtFieldDouble.setShowAsPercentage(blnColumnDoubleShowAsPercentage);
 		txtFieldDouble.setFont(LTParameters.getInstance().getFontComponentTextField());
 		txtFieldDouble.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
-		txtFieldDouble.setFractionDigits(intColumnDoubleFractionDigits);
 		
 		String strValue = "";
 		
@@ -54,8 +57,8 @@ public class TableEditorDouble extends DefaultCellEditor {
 			}
 		}
 		
-		txtFieldDouble.setText("" + strValue);
-
+		txtFieldDouble.setText(strValue);
+		
 		return txtFieldDouble;
 	}
 }

@@ -17,7 +17,6 @@ import com.leandrotacioli.libs.LTParameters;
  * A tabela cria automaticamente uma coluna chamada 'ID_ROW_LT_TABLE' que gerencia internamente as linhas da LTTable.
  * 
  * @author Leandro Tacioli
- * @version 4.1 - 26/Jan/2021
  */
 public class LTTable extends JScrollPane implements TableInterface {
 	private static final long serialVersionUID = -3832122577742129437L;
@@ -152,6 +151,11 @@ public class LTTable extends JScrollPane implements TableInterface {
 	}
 	
 	@Override
+	public void orderColumnData(int intColumnIndex, boolean blnAscending) {
+		objTable.orderColumnData(intColumnIndex, blnAscending);
+	}
+	
+	@Override
 	public void orderColumnData(String strColumnName, boolean blnAscending) {
 		objTable.orderColumnData(strColumnName, blnAscending);
 	}
@@ -244,6 +248,11 @@ public class LTTable extends JScrollPane implements TableInterface {
 	@Override
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits) {
 		objTable.setColumnDoubleFractionDigits(strColumnName, intColumnDoubleFractionDigits);
+	}
+	
+	@Override
+	public void setColumnDoubleShowAsPercentage(String strColumnName, boolean blnShowAsPercentage) {
+		objTable.setColumnDoubleShowAsPercentage(strColumnName, blnShowAsPercentage);
 	}
 	
 	@Override

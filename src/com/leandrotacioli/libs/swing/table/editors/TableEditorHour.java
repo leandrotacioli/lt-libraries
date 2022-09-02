@@ -4,6 +4,7 @@ import java.awt.Component;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.swing.textfield.lthour.TextFieldHour;
@@ -11,21 +12,29 @@ import com.leandrotacioli.libs.swing.textfield.lthour.TextFieldHour;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 11/Nov/2020
  */
 public class TableEditorHour extends DefaultCellEditor {
 	private static final long serialVersionUID = -5687943739963048019L;
 	
 	private static TextFieldHour txtFieldHour = new TextFieldHour();
 	
+	private int intHorizontalAlignment;
+	
 	public TableEditorHour() {
+		this(SwingConstants.LEFT);
+	}
+	
+	public TableEditorHour(int intHorizontalAlignment) {
 		super(txtFieldHour);
+		
+		this.intHorizontalAlignment = intHorizontalAlignment;
 	}
 	
 	//*************************************************************************
 	@Override
 	public Component getTableCellEditorComponent(JTable table, Object aValue, boolean isSelected, int rowIndex, int columnIndex) {
 		txtFieldHour = (TextFieldHour) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+		txtFieldHour.setHorizontalAlignment(intHorizontalAlignment);
 		txtFieldHour.setFont(LTParameters.getInstance().getFontComponentTextField());
 		txtFieldHour.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
 		txtFieldHour.setText("" + aValue);

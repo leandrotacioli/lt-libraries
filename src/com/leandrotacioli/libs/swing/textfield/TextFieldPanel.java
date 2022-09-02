@@ -35,7 +35,7 @@ public class TextFieldPanel extends JPanel {
 			
 			ImageIcon iconAlert = new ImageIcon("res/images/alert.png");
 			lblAlert = new JLabel(iconAlert, JLabel.CENTER);
-			lblAlert.setToolTipText(LTParameters.getInstance().getBundle().getString("text_field_panel_mandatory_field"));
+			lblAlert.setToolTipText(LTParameters.getInstance().getBundle().getString("mandatory_field"));
 			lblAlert.setVisible(false);
 			
 			this.setLayout(new MigLayout("insets 0", "[grow]", "[] 0 [grow]"));

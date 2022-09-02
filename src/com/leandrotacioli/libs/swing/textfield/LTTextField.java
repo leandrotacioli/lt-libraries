@@ -113,12 +113,26 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 	}
 	
 	/**
-	 * Atualiza a quantidade de casas decimais do campo <i>DOUBLE</i>.
+	 * Atualiza a quantidade de casas decimais.
+	 * <br>
+	 * OBS: Válido apenas para <i>DOUBLE</i>.
 	 * 
 	 * @param intFractionDigits
 	 */
 	public void setFractionDigits(int intFractionDigits) {
 		objTextField.setFractionDigits(intFractionDigits);
+	}
+	
+	/**
+	 * Exibe o campo com uma máscara de porcentagem.
+	 * <br>
+	 * OBS 1: Válido apenas para <i>DOUBLE</i>.
+	 * OBS 2: O cálculo de porcentagem não é realizado automaticamente.
+	 * 
+	 * @param blnShowAsPercentage
+	 */
+	public void setShowAsPercentage(boolean blnShowAsPercentage) {
+		objTextField.setShowAsPercentage(blnShowAsPercentage);
 	}
 
 	// *********************************************************************

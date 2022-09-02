@@ -12,7 +12,6 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 2.0 - 09/Nov/2020
  */
 public class TableRendererBoolean extends JCheckBox implements TableCellRenderer {
 	private static final long serialVersionUID = -3981049152248920887L;
@@ -43,6 +42,12 @@ public class TableRendererBoolean extends JCheckBox implements TableCellRenderer
 	@Override
 	public Component getTableCellRendererComponent(JTable table, Object aValue, boolean isSelected, boolean hasFocus, int rowIndex, int columnIndex) {
 		setSelected(Boolean.TRUE.equals(aValue));
+		
+		if (Boolean.TRUE.equals(aValue)) {
+			setToolTipText(LTParameters.getInstance().getBundle().getString("field_boolean_true"));
+		} else {
+			setToolTipText(LTParameters.getInstance().getBundle().getString("field_boolean_false"));
+		}
 		
 		if (hasFocus) {
 			setBorder(LTParameters.getInstance().getBorderTableTextFieldFocus());

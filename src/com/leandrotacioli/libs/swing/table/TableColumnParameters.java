@@ -11,7 +11,6 @@ import com.leandrotacioli.libs.LTDataTypes;
  * Estabelece as colunas que serão inseridas no LTTable.
  * 
  * @author Leandro Tacioli
- * @version 4.0 - 09/Nov/2020
  */
 public class TableColumnParameters {
 	private TableCellRenderer objTableCellRenderer;
@@ -26,6 +25,7 @@ public class TableColumnParameters {
 	private Color colorColumn;
 	private int intColumnStringMaximumLength;
 	private int intColumnDoubleFractionDigits;
+	private boolean blnColumnDoubleShowAsPercentage;
 	
 	/**
 	 * Retorna o 'TableCellRenderer' da coluna.
@@ -185,6 +185,24 @@ public class TableColumnParameters {
 	}
 	
 	/**
+	 * Retorna o status de exibiçao do campo com uma máscara de porcentagem (Tipo de dados DOUBLE).
+	 * 
+	 * @return blnColumnDoubleShowAsPercentage
+	 */
+	protected boolean getColumnDoubleShowAsPercentage() {
+		return blnColumnDoubleShowAsPercentage;
+	}
+	
+	/**
+	 * Altera o status de exibição do campo com uma máscara de porcentagem (Tipo de dados DOUBLE).
+	 * 
+	 * @param blnColumnDoubleShowAsPercentage
+	 */
+	protected void setColumnDoubleShowAsPercentage(boolean blnColumnDoubleShowAsPercentage) {
+		this.blnColumnDoubleShowAsPercentage = blnColumnDoubleShowAsPercentage;
+	}
+	
+	/**
 	 * Retorna o alinhamento horizontal da coluna.
 	 * 
 	 * @return intColumnHorizonalAlignment
@@ -234,6 +252,7 @@ public class TableColumnParameters {
 		// Campos DOUBLE tem 2 casas decimais como padrão
 		if (objColumnDataType == LTDataTypes.DOUBLE) {
 			this.intColumnDoubleFractionDigits = 2;
+			this.blnColumnDoubleShowAsPercentage = false;
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.leandrotacioli.libs.swing.table.editors;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
+import javax.swing.SwingConstants;
 
 import java.awt.Component;
 import java.text.ParseException;
@@ -13,20 +14,24 @@ import com.leandrotacioli.libs.swing.textfield.ltdate.TextFieldDate;
 /**
  * 
  * @author Leandro Tacioli
- * @version 2.0 - 11/Nov/2020
  */
 public class TableEditorDate extends DefaultCellEditor {
 	private static final long serialVersionUID = -9025778248402406514L;
 	
 	private static TextFieldDate txtFieldDate = new TextFieldDate();
 	
+	private int intHorizontalAlignment;
+	
 	private SimpleDateFormat dateFormat;
 	
-	/**
-	 * 
-	 */
-    public TableEditorDate() {
+	public TableEditorDate() {
+		this(SwingConstants.LEFT);
+	}
+	
+    public TableEditorDate(int intHorizontalAlignment) {
         super(txtFieldDate);
+        
+        this.intHorizontalAlignment = intHorizontalAlignment;
         
         dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat());
         dateFormat.setLenient(false);
@@ -37,6 +42,7 @@ public class TableEditorDate extends DefaultCellEditor {
     @Override
     public Component getTableCellEditorComponent(JTable table, Object aValue, boolean isSelected, int rowIndex, int columnIndex) {
     	txtFieldDate = (TextFieldDate) super.getTableCellEditorComponent(table, aValue, isSelected, rowIndex, columnIndex);
+    	txtFieldDate.setHorizontalAlignment(intHorizontalAlignment);
     	txtFieldDate.setFont(LTParameters.getInstance().getFontComponentTextField());
     	txtFieldDate.setBorder(LTParameters.getInstance().getBorderTableTextFieldEditing());
 

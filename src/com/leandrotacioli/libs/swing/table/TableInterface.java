@@ -9,7 +9,6 @@ import com.leandrotacioli.libs.LTDataTypes;
  * Interface com os métodos da LTTable.
  * 
  * @author Leandro Tacioli
- * @version 4.0 - 26/Ago/2018
  */
 public interface TableInterface {
 	
@@ -138,6 +137,16 @@ public interface TableInterface {
 	 * @param color         - Cor
 	 */
 	public void setColumnColor(String strColumnName, Color color);
+	
+	/**
+	 * Ordena os dados de uma coluna da LTTable.<br>
+	 * <br>
+	 * Obs: Caso uma nova linha seja incluída/excluída, é necessário chamar este método novamente.
+	 * 
+	 * @param intColumnIndex - Índice da coluna
+	 * @param blnAscending   - Ascendente
+	 */
+	public void orderColumnData(int intColumnIndex, boolean blnAscending);
 	
 	/**
 	 * Ordena os dados de uma coluna da LTTable.<br>
@@ -288,6 +297,14 @@ public interface TableInterface {
 	 * @param intColumnDoubleFractionDigits - Quantidade de casas decimais
 	 */
 	public void setColumnDoubleFractionDigits(String strColumnName, int intColumnDoubleFractionDigits);
+	
+	/**
+	 * Exibe o campo DOUBLE com uma máscara de porcentagem.
+	 * 
+	 * @param strColumnName       - Nome da coluna
+	 * @param blnShowAsPercentage - Exibir com máscara de porcentagem
+	 */
+	public void setColumnDoubleShowAsPercentage(String strColumnName, boolean blnShowAsPercentage);
 	
 	/**
 	 * Altera o alinhamento horizonal de uma coluna da tabela.

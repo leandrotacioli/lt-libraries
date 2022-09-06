@@ -16,9 +16,10 @@ import com.leandrotacioli.libs.StringTransformations;
 public class TextFieldDouble extends JFormattedTextField implements KeyListener {
 	private static final long serialVersionUID = 8041888551259051911L;
 	
-	/**
-	 * Valor máximo para o campo DOUBLE.
-	 */
+	/** Valor mínimo para o campo DOUBLE. */
+	public static final double MIN_VALUE = -9999999999999.99999999;
+	
+	/** Valor máximo para o campo DOUBLE. */
 	public static final double MAX_VALUE = 9999999999999.99999999;
 	
 	private DecimalFormat decimalFormat;
@@ -168,10 +169,10 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 					setCaretPosition(1);
 				}
 				
-				// Verifica se o valor não ficará maior que o permitido
+				// Verifica se o valor não ficará menor/maior que o permitido
 				double dblValue = StringTransformations.setStringToDouble(strValue);
 				
-				if (dblValue > MAX_VALUE) {
+				if (dblValue < MIN_VALUE || dblValue > MAX_VALUE) {
 					setText(strValueBeforeDeleted + (blnShowAsPercentage ? "%" : ""));
 				}
 			}

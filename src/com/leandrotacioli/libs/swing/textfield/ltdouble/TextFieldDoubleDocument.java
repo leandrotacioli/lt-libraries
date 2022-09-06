@@ -10,7 +10,6 @@ import com.leandrotacioli.libs.StringTransformations;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 16/Abr/2015
  */
 public class TextFieldDoubleDocument extends PlainDocument {
 	private static final long serialVersionUID = 1191649656321787135L;
@@ -29,73 +28,71 @@ public class TextFieldDoubleDocument extends PlainDocument {
 	//*************************************************************************
 	@Override
 	public void insertString(int offset, String strString, AttributeSet attr) throws BadLocationException {
-		char cChar = strString.charAt(0);
-		
-		// Verifica se já existem separadores ('.' e ',')
-		String strDouble = getText(0, getLength());
-		boolean blnSeparator = false;
-		
-		for (int intIndex = 0; intIndex < strDouble.length(); intIndex++) {
-            if (strDouble.charAt(intIndex) == '.' || strDouble.charAt(intIndex) == ',') {
-            	blnSeparator = true;
-            	break;
-            }
-        }
-		
-		// Permite apenas números e separadores ('.' e ',')
-		if (Character.isDigit(cChar) || cChar == '.' || cChar == ',') {
-			String strValue = getText(0, offset) + strString + getText(offset, getLength() - offset);
-			String[] strSeparated = getIntegerDecimalParts(strValue);
+		if (offset == 0 && strString.length() > 0) {
+			super.insertString(offset, strString.toString(), attr);
+		} else {
+			char cChar = strString.charAt(0);
 			
-			strValue = strSeparated[0] + "." + strSeparated[1];
-			double dblValue = StringTransformations.setStringToDouble(strValue);
+			String strDouble = getText(0, getLength());
+			boolean blnSeparator = false;
 			
-			// Permite inclusão de apenas 1 separador
-			if (blnSeparator) {
-				if (cChar != '.' && cChar != ',') {
-					// Permitir apenas o número de casas decimais estabelecido no TextFieldDouble
-					if (strSeparated[1].length() <= intFractionDigits) {
-						if (dblValue <= TextFieldDouble.MAX_VALUE) {
+			for (int intIndex = 0; intIndex < strDouble.length(); intIndex++) {
+	            if (strDouble.charAt(intIndex) == '.' || strDouble.charAt(intIndex) == ',') {
+	            	blnSeparator = true;
+	            }
+	        }
+			
+			if (Character.isDigit(cChar) || cChar == '.' || cChar == ',') {
+				String strValue = getText(0, offset) + strString + getText(offset, getLength() - offset);
+				double dblValue = StringTransformations.setStringToDouble(strValue);
+				
+				String[] strIntegerDecimalParts = getIntegerDecimalParts(strValue);
+				
+				// Permite inclusão de apenas 1 separador
+				if (blnSeparator) {
+					if (Character.isDigit(cChar)) {
+						// Permitir apenas o número de casas decimais estabelecido no TextFieldDouble
+						if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE && strIntegerDecimalParts[1].length() <= intFractionDigits) {
 							super.insertString(offset, strString.toString(), attr);
 						}
 					}
-				}
-				
-			// Caso ainda não possua separador
-			} else {
-				if (cChar == '.' || cChar == ',') {
-					strValue = getText(0, offset) + "." + getText(offset, getLength() - offset);
 					
-					if (!strString.equals(".") && !strString.equals(",") && getText(offset, getLength() - offset).equals("")) {
-						strValue = strValue + "0";
-					}
-					
-					dblValue = StringTransformations.setStringToDouble(strValue);
-				}
-				
-				if (dblValue <= TextFieldDouble.MAX_VALUE) {
-					// Altera o separador para o padrão configurado nos parâmetros
+				// Caso ainda não possua separador
+				} else {
 					if (cChar == '.' || cChar == ',') {
-						// Separador é uma vírgula
-						if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-							if (strValue.equals(".")) {
-								super.insertString(offset, "0,", attr);
-							} else {
-								super.insertString(offset, ",", attr);
-							}
+						strValue = getText(0, offset) + "." + getText(offset, getLength() - offset);
 						
-						// Separador é um ponto
-						} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-							if (strValue.equals(".")) {
-								super.insertString(offset, "0.", attr);
-							} else {
-								super.insertString(offset, ".", attr);
-							}
+						if (!strString.equals(".") && !strString.equals(",") && getText(offset, getLength() - offset).equals("")) {
+							strValue = strValue + "0";
 						}
 						
-					// Insere valor à string
-					} else {
-						super.insertString(offset, strString.toString(), attr);
+						dblValue = StringTransformations.setStringToDouble(strValue);
+					}
+					
+					if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE) {
+						// Altera o separador para o padrão configurado nos parâmetros
+						if (cChar == '.' || cChar == ',') {
+							// Separador é uma vírgula
+							if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
+								if (strValue.equals(".")) {
+									super.insertString(offset, "0,", attr);
+								} else {
+									super.insertString(offset, ",", attr);
+								}
+							
+							// Separador é um ponto
+							} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
+								if (strValue.equals(".")) {
+									super.insertString(offset, "0.", attr);
+								} else {
+									super.insertString(offset, ".", attr);
+								}
+							}
+							
+						// Insere valor à string
+						} else {
+							super.insertString(offset, strString.toString(), attr);
+						}
 					}
 				}
 			}
@@ -103,8 +100,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 	}
 	
 	/**
-	 * Retorna a parte inteira e a decimal de um número
-	 * separadas em um array.
+	 * Retorna a parte inteira e a decimal de um número separadas em um array.
 	 * 
 	 * @param strValue
 	 * 

@@ -125,7 +125,7 @@ public class LTLibraries implements TableListener {
 		txtDouble = new LTTextField(getLabelFromBundle("field_double"), LTDataTypes.DOUBLE, true, true);
 		txtDouble.setFractionDigits(4);
 		
-		txtDoubleAsPercentage = new LTTextField(getLabelFromBundle("field_double"), LTDataTypes.DOUBLE, true, true);
+		txtDoubleAsPercentage = new LTTextField(getLabelFromBundle("field_double") + " - " + getLabelFromBundle("percentage"), LTDataTypes.DOUBLE, true, true);
 		txtDoubleAsPercentage.setFractionDigits(2);
 		txtDoubleAsPercentage.setShowAsPercentage(true);
 		
@@ -234,6 +234,7 @@ public class LTLibraries implements TableListener {
 				System.out.println(getLabelFromBundle("field_integer") + ": " + txtInteger.getValue());
 				System.out.println(getLabelFromBundle("field_long") + ": " + txtLong.getValue());
 				System.out.println(getLabelFromBundle("field_double") + ": " + txtDouble.getValue());
+				System.out.println(getLabelFromBundle("field_double") + " - " + getLabelFromBundle("percentage") + ": " + txtDoubleAsPercentage.getValue());
 				System.out.println(getLabelFromBundle("field_string") + ": " + txtString.getValue());
 				System.out.println(getLabelFromBundle("field_string") + " (" + getLabelFromBundle("alignment_right") + "): " + txtStringRightAligned.getValue());
 				System.out.println(getLabelFromBundle("field_text") + ": " + txtText.getValue());
@@ -251,7 +252,6 @@ public class LTLibraries implements TableListener {
 					for (int indexColumn = 0; indexColumn < objTable.getColumnCount(); indexColumn++) {
 						System.out.print(objTable.getColumnName(indexColumn) + ": " + objTable.getValue(indexRow, indexColumn) + " | ");
 					}
-					
 					System.out.println("");
 				}
 				System.out.println("---------------------------------------------------------------------");
@@ -479,7 +479,7 @@ public class LTLibraries implements TableListener {
 		objTable.addRowData("boolean", false);
 				
 		objTable.addRow();
-		objTable.addRowData("image", "Botão X");
+		objTable.addRowData("image", getLabelFromBundle("button"));
 		objTable.addRowData("integer", 900);
 		objTable.addRowData("integer_show_zero_values", 990);
 		objTable.addRowData("long", 9000);
@@ -523,6 +523,7 @@ public class LTLibraries implements TableListener {
 		txtInteger.setLabel(getLabelFromBundle("field_integer"));
 		txtLong.setLabel(getLabelFromBundle("field_long"));
 		txtDouble.setLabel(getLabelFromBundle("field_double"));
+		txtDoubleAsPercentage.setLabel(getLabelFromBundle("field_double") + " - " + getLabelFromBundle("percentage"));
 		txtBoolean.setLabel(getLabelFromBundle("field_boolean"));
 		txtString.setLabel(getLabelFromBundle("field_string"));
 		txtStringRightAligned.setLabel(getLabelFromBundle("field_string") + " - " + getLabelFromBundle("alignment_right"));
@@ -530,6 +531,21 @@ public class LTLibraries implements TableListener {
 		comboBox.setLabel(getLabelFromBundle("field_combo_box"));
 		txtDate.setLabel(getLabelFromBundle("field_date"));
 		txtHour.setLabel(getLabelFromBundle("field_hour"));
+
+		objTable.setColumnDescription("image", getLabelFromBundle("image"));
+		objTable.setColumnDescription("integer", getLabelFromBundle("field_integer"));
+		objTable.setColumnDescription("integer_show_zero_values", getLabelFromBundle("field_integer") + " - " + getLabelFromBundle("show_zero_values"));
+		objTable.setColumnDescription("long", getLabelFromBundle("field_long"));
+		objTable.setColumnDescription("double", getLabelFromBundle("field_double"));
+		objTable.setColumnDescription("double_show_zero_values", getLabelFromBundle("field_double") + " - " + getLabelFromBundle("show_zero_values"));
+		objTable.setColumnDescription("double_percentage", getLabelFromBundle("field_double") + " - " + getLabelFromBundle("percentage"));
+		objTable.setColumnDescription("string", getLabelFromBundle("field_string"));
+		objTable.setColumnDescription("string_right", getLabelFromBundle("field_string") + " - " + getLabelFromBundle("alignment_right"));
+		objTable.setColumnDescription("string_read_only", getLabelFromBundle("field_string") + " - " + getLabelFromBundle("read_only"));
+		objTable.setColumnDescription("text", getLabelFromBundle("field_text"));
+		objTable.setColumnDescription("date", getLabelFromBundle("field_date"));
+		objTable.setColumnDescription("hour", getLabelFromBundle("field_hour"));
+		objTable.setColumnDescription("boolean", getLabelFromBundle("field_boolean"));
 	}
 	
 	private void setComponentEnabled(Container container, boolean blnEnabled) {

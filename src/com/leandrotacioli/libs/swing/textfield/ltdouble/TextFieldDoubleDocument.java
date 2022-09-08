@@ -27,23 +27,23 @@ public class TextFieldDoubleDocument extends PlainDocument {
 	
 	//*************************************************************************
 	@Override
-	public void insertString(int offset, String strString, AttributeSet attr) throws BadLocationException {
-		if (offset == 0 && strString.length() > 0) {
-			super.insertString(offset, strString.toString(), attr);
+	public void insertString(int offset, String str, AttributeSet attr) throws BadLocationException {
+		if (offset == 0 && str.length() > 0) {
+			super.insertString(offset, str, attr);
 		} else {
-			char cChar = strString.charAt(0);
-			
-			String strDouble = getText(0, getLength());
-			boolean blnSeparator = false;
-			
-			for (int intIndex = 0; intIndex < strDouble.length(); intIndex++) {
-	            if (strDouble.charAt(intIndex) == '.' || strDouble.charAt(intIndex) == ',') {
-	            	blnSeparator = true;
-	            }
-	        }
-			
+			char cChar = str.charAt(0);
+
 			if (Character.isDigit(cChar) || cChar == '.' || cChar == ',') {
-				String strValue = getText(0, offset) + strString + getText(offset, getLength() - offset);
+				String strDouble = getText(0, getLength());
+				boolean blnSeparator = false;
+
+				for (int intIndex = 0; intIndex < strDouble.length(); intIndex++) {
+					if (strDouble.charAt(intIndex) == '.' || strDouble.charAt(intIndex) == ',') {
+						blnSeparator = true;
+					}
+				}
+
+				String strValue = getText(0, offset) + str + getText(offset, getLength() - offset);
 				double dblValue = StringTransformations.setStringToDouble(strValue);
 				
 				String[] strIntegerDecimalParts = getIntegerDecimalParts(strValue);
@@ -53,7 +53,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 					if (Character.isDigit(cChar)) {
 						// Permitir apenas o número de casas decimais estabelecido no TextFieldDouble
 						if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE && strIntegerDecimalParts[1].length() <= intFractionDigits) {
-							super.insertString(offset, strString.toString(), attr);
+							super.insertString(offset, str, attr);
 						}
 					}
 					
@@ -62,7 +62,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 					if (cChar == '.' || cChar == ',') {
 						strValue = getText(0, offset) + "." + getText(offset, getLength() - offset);
 						
-						if (!strString.equals(".") && !strString.equals(",") && getText(offset, getLength() - offset).equals("")) {
+						if (!str.equals(".") && !str.equals(",") && getText(offset, getLength() - offset).equals("")) {
 							strValue = strValue + "0";
 						}
 						
@@ -91,7 +91,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 							
 						// Insere valor à string
 						} else {
-							super.insertString(offset, strString.toString(), attr);
+							super.insertString(offset, str, attr);
 						}
 					}
 				}

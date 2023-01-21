@@ -514,8 +514,9 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	}
 
 	/**
-	 * Cria um comparador para ordenar corretamente as colunas que tiverem valores nulos.
+	 * Cria um comparador para ordenar corretamente os valores das colunas.
 	 *
+	 * @param sorter
 	 * @param intColumnIndex
 	 * @param objDataType
 	 *
@@ -523,11 +524,13 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	 */
 	private Comparator<?> setTableColumnSorterComparator(TableRowSorter<TableModel> sorter, int intColumnIndex, LTDataTypes objDataType) {
 		if (objDataType == LTDataTypes.INTEGER) {
-			return new TableComparatorEmptyRow<Integer>(sorter, intColumnIndex);
+			return new TableColumnComparator<Integer>(sorter, intColumnIndex);
 		} else if (objDataType == LTDataTypes.LONG) {
-			return new TableComparatorEmptyRow<Long>(sorter, intColumnIndex);
+			return new TableColumnComparator<Long>(sorter, intColumnIndex);
 		} else if (objDataType == LTDataTypes.DOUBLE) {
-			return new TableComparatorEmptyRow<Double>(sorter, intColumnIndex);
+			return new TableColumnComparator<Double>(sorter, intColumnIndex);
+		} else if (objDataType == LTDataTypes.DATE) {
+			return new TableColumnComparator<Date>(sorter, intColumnIndex);
 		}
 
 		return null;
@@ -798,7 +801,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	    	} else if (objDataType == LTDataTypes.TEXT) {
 	  			classType = String.class;
 	    	} else if (objDataType == LTDataTypes.DATE) {
-	  			classType = String.class;
+	  			classType = Date.class;
 	    	} else if (objDataType == LTDataTypes.HOUR) {
 	  			classType = String.class;
 	    	} else if (objDataType == LTDataTypes.BOOLEAN) {

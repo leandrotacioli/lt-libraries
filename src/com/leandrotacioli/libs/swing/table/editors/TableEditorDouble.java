@@ -7,8 +7,8 @@ import javax.swing.JTable;
 import javax.swing.SwingConstants;
 
 import com.leandrotacioli.libs.LTParameters;
-import com.leandrotacioli.libs.StringTransformations;
 import com.leandrotacioli.libs.swing.textfield.ltdouble.TextFieldDouble;
+import com.leandrotacioli.libs.transformation.DoubleTransformation;
 
 /**
  * 
@@ -46,7 +46,7 @@ public class TableEditorDouble extends DefaultCellEditor {
 		String strValue = "";
 		
 		if (aValue != null && !aValue.equals("")) {
-			strValue = StringTransformations.setDoubleToString((double) aValue, intColumnDoubleFractionDigits);
+			strValue = DoubleTransformation.doubleToString((double) aValue, intColumnDoubleFractionDigits);
 			
 			// Retira os caracteres de separador de milhares e altera o separador para o padrão configurado nos parâmetros
 			if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {

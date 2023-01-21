@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.leandrotacioli</groupId>
   <artifactId>lt-libraries</artifactId>
-  <version>3.7.0</version>
+  <version>3.7.1</version>
   <name>LT Libraries</name>
   <description>LT Libraries allows you to easily insert custom fields (Integer, Long, Double, String, Text, Date, Hour, Boolean) and to manipulate tables for graphical user interface (GUI) Java programs.</description>
   <url>https://github.com/leandrotacioli/LT-Libraries</url>

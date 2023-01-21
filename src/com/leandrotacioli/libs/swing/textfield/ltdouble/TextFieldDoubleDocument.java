@@ -5,7 +5,7 @@ import javax.swing.text.BadLocationException;
 import javax.swing.text.PlainDocument;
 
 import com.leandrotacioli.libs.LTParameters;
-import com.leandrotacioli.libs.StringTransformations;
+import com.leandrotacioli.libs.transformation.DoubleTransformation;
 
 /**
  * 
@@ -44,7 +44,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 				}
 
 				String strValue = getText(0, offset) + str + getText(offset, getLength() - offset);
-				double dblValue = StringTransformations.setStringToDouble(strValue);
+				double dblValue = DoubleTransformation.stringToDouble(strValue);
 				
 				String[] strIntegerDecimalParts = getIntegerDecimalParts(strValue);
 				
@@ -66,7 +66,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 							strValue = strValue + "0";
 						}
 						
-						dblValue = StringTransformations.setStringToDouble(strValue);
+						dblValue = DoubleTransformation.stringToDouble(strValue);
 					}
 					
 					if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE) {

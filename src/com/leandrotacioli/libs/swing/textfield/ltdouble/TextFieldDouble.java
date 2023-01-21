@@ -7,10 +7,10 @@ import java.text.DecimalFormat;
 import javax.swing.JFormattedTextField;
 
 import com.leandrotacioli.libs.LTParameters;
-import com.leandrotacioli.libs.StringTransformations;
+import com.leandrotacioli.libs.transformation.DoubleTransformation;
 
 /**
- * 
+ *
  * @author Leandro Tacioli
  */
 public class TextFieldDouble extends JFormattedTextField implements KeyListener {
@@ -132,7 +132,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 					}
 				}
 				
-				dblValue = StringTransformations.setStringToDouble(strValue);
+				dblValue = DoubleTransformation.stringToDouble(strValue);
 			}
 
 		} catch (Exception e) {
@@ -170,7 +170,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 				}
 				
 				// Verifica se o valor não ficará menor/maior que o permitido
-				double dblValue = StringTransformations.setStringToDouble(strValue);
+				double dblValue = DoubleTransformation.stringToDouble(strValue);
 				
 				if (dblValue < MIN_VALUE || dblValue > MAX_VALUE) {
 					setText(strValueBeforeDeleted + (blnShowAsPercentage ? "%" : ""));

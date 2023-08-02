@@ -1,0 +1,149 @@
+package com.leandrotacioli.libs.swing.textfield;
+
+import java.awt.event.ActionListener;
+import java.awt.event.FocusListener;
+import java.awt.event.ItemListener;
+import java.awt.event.KeyListener;
+
+import javax.swing.JPanel;
+
+/**
+ *
+ * @author Leandro Tacioli
+ */
+public class TextField extends JPanel implements TextFieldInterface {
+	private static final long serialVersionUID = 9058121922409010383L;
+
+	private String strLabel;
+
+	private boolean blnEnabled;
+	private boolean blnMandatoryField;
+	
+	/**
+	 * Retorna o status de exibição do campo.
+	 * 
+	 * @return blnEnabled
+	 */
+	protected boolean getEnabled() {
+		return blnEnabled;
+	}
+
+	/**
+	 * Retorna o status de campo obrigatório.
+	 * 
+	 * @return blnMandatoryField
+	 */
+	protected boolean getMandatoryField() {
+		return blnMandatoryField;
+	}
+
+	/**
+	 * 
+	 * @param strLabel
+	 * @param blnEnabled
+	 * @param blnMandatoryField
+	 */
+	protected TextField(String strLabel, boolean blnEnabled, boolean blnMandatoryField) {
+		this.strLabel = strLabel;
+		this.blnEnabled = blnEnabled;
+		this.blnMandatoryField = blnMandatoryField;
+	}
+	
+	/**
+	 * Altera o alinhamento horizontal do campo.
+	 * 
+	 * @param intHorizontalAlignment
+	 */
+	protected void setHorizontalAlignment(int intHorizontalAlignment) {
+		
+	}
+
+	/**
+	 * Altera a quantidade máxima de caracteres do campo <i>STRING</i>.
+	 * 
+	 * @param intMaximumLength
+	 */
+	protected void setStringLength(int intMaximumLength) {
+		
+	}
+	
+	/**
+	 * Atualiza a quantidade de casas decimais.
+	 * <br>
+	 * OBS: Válido apenas para <i>DOUBLE</i>.
+	 * 
+	 * @param intFractionDigits
+	 */
+	protected void setFractionDigits(int intFractionDigits) {
+		
+	}
+	
+	/**
+	 * Atualiza o status de exibição do campo com uma máscara de porcentagem.
+	 * <br>
+	 * OBS 1: Válido apenas para <i>DOUBLE</i>.
+	 * OBS 2: O cálculo de porcentagem não é realizado automaticamente.
+	 * 
+	 * @param blnShowAsPercentage
+	 */
+	protected void setShowAsPercentage(boolean blnShowAsPercentage) {
+		
+	}
+
+	// *********************************************************************
+	// Implementa TextFieldInterface
+	@Override
+	public String getLabel() {
+		return strLabel;
+	}
+	
+	@Override
+	public void setLabel(String strLabel) {
+		this.strLabel = strLabel;
+	}
+	
+	@Override
+	public boolean getIsMandatoryFieldEmpty() {
+		return false;
+	}
+	
+	@Override
+	public Object getValue() {
+		return null;
+	}
+	
+	@Override
+	public void setValue(Object objValue) {
+		
+	}
+	
+	@Override
+	public void setEnabled(boolean blnEnabled) {
+		this.blnEnabled = blnEnabled;
+	}
+	
+	@Override
+	public void setFocus() {
+		
+	}
+		
+	@Override
+	public void addActionListener(ActionListener actionListener) {
+		
+	}
+	
+	@Override
+	public void addKeyListener(KeyListener keyListener) {
+		
+	}
+	
+	@Override
+	public void addFocusListener(FocusListener focusListener) {
+		
+	}
+	
+	@Override
+	public void addItemListener(ItemListener itemListener) {
+
+	}
+}

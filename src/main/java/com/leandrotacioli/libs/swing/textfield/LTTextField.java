@@ -106,7 +106,7 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 	/**
 	 * Atualiza o alinhamento horizontal do campo.
 	 * 
-	 * @param intFractionDigits
+	 * @param intHorizontalAlignment
 	 */
 	public void setHorizontalAlignment(int intHorizontalAlignment) {
 		objTextField.setHorizontalAlignment(intHorizontalAlignment);

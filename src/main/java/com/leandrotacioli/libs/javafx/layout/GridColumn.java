@@ -32,6 +32,16 @@ public class GridColumn {
      * Grid Column.
      *
      * @param content the content to be added to the column
+     * @param width the requested width for all window sizes (must be between 1 and 12)
+     */
+    public GridColumn(Node content, int width) {
+        this(content, width, width, width, width, width);
+    }
+
+    /**
+     * Grid Column.
+     *
+     * @param content the content to be added to the column
      * @param widthXSmall the requested width for the Extra Small size (must be between 1 and 12)
      * @param widthSmall the requested width for the Small size (must be between 1 and 12)
      * @param widthMedium the requested width for the Medium size (must be between 1 and 12)

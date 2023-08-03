@@ -1,10 +1,14 @@
 package com.leandrotacioli;
 
+import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.LTField;
 import com.leandrotacioli.libs.javafx.layout.GridColumn;
 import com.leandrotacioli.libs.javafx.layout.GridRow;
 import com.leandrotacioli.libs.javafx.layout.ResponsiveLayout;
 import com.leandrotacioli.libs.javafx.layout.WindowSize;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -23,6 +27,7 @@ public class LTLibrariesResponsiveFX extends Application {
         root.setGridLinesVisible(true);
         root.addRow(createGridRow1());
         root.addRow(createGridRow2());
+        root.addRow(createGridRow3());
         root.setPadding(new Insets(25));
         root.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
@@ -75,6 +80,29 @@ public class LTLibrariesResponsiveFX extends Application {
         row.addColumn(columnMagenta);
         row.addColumn(columnOrange);
         row.addColumn(columnCyan);
+
+        return row;
+    }
+
+    private GridRow createGridRow3() {
+        GridRow row = new GridRow();
+
+        LTField fieldString1 = new LTField("String: ", LTDataTypes.STRING, true, false, 10);
+        fieldString1.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) {
+                System.out.println("Focused: " + fieldString1.getValue());
+            }
+        });
+
+        LTField fieldString2 = new LTField("String 2 - Max Length 20: ", LTDataTypes.STRING, true, false);
+        fieldString2.setMaximumLength(20);
+        fieldString2.setValue("String 2");
+
+        //LTField fieldString3 = new LTField("Integer: ", LTDataTypes.INTEGER, true, false);
+
+        row.addColumn(new GridColumn(fieldString1.load(), 12));
+        row.addColumn(new GridColumn(fieldString2.load(), 12));
+        //row.addColumn(new GridColumn(fieldString3.load(), 12));
 
         return row;
     }

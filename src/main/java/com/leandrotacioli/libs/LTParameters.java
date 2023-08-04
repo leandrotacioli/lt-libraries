@@ -10,7 +10,6 @@ import java.util.ResourceBundle;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 
-import com.leandrotacioli.libs.internationalization.Locales;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -20,15 +19,20 @@ import org.w3c.dom.NodeList;
  * Cria os parâmetros necessários para a execução do </i>LT Libraries</i>. 
  * 
  * @author Leandro Tacioli
- * @version 4.0 - 22/Mai/2020
  */
 public class LTParameters {
 	private static LTParameters objLTParameters;
+
+	public String LOCALE_LANGUAGE_ENGLISH = "en";
+	public String LOCALE_LANGUAGE_PORTUGUESE = "pt";
+
+	public String LOCALE_COUNTRY_USA = "US";
+	public String LOCALE_COUNTRY_BRAZIL = "BR";
 	
 	private String DEFAULT_DATE_FORMAT = "dd/MM/yyyy";
 	private String DEFAULT_DECIMAL_MARK = "COMMA";
-	private String DEFAULT_LOCALE_LANGUAGE = Locales.LOCALE_COUNTRY_USA;
-	private String DEFAULT_LOCALE_COUNTRY = Locales.LOCALE_COUNTRY_USA;
+	private String DEFAULT_LOCALE_LANGUAGE = LOCALE_COUNTRY_USA;
+	private String DEFAULT_LOCALE_COUNTRY = LOCALE_COUNTRY_USA;
 	
 	private String strDateFormat;
 	private String strDecimalMark;
@@ -98,11 +102,11 @@ public class LTParameters {
 				
 		locale = new Locale(strLocaleLanguage, strLocaleCountry);
 		
-		rsBundle = ResourceBundle.getBundle("com.leandrotacioli.libs.internationalization.LabelBundles", locale);
+		rsBundle = ResourceBundle.getBundle("i18n.LabelBundles", locale);
 	}
 	
 	/**
-	 * Retorna o pacote de linguagens do sistema.
+	 * Retorna o pacote de linguagens do sistema.LOCALE_LANGUAGE_ENGLISH
 	 * 
 	 * @return rsBundle
 	 */
@@ -176,13 +180,11 @@ public class LTParameters {
 					}
 				}
 		    }
-			
-			locale = new Locale(strLocaleLanguage, strLocaleCountry);
-			
-			rsBundle = ResourceBundle.getBundle("com.leandrotacioli.libs.internationalization.LabelBundles", locale);
-			
+
+			setLocale(strLocaleLanguage, strLocaleCountry);
+
 			decimalFormatSymbols = new DecimalFormatSymbols();
-			
+
 			if (strDecimalMark.equals("COMMA")) {
 				decimalFormatSymbols.setDecimalSeparator(',');
 				decimalFormatSymbols.setGroupingSeparator('.');

@@ -7,7 +7,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import com.leandrotacioli.libs.internationalization.Locales;
 import com.leandrotacioli.libs.swing.LTSwing;
 import com.leandrotacioli.libs.swing.comboboxfield.LTComboBoxField;
 import com.leandrotacioli.libs.swing.textfield.LTTextField;
@@ -330,16 +329,16 @@ public class LTLibrariesSwing implements TableListener {
 		
 		btnChangeLocaleEnglishUs = new JButton("Locale - English US");
 		btnChangeLocaleEnglishUs.addActionListener(event -> {
-			LTParameters.getInstance().setLocale(Locales.LOCALE_LANGUAGE_ENGLISH, Locales.LOCALE_COUNTRY_USA);
+			LTParameters.getInstance().setLocale(LTParameters.getInstance().LOCALE_LANGUAGE_ENGLISH, LTParameters.getInstance().LOCALE_COUNTRY_USA);
 			setFieldDescriptions();
-			JOptionPane.showMessageDialog(null, "Locale changed successfully!", "Locale: " + Locales.LOCALE_LANGUAGE_ENGLISH + "-" + Locales.LOCALE_COUNTRY_USA, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Locale changed successfully!", "Locale: " + LTParameters.getInstance().LOCALE_LANGUAGE_ENGLISH + "-" + LTParameters.getInstance().LOCALE_COUNTRY_USA, JOptionPane.INFORMATION_MESSAGE);
 		});
 		
 		btnChangeLocalePortuguesBr = new JButton("Locale - Português Brasil");
 		btnChangeLocalePortuguesBr.addActionListener(event -> {
-			LTParameters.getInstance().setLocale(Locales.LOCALE_LANGUAGE_PORTUGUESE, Locales.LOCALE_COUNTRY_BRAZIL);
+			LTParameters.getInstance().setLocale(LTParameters.getInstance().LOCALE_LANGUAGE_PORTUGUESE, LTParameters.getInstance().LOCALE_COUNTRY_BRAZIL);
 			setFieldDescriptions();
-			JOptionPane.showMessageDialog(null, "Locale alterado com sucesso!", "Locale: " + Locales.LOCALE_LANGUAGE_PORTUGUESE + "-" + Locales.LOCALE_COUNTRY_BRAZIL, JOptionPane.INFORMATION_MESSAGE);
+			JOptionPane.showMessageDialog(null, "Locale alterado com sucesso!", "Locale: " + LTParameters.getInstance().LOCALE_LANGUAGE_PORTUGUESE + "-" + LTParameters.getInstance().LOCALE_COUNTRY_BRAZIL, JOptionPane.INFORMATION_MESSAGE);
 		});
 		
 		// *********************************************************************************************************************

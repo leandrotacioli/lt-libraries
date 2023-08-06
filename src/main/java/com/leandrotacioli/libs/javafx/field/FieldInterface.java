@@ -1,0 +1,17 @@
+package com.leandrotacioli.libs.javafx.field;
+
+import javafx.beans.value.ChangeListener;
+
+public interface FieldInterface {
+
+    public void setEnabled(boolean isEnabled);
+
+    public Object getValue();
+
+    public void setValue(Object objValue);
+
+    public void setMaximumLength(int maximumLength);
+
+    public void addFocusListener(ChangeListener<Boolean> changeListener);
+
+}

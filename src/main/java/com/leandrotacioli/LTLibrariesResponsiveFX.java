@@ -87,7 +87,7 @@ public class LTLibrariesResponsiveFX extends Application {
     private GridRow createGridRow3() {
         GridRow row = new GridRow();
 
-        LTField fieldString1 = new LTField("String: ", LTDataTypes.STRING, true, false, 10);
+        LTField fieldString1 = new LTField("String: ", LTDataTypes.STRING, true, false);
         fieldString1.addFocusListener((obs, oldVal, newVal) -> {
             if (newVal) {
                 System.out.println("Focused: " + fieldString1.getValue());
@@ -95,14 +95,19 @@ public class LTLibrariesResponsiveFX extends Application {
         });
 
         LTField fieldString2 = new LTField("String 2 - Max Length 20: ", LTDataTypes.STRING, true, false);
+        fieldString2.setEnabled(false);
         fieldString2.setMaximumLength(20);
         fieldString2.setValue("String 2");
 
-        //LTField fieldString3 = new LTField("Integer: ", LTDataTypes.INTEGER, true, false);
+        LTField fieldInteger = new LTField("Integer: ", LTDataTypes.INTEGER, true, false);
+        LTField fieldLong = new LTField("Long: ", LTDataTypes.LONG, true, false);
+        LTField fieldDouble = new LTField("Double: ", LTDataTypes.DOUBLE, true, false);
 
         row.addColumn(new GridColumn(fieldString1.load(), 12));
         row.addColumn(new GridColumn(fieldString2.load(), 12));
-        //row.addColumn(new GridColumn(fieldString3.load(), 12));
+        row.addColumn(new GridColumn(fieldInteger.load(), 12));
+        row.addColumn(new GridColumn(fieldLong.load(), 12));
+        row.addColumn(new GridColumn(fieldDouble.load(), 12));
 
         return row;
     }

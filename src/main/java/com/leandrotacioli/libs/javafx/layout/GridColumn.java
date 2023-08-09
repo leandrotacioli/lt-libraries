@@ -1,5 +1,6 @@
 package com.leandrotacioli.libs.javafx.layout;
 
+import com.leandrotacioli.libs.javafx.field.LTField;
 import javafx.scene.Node;
 import lombok.Getter;
 
@@ -21,11 +22,12 @@ public class GridColumn {
 
     /**
      * Grid Column.
+     * <p>Default width for all window sizes = 1</p>
      *
      * @param content the content to be added to the column
      */
     public GridColumn(Node content) {
-        this.content = content;
+        this(content, 1, 1, 1, 1, 1);
     }
 
     /**
@@ -36,6 +38,26 @@ public class GridColumn {
      */
     public GridColumn(Node content, int width) {
         this(content, width, width, width, width, width);
+    }
+
+    /**
+     * Grid Column.
+     * <p>Default width for all window sizes = 1</p>
+     *
+     * @param field the field to be added to the column
+     */
+    public GridColumn(LTField field) {
+        this(field.load(), 1, 1, 1, 1, 1);
+    }
+
+    /**
+     * Grid Column.
+     *
+     * @param field the field to be added to the column
+     * @param width the requested width for all window sizes (must be between 1 and 12)
+     */
+    public GridColumn(LTField field, int width) {
+        this(field.load(), width, width, width, width, width);
     }
 
     /**

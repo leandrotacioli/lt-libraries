@@ -7,9 +7,8 @@ import com.leandrotacioli.libs.javafx.layout.GridRow;
 import com.leandrotacioli.libs.javafx.layout.ResponsiveLayout;
 import com.leandrotacioli.libs.javafx.layout.WindowSize;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
@@ -87,27 +86,44 @@ public class LTLibrariesResponsiveFX extends Application {
     private GridRow createGridRow3() {
         GridRow row = new GridRow();
 
-        LTField fieldString1 = new LTField("String: ", LTDataTypes.STRING, true, false);
+        LTField fieldString1 = new LTField("String:", LTDataTypes.STRING, true, false);
         fieldString1.addFocusListener((obs, oldVal, newVal) -> {
-            if (newVal) {
-                System.out.println("Focused: " + fieldString1.getValue());
-            }
+            if (newVal) System.out.println("String Focus: " + fieldString1.getValue());
+            if (oldVal) System.out.println("String Lost Focus: " + fieldString1.getValue());
         });
 
-        LTField fieldString2 = new LTField("String 2 - Max Length 20: ", LTDataTypes.STRING, true, false);
-        fieldString2.setEnabled(false);
-        fieldString2.setMaximumLength(20);
-        fieldString2.setValue("String 2");
+        LTField fieldString2 = new LTField("String 2 - Disabled:", LTDataTypes.STRING, false, false);
+        fieldString2.setMaximumLength(50);
+        fieldString2.setHorizontalAlignment(Pos.CENTER);
+        fieldString2.setValue("This String field is Disabled");
 
-        LTField fieldInteger = new LTField("Integer: ", LTDataTypes.INTEGER, true, false);
-        LTField fieldLong = new LTField("Long: ", LTDataTypes.LONG, true, false);
-        LTField fieldDouble = new LTField("Double: ", LTDataTypes.DOUBLE, true, false);
+        LTField fieldString3 = new LTField("String 3 - Max Length 20 - Right Aligned:", LTDataTypes.STRING, true, false);
+        fieldString3.setMaximumLength(20);
+        fieldString3.setHorizontalAlignment(Pos.CENTER_RIGHT);
 
-        row.addColumn(new GridColumn(fieldString1.load(), 12));
-        row.addColumn(new GridColumn(fieldString2.load(), 12));
-        row.addColumn(new GridColumn(fieldInteger.load(), 12));
-        row.addColumn(new GridColumn(fieldLong.load(), 12));
-        row.addColumn(new GridColumn(fieldDouble.load(), 12));
+        LTField fieldInteger = new LTField("Integer:", LTDataTypes.INTEGER, true, false);
+        fieldInteger.setValue(10);
+        fieldInteger.setMinHeight(10);
+        fieldInteger.setMaximumLength(50);
+
+        LTField fieldLong = new LTField("Long:", LTDataTypes.LONG, true, false);
+        fieldLong.setMinHeight(25);
+        fieldLong.setFractionDigits(6);
+
+        LTField fieldDouble = new LTField("Double:", LTDataTypes.DOUBLE, true, false);
+        fieldDouble.setFractionDigits(4);
+        fieldDouble.setValue(1234.25);
+        fieldDouble.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Double Focus: " + fieldDouble.getValue());
+            if (oldVal) System.out.println("Double Lost Focus: " + fieldDouble.getValue());
+        });
+
+        row.addColumn(new GridColumn(fieldString1, 4));
+        row.addColumn(new GridColumn(fieldString2, 4));
+        row.addColumn(new GridColumn(fieldString3, 4));
+        row.addColumn(new GridColumn(fieldInteger, 4));
+        row.addColumn(new GridColumn(fieldLong, 4));
+        row.addColumn(new GridColumn(fieldDouble, 4));
 
         return row;
     }

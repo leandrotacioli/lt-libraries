@@ -1,6 +1,7 @@
 package com.leandrotacioli.libs.swing.table.editors;
 
 import java.awt.Component;
+import java.math.BigDecimal;
 
 import javax.swing.DefaultCellEditor;
 import javax.swing.JTable;
@@ -47,15 +48,8 @@ public class TableEditorDouble extends DefaultCellEditor {
 		String strValue = "";
 		
 		if (aValue != null && !aValue.equals("")) {
-			strValue = DoubleTransformation.doubleToString((double) aValue, intColumnDoubleFractionDigits);
-			
-			// Retira os caracteres de separador de milhares e altera o separador para o padrão configurado nos parâmetros
-			if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-				strValue = strValue.replace(".", "");
-				strValue.replace(".", ",");
-			} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-				strValue = strValue.replace(",", "");
-			}
+			strValue = DoubleTransformation.doubleToString(new BigDecimal(aValue.toString()), intColumnDoubleFractionDigits);
+			strValue = DoubleTransformation.replaceDecimalSeparator(strValue);
 		}
 		
 		txtFieldDouble.setText(strValue);

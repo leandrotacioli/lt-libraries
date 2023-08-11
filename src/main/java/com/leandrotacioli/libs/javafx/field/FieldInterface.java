@@ -8,9 +8,11 @@ public interface FieldInterface {
 
     public Object getValue();
 
-    public void setValue(Object objValue);
+    public void setValue(Object value);
 
     public void setMaximumLength(int maximumLength);
+
+    public void setFractionDigits(int fractionDigits);
 
     public void addFocusListener(ChangeListener<Boolean> changeListener);
 

@@ -7,13 +7,14 @@ import javax.swing.text.PlainDocument;
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.transformation.DoubleTransformation;
 
+import java.math.BigDecimal;
+
 /**
  * 
  * @author Leandro Tacioli
  */
 public class TextFieldDoubleDocument extends PlainDocument {
-	private static final long serialVersionUID = 1191649656321787135L;
-	
+
 	private int intFractionDigits;
 	
 	/**
@@ -44,7 +45,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 				}
 
 				String strValue = getText(0, offset) + str + getText(offset, getLength() - offset);
-				double dblValue = DoubleTransformation.stringToDouble(strValue);
+				BigDecimal dblValue = new BigDecimal(DoubleTransformation.replaceDecimalSeparator(strValue));
 				
 				String[] strIntegerDecimalParts = getIntegerDecimalParts(strValue);
 				
@@ -52,7 +53,7 @@ public class TextFieldDoubleDocument extends PlainDocument {
 				if (blnSeparator) {
 					if (Character.isDigit(cChar)) {
 						// Permitir apenas o número de casas decimais estabelecido no TextFieldDouble
-						if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE && strIntegerDecimalParts[1].length() <= intFractionDigits) {
+						if (dblValue.compareTo(TextFieldDouble.MIN_VALUE) >= 0 && dblValue.compareTo(TextFieldDouble.MAX_VALUE) <= 0 && strIntegerDecimalParts[1].length() <= intFractionDigits) {
 							super.insertString(offset, str, attr);
 						}
 					}
@@ -66,10 +67,10 @@ public class TextFieldDoubleDocument extends PlainDocument {
 							strValue = strValue + "0";
 						}
 						
-						dblValue = DoubleTransformation.stringToDouble(strValue);
+						dblValue = new BigDecimal(strValue);
 					}
-					
-					if (dblValue >= TextFieldDouble.MIN_VALUE && dblValue <= TextFieldDouble.MAX_VALUE) {
+
+					if (dblValue.compareTo(TextFieldDouble.MIN_VALUE) >= 0 && dblValue.compareTo(TextFieldDouble.MAX_VALUE) <= 0) {
 						// Altera o separador para o padrão configurado nos parâmetros
 						if (cChar == '.' || cChar == ',') {
 							// Separador é uma vírgula

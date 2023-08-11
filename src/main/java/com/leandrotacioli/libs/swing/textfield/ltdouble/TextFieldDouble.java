@@ -2,6 +2,7 @@ package com.leandrotacioli.libs.swing.textfield.ltdouble;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import javax.swing.JFormattedTextField;
@@ -14,17 +15,16 @@ import com.leandrotacioli.libs.transformation.DoubleTransformation;
  * @author Leandro Tacioli
  */
 public class TextFieldDouble extends JFormattedTextField implements KeyListener {
-	private static final long serialVersionUID = 8041888551259051911L;
-	
+
 	/** Valor mínimo para o campo DOUBLE. */
-	public static final double MIN_VALUE = -9999999999999.99999999;
+	public static final BigDecimal MIN_VALUE = new BigDecimal("-9999999999999999.9999999999");
 	
 	/** Valor máximo para o campo DOUBLE. */
-	public static final double MAX_VALUE = 9999999999999.99999999;
+	public static final BigDecimal MAX_VALUE = new BigDecimal("9999999999999999.9999999999");
 	
 	private DecimalFormat decimalFormat;
 	
-	private double dblValue;
+	private BigDecimal value;
 
 	private int intFractionDigits;
 	private boolean blnShowAsPercentage;
@@ -54,8 +54,6 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	
 	/**
 	 * Retorna o status de exibiçao do campo com uma máscara de porcentagem.
-	 * 
-	 * @param blnShowAsPercentage
 	 */
 	public boolean getShowAsPercentage() {
 		return blnShowAsPercentage;
@@ -96,10 +94,7 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	 * Estabelece o formato padrão da data.
 	 */
 	private void setDoubleFormat() {
-		decimalFormat = new DecimalFormat();
-		decimalFormat.setMinimumFractionDigits(intFractionDigits);
-		decimalFormat.setMaximumFractionDigits(intFractionDigits);
-		decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
+		decimalFormat = DoubleTransformation.getDecimalFormat(intFractionDigits);
 		
 		setInputVerifier(new TextFieldDoubleVerifier(this, decimalFormat));
 		setDocument(new TextFieldDoubleDocument(intFractionDigits));
@@ -108,38 +103,40 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 	
 	@Override
 	public Object getValue() {
-		return dblValue;
+		return value;
 	}
 	
 	@Override
 	public void setValue(Object objValue) {
 		try {
-			if (objValue instanceof Double) {
-				dblValue = (double) objValue;
-			
-			} else if (objValue instanceof Integer) {
-				dblValue = Integer.valueOf(objValue.toString());
-				
-			} else if (objValue instanceof String) {
-				String strValue = objValue.toString();
-				
-				if (!strValue.equals("0.0")) {
-					if (LTParameters.getInstance().getDecimalMark().equals("COMMA")) {
-						strValue = strValue.replace(".", "");   // Retira os separadores de milhar
-						strValue = strValue.replace(",", ".");
-					} else if (LTParameters.getInstance().getDecimalMark().equals("PERIOD")) {
-						strValue = strValue.replace(",", "");   // Retira os separadores de milhar
+			if (objValue != null) {
+				if (objValue instanceof BigDecimal) {
+					value = (BigDecimal) objValue;
+
+				} else if (objValue instanceof Double) {
+					value = new BigDecimal(objValue.toString());
+
+				} else if (objValue instanceof Integer) {
+					value = new BigDecimal(objValue.toString());
+
+				} else if (objValue instanceof String) {
+					String strValue = objValue.toString();
+
+					if (!strValue.equals("0.0")) {
+						strValue = DoubleTransformation.replaceDecimalSeparator(strValue);
 					}
+
+					value = new BigDecimal(strValue);
 				}
-				
-				dblValue = DoubleTransformation.stringToDouble(strValue);
+			} else {
+				value = new BigDecimal("0.00");
 			}
 
 		} catch (Exception e) {
-			dblValue = 0.00;
+			value = new BigDecimal("0.00");
 		}
 		
-		setText(decimalFormat.format(dblValue) + (blnShowAsPercentage ? "%" : ""));
+		setText(decimalFormat.format(value) + (blnShowAsPercentage ? "%" : ""));
 	}
 
 	// Implementa KeyListener
@@ -170,9 +167,9 @@ public class TextFieldDouble extends JFormattedTextField implements KeyListener 
 				}
 				
 				// Verifica se o valor não ficará menor/maior que o permitido
-				double dblValue = DoubleTransformation.stringToDouble(strValue);
-				
-				if (dblValue < MIN_VALUE || dblValue > MAX_VALUE) {
+				BigDecimal doubleValue = new BigDecimal(strValue);
+
+				if (doubleValue.compareTo(MIN_VALUE) >= 0 && doubleValue.compareTo(MAX_VALUE) <= 0) {
 					setText(strValueBeforeDeleted + (blnShowAsPercentage ? "%" : ""));
 				}
 			}

@@ -12,6 +12,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.math.BigDecimal;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -999,7 +1000,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			    			objValue = strDouble;
 				    	}
 				    	
-				    	lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
+				    	lstColumnModel.get(intRowIndex).setValue(intColumnIndex, new BigDecimal(objValue.toString()));
 			    	} else {
 			    		if (objValue != null && !objValue.equals("")) {
 			    			String strDouble = objValue.toString();
@@ -1007,7 +1008,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			    			strDouble = strDouble.replace("%", "");
 			    			objValue = strDouble;
 			    			
-			    			lstColumnModel.get(intRowIndex).setValue(intColumnIndex, Double.parseDouble(objValue.toString()));
+			    			lstColumnModel.get(intRowIndex).setValue(intColumnIndex, new BigDecimal(objValue.toString()));
 						}
 			    	}
 			    	

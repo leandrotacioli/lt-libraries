@@ -19,69 +19,97 @@ public class DoubleTransformation {
 	}
 
 	/**
-	 * Transforma uma <i>String</i> em um valor <i>double</i>.
-	 *
-	 * @param strValue - Valor
-	 *
-	 * @return dblValue
-	 */
-	public static double stringToDouble(String strValue) {
-		double dblValue = 0;
-
-		try {
-			dblValue = Double.parseDouble(strValue);
-		} catch (Exception e) {
-			dblValue = 0;
-		}
-
-		return dblValue;
-	}
-
-	/**
-	 * Transforma um valor <i>double</i> em um objeto <i>String</i>.
+	 * Transforma um valor <i>BigDecimal</i> em um objeto <i>String</i>.
 	 * 
-	 * @param dblValue - Valor a ser transformado
-	 * @param intDecimalPlaces - Quantidade de casas decimais
+	 * @param value - Valor a ser transformado
+	 * @param fractionDigits - Quantidade de casas decimais
 	 * 
 	 * @return strDouble - Ex: <i>120,63</i>
 	 */
-	public static String doubleToString(double dblValue, int intDecimalPlaces) {
-		DecimalFormat decimalFormat = getDecimalFormat(intDecimalPlaces);
+	public static String doubleToString(BigDecimal value, int fractionDigits) {
+		DecimalFormat decimalFormat = getDecimalFormat(fractionDigits);
 		
-		return decimalFormat.format(dblValue);
+		return decimalFormat.format(value);
 	}
 	
 	/**
-	 * Arredonda um valor <i>double</i> para a quantidade de casas decimais desejada.
+	 * Arredonda um valor <i>BigDecimal</i> para a quantidade de casas decimais desejada.
 	 *
-	 * @param dblValue - Valor a ser transformado
-	 * @param intDecimalPlaces - Quantidade de casas decimais
+	 * @param value - Valor a ser transformado
+	 * @param fractionDigits - Quantidade de casas decimais
 	 * 
 	 * @return dblDouble
 	 */
-	public static double roundDouble(double dblValue, int intDecimalPlaces) {
-		return roundDouble(dblValue, intDecimalPlaces, BigDecimal.ROUND_HALF_UP);
+	public static BigDecimal roundDouble(BigDecimal value, int fractionDigits) {
+		return roundDouble(value, fractionDigits, BigDecimal.ROUND_HALF_UP);
 	}
 	
 	/**
-	 * Arredonda um objeto <i>double</i> para a quantidade de casas decimais desejada.
+	 * Arredonda um objeto <i>BigDecimal</i> para a quantidade de casas decimais desejada.
 	 *
-	 * @param dblValue - Valor a ser transformado
-	 * @param intDecimalPlaces - Quantidade de casas decimais
-	 * @param intRoundingMode - Modo de Arredondamento
+	 * @param value - Valor a ser transformado
+	 * @param fractionDigits - Quantidade de casas decimais
+	 * @param roundingMode - Modo de Arredondamento
 	 * 
-	 * @return dblDouble
+	 * @return bigDecimal
 	 */
-	public static double roundDouble(double dblValue, int intDecimalPlaces, int intRoundingMode) {
-		return BigDecimal.valueOf(dblValue).setScale(intDecimalPlaces, intRoundingMode).doubleValue();
+	public static BigDecimal roundDouble(BigDecimal value, int fractionDigits, int roundingMode) {
+		return value.setScale(fractionDigits, roundingMode);
 	}
 
-	public static DecimalFormat getDecimalFormat(int intDecimalPlaces) {
+	/**
+	 * Returns a DecimalFormat object set with the fraction digits and its symbols.
+	 *
+	 * @param fractionDigits
+	 *
+	 * @return decimalFormat
+	 */
+	public static DecimalFormat getDecimalFormat(int fractionDigits) {
 		DecimalFormat decimalFormat = new DecimalFormat();
-		decimalFormat.setMinimumFractionDigits(intDecimalPlaces);
-		decimalFormat.setMaximumFractionDigits(intDecimalPlaces);
+		decimalFormat.setMinimumFractionDigits(fractionDigits);
+		decimalFormat.setMaximumFractionDigits(fractionDigits);
 		decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
 
 		return decimalFormat;
+	}
+
+	/**
+	 * Removes the grouping separator of a DOUBLE string.
+	 *
+	 * <p>Example: 1.000,123 -> 1000,123<p/>
+	 *
+	 * @param value
+	 *
+	 * @return
+	 */
+	public static String removeGroupingSeparator(String value) {
+		if (LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() == ',') {
+			value = value.replace(".", "");
+		} else if (LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() == '.') {
+			value = value.replace(",", "");
+		}
+
+		return value;
+	}
+
+	/**
+	 * Replace the decimal separator to a valid DOUBLE string.
+	 *
+	 * <p>Example 1: 5.020.100,123 -> 502000.123 | When Decimal Separator = ','<p/>
+	 * <p>Example 2: 5,020,100.123 -> 502000.123 | When Decimal Separator = '.'<p/>
+	 *
+	 * @param value
+	 *
+	 * @return
+	 */
+	public static String replaceDecimalSeparator(String value) {
+		if (LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() == ',') {
+			value = value.replace(".", "");
+			value = value.replace(",", ".");
+		} else if (LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() == '.') {
+			value = value.replace(",", "");
+		}
+
+		return value;
 	}
 }

@@ -10,6 +10,7 @@ import javax.swing.table.DefaultTableCellRenderer;
 import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
 import com.leandrotacioli.libs.swing.LTSwing;
+import com.leandrotacioli.libs.transformation.DoubleTransformation;
 
 /**
  * 
@@ -35,10 +36,7 @@ public class TableRendererDefault extends DefaultTableCellRenderer {
 	 * @param intColumnDoubleFractionDigits
 	 */
 	public void setColumnDoubleFractionDigits(int intColumnDoubleFractionDigits) {
-		decimalFormat = new DecimalFormat();
-		decimalFormat.setMinimumFractionDigits(intColumnDoubleFractionDigits);
-		decimalFormat.setMaximumFractionDigits(intColumnDoubleFractionDigits);
-		decimalFormat.setDecimalFormatSymbols(LTParameters.getInstance().getDecimalFormatSymbols());
+		decimalFormat = DoubleTransformation.getDecimalFormat(intColumnDoubleFractionDigits);
 	}
 	
 	/**

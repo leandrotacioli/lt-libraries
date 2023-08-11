@@ -1,5 +1,6 @@
 package com.leandrotacioli.libs.swing.textfield.ltdouble;
 
+import java.math.BigDecimal;
 import java.text.DecimalFormat;
 
 import javax.swing.InputVerifier;
@@ -38,14 +39,14 @@ public class TextFieldDoubleVerifier extends InputVerifier {
         	if (component == textField) {
         		// Se o campo estiver vazio
         		if (textField.getText() == null || textField.getText().length() == 0) {
-        			textField.setText(decimalFormat.format(0));
+        			textField.setText(decimalFormat.format(new BigDecimal("0.00")));
         			
         			blnResult = true;
         		
         		// Se o campo já conter algum valor
         		} else {
         			textField.setText(textField.getText().replace(",", "."));
-		            textField.setText(decimalFormat.format(Double.parseDouble(textField.getText())));
+		            textField.setText(decimalFormat.format(new BigDecimal(textField.getText())));
 
 		            blnResult = true;
         		}

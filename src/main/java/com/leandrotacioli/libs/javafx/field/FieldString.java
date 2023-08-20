@@ -6,19 +6,8 @@ import javafx.scene.control.TextField;
 
 public class FieldString extends TextField implements FieldInterface {
 
-    private int maximumLength;
-
     protected FieldString(boolean isEnabled) {
         this.setEditable(isEnabled);
-    }
-
-    private void validateMaximumLength() {
-        String string = this.getText();
-
-        if (maximumLength > 0 && string.length() > maximumLength) {
-            this.setText(string.substring(0, maximumLength));
-            this.positionCaret(string.length());
-        }
     }
 
     @Override
@@ -34,15 +23,16 @@ public class FieldString extends TextField implements FieldInterface {
     @Override
     public void setValue(Object value) {
         this.setText((String) value);
-
-        validateMaximumLength();
     }
 
     @Override
     public void setMaximumLength(int maximumLength) {
-        this.maximumLength = maximumLength;
+        if (maximumLength > 0) {
+            FieldValidator fieldValidator = new FieldValidator(LTDataTypes.STRING);
+            fieldValidator.stringPattern(maximumLength);
 
-        this.setOnKeyTyped(event -> validateMaximumLength());
+            this.setTextFormatter(fieldValidator.getFormatter());
+        }
     }
 
     @Override

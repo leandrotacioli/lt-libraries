@@ -10,29 +10,41 @@ import java.util.regex.Pattern;
 
 public class FieldValidator {
 
-    private static final BigDecimal DOUBLE_MIN_VALUE = new BigDecimal("-9999999999999999.9999999999");
-    private static final BigDecimal DOUBLE_MAX_VALUE = new BigDecimal("9999999999999999.9999999999");
-
     private LTDataTypes dataType;
     private Pattern pattern;
 
-    protected FieldValidator(LTDataTypes dataType) {
-        this(dataType, 0);
-    }
+    private int fractionDigits;
+    private int maxLength;
 
-    protected FieldValidator(LTDataTypes dataType, int fractionDigits) {
+    protected FieldValidator(LTDataTypes dataType) {
         this.dataType = dataType;
 
-        if (this.dataType == LTDataTypes.INTEGER) pattern = integerLongPattern();
-        else if (this.dataType == LTDataTypes.LONG) pattern = integerLongPattern();
-        else if (this.dataType == LTDataTypes.DOUBLE) pattern = doublePattern(fractionDigits);
+        if (this.dataType == LTDataTypes.INTEGER) integerPattern();
+        else if (this.dataType == LTDataTypes.LONG) longPattern();
+        else if (this.dataType == LTDataTypes.DOUBLE) doublePattern(2);
+        else if (this.dataType == LTDataTypes.STRING) stringPattern(0);
+        else if (this.dataType == LTDataTypes.TEXT) textPattern(0);
     }
 
     protected TextFormatter<Object> getFormatter() {
-        return new TextFormatter<>(this::validateChange);
+        if (this.dataType == LTDataTypes.INTEGER || this.dataType == LTDataTypes.LONG || this.dataType == LTDataTypes.DOUBLE) {
+            return new TextFormatter<>(this::validateNumericChange);
+        } else if (this.dataType == LTDataTypes.STRING || this.dataType == LTDataTypes.TEXT) {
+            return new TextFormatter<>(this::validateTextChange);
+        }
+
+        return new TextFormatter<>(this::validateDefaultChange);
     }
 
-    private TextFormatter.Change validateChange(TextFormatter.Change change) {
+    private TextFormatter.Change validateDefaultChange(TextFormatter.Change change) {
+        if (pattern.matcher(change.getControlNewText()).matches()) {
+            return change;
+        }
+
+        return null;
+    }
+
+    private TextFormatter.Change validateNumericChange(TextFormatter.Change change) {
         if (pattern.matcher(change.getControlNewText()).matches()) {
             if (change.getControlNewText() != null && change.getControlNewText().length() > 0 && !change.getControlNewText().equals("-")) {
                 try {
@@ -51,12 +63,65 @@ public class FieldValidator {
         return null;
     }
 
-    private Pattern integerLongPattern() {
-        return Pattern.compile("-?\\d*");
+    private TextFormatter.Change validateTextChange(TextFormatter.Change change) {
+        if (change.getControlNewText().length() <= maxLength) {
+            return change;
+
+        } else {
+            if (change.getControlText().length() <= maxLength || change.getRangeStart() != change.getRangeEnd()) {
+                String oldTextBeforeAnchor = change.getControlText().substring(0, change.getControlAnchor());
+                String oldTextAfterAnchor = change.getControlText().substring(change.getControlAnchor(), change.getControlText().length());
+
+                if (change.getControlText().length() == maxLength && change.getRangeStart() != change.getRangeEnd()) {
+                    oldTextBeforeAnchor = change.getControlText().substring(0, change.getRangeStart());
+                    oldTextAfterAnchor = change.getControlText().substring(change.getRangeEnd(), change.getControlText().length());
+                }
+
+                String newText = change.getText().substring(0, (maxLength - oldTextBeforeAnchor.length() - oldTextAfterAnchor.length()));
+
+                change.setText(oldTextBeforeAnchor + newText + oldTextAfterAnchor);
+                change.setRange(0, change.getControlText().length());
+                change.setAnchor(oldTextBeforeAnchor.length() + newText.length());
+                change.setCaretPosition(oldTextBeforeAnchor.length() + newText.length());
+
+                return change;
+
+            } else {
+                return null;
+            }
+        }
     }
 
-    private Pattern doublePattern(int fractionDigits) {
-        return Pattern.compile("-?\\d*(\\" + LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() + "\\d{0," + fractionDigits + "})?");
+    protected void integerPattern() {
+        this.pattern = Pattern.compile("-?\\d*");
+    }
+
+    protected void longPattern() {
+        this.pattern = Pattern.compile("-?\\d*");
+    }
+
+    protected void doublePattern(int fractionDigits) {
+        this.pattern = Pattern.compile("-?\\d*(\\" + LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() + "\\d{0," + fractionDigits + "})?");
+    }
+
+    protected void stringPattern(int maxLength) {
+        this.maxLength = maxLength;
+
+        if (maxLength <= 0) {
+            this.pattern = Pattern.compile(".");
+        } else {
+            this.pattern = Pattern.compile(".{0," + maxLength + "}");
+        }
+    }
+
+    protected void textPattern(int maxLength) {
+        this.maxLength = maxLength;
+
+        if (maxLength <= 0) {
+            this.pattern = Pattern.compile(".");
+        } else {
+            this.pattern = Pattern.compile(".{0," + maxLength + "}");
+        }
     }
 
     protected static int validateIntegerValue(Object value) throws IllegalArgumentException {
@@ -76,6 +141,9 @@ public class FieldValidator {
     }
 
     protected static BigDecimal validateDoubleValue(Object value) throws IllegalArgumentException {
+        BigDecimal DOUBLE_MIN_VALUE = new BigDecimal("-9999999999999999.9999999999");
+        BigDecimal DOUBLE_MAX_VALUE = new BigDecimal("9999999999999999.9999999999");
+
         try {
             BigDecimal bigDecimalValue = new BigDecimal(value.toString());
 

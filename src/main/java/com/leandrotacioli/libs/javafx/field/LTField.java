@@ -21,6 +21,7 @@ public class LTField implements FieldInterface {
 
     private FieldNumeric fieldNumeric;
     private FieldString fieldString;
+    private FieldText fieldText;
 
     private LTDataTypes dataType;
     private boolean isEnabled;
@@ -76,7 +77,8 @@ public class LTField implements FieldInterface {
             fieldString.setValue("");
 
         } else if (this.dataType == LTDataTypes.TEXT) {
-            throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
+            fieldText = new FieldText(isEnabled);
+            fieldText.setValue("");
 
         } else if (this.dataType == LTDataTypes.DATE) {
             throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
@@ -95,6 +97,7 @@ public class LTField implements FieldInterface {
 
         addFieldToPane(fieldNumeric);
         addFieldToPane(fieldString);
+        addFieldToPane(fieldText);
     }
 
     private void addFieldToPane(Node field) {
@@ -130,6 +133,7 @@ public class LTField implements FieldInterface {
 
         if (fieldNumeric != null) fieldNumeric.setMinHeight(minHeight);
         if (fieldString != null) fieldString.setMinHeight(minHeight);
+        if (fieldText != null) fieldText.setMinHeight(minHeight);
     }
 
     /**
@@ -140,18 +144,21 @@ public class LTField implements FieldInterface {
     public void setHorizontalAlignment(Pos horizontalAlignment) {
         if (fieldNumeric != null) fieldNumeric.setAlignment(horizontalAlignment);
         if (fieldString != null) fieldString.setAlignment(horizontalAlignment);
+        if (fieldText != null) System.err.println("setHorizontalAlignment - This method is not allowed for " + this.dataType + " fields.");
     }
 
     @Override
     public void setEnabled(boolean isEnabled) {
         if (fieldNumeric != null) fieldNumeric.setEnabled(isEnabled);
         if (fieldString != null) fieldString.setEnabled(isEnabled);
+        if (fieldText != null) fieldText.setEnabled(isEnabled);
     }
 
     @Override
     public Object getValue() {
         if (fieldNumeric != null) return fieldNumeric.getValue();
         if (fieldString != null) return fieldString.getValue();
+        if (fieldText != null) return fieldText.getValue();
 
         throw new UnsupportedOperationException("getValue - Not supported yet for " + this.dataType + " field.");
     }
@@ -160,12 +167,14 @@ public class LTField implements FieldInterface {
     public void setValue(Object value) {
         if (fieldNumeric != null) fieldNumeric.setValue(value);
         if (fieldString != null) fieldString.setValue(value);
+        if (fieldText != null) fieldText.setValue(value);
     }
 
     @Override
     public void setMaximumLength(int maximumLength) {
-        if (this.dataType == LTDataTypes.STRING) {
+        if (this.dataType == LTDataTypes.STRING || this.dataType == LTDataTypes.TEXT) {
             if (fieldString != null) fieldString.setMaximumLength(maximumLength);
+            else if (fieldText != null) fieldText.setMaximumLength(maximumLength);
         } else {
             System.err.println("setMaximumLength - This method is not allowed for " + this.dataType + " fields.");
         }
@@ -184,6 +193,7 @@ public class LTField implements FieldInterface {
     public void addFocusListener(ChangeListener<Boolean> changeListener) {
         if (fieldNumeric != null) fieldNumeric.addFocusListener(changeListener);
         if (fieldString != null) fieldString.addFocusListener(changeListener);
+        if (fieldText != null) fieldText.addFocusListener(changeListener);
     }
 
 }

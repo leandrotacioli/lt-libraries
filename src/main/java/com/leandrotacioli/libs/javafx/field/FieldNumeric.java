@@ -42,12 +42,16 @@ public class FieldNumeric extends TextField implements FieldInterface {
             // Focus gained
             if (newVal) {
                 if (this.dataType == LTDataTypes.INTEGER) {
-                    this.setTextFormatter(new FieldValidator(dataType).getFormatter());
+                    FieldValidator fieldValidator = new FieldValidator(LTDataTypes.INTEGER);
+                    this.setTextFormatter(fieldValidator.getFormatter());
                 } else if (this.dataType == LTDataTypes.LONG) {
-                    this.setTextFormatter(new FieldValidator(dataType).getFormatter());
+                    FieldValidator fieldValidator = new FieldValidator(LTDataTypes.LONG);
+                    this.setTextFormatter(fieldValidator.getFormatter());
                 } else if (this.dataType == LTDataTypes.DOUBLE) {
+                    FieldValidator fieldValidator = new FieldValidator(LTDataTypes.DOUBLE);
+                    fieldValidator.doublePattern(fractionDigits);
+                    this.setTextFormatter(fieldValidator.getFormatter());
                     this.setText(DoubleTransformation.removeGroupingSeparator(this.getText()));
-                    this.setTextFormatter(new FieldValidator(dataType, fractionDigits).getFormatter());
                 } else {
                     throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
                 }

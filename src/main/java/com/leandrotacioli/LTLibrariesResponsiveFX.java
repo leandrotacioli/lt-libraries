@@ -87,6 +87,7 @@ public class LTLibrariesResponsiveFX extends Application {
         GridRow row = new GridRow();
 
         LTField fieldString1 = new LTField("String:", LTDataTypes.STRING, true, false);
+        fieldString1.setMaximumLength(15);
         fieldString1.addFocusListener((obs, oldVal, newVal) -> {
             if (newVal) System.out.println("String Focus: " + fieldString1.getValue());
             if (oldVal) System.out.println("String Lost Focus: " + fieldString1.getValue());
@@ -118,12 +119,17 @@ public class LTLibrariesResponsiveFX extends Application {
             if (oldVal) System.out.println("Double Lost Focus: " + fieldDouble.getValue());
         });
 
+        LTField fieldText = new LTField("Text:", LTDataTypes.TEXT, true, false);
+        fieldText.setMaximumLength(200);
+        fieldText.setMinHeight(150);
+
         row.addColumn(new GridColumn(fieldString1, 4));
         row.addColumn(new GridColumn(fieldString2, 4));
         row.addColumn(new GridColumn(fieldString3, 4));
         row.addColumn(new GridColumn(fieldInteger, 4));
         row.addColumn(new GridColumn(fieldLong, 4));
         row.addColumn(new GridColumn(fieldDouble, 4));
+        row.addColumn(new GridColumn(fieldText, 12));
 
         return row;
     }

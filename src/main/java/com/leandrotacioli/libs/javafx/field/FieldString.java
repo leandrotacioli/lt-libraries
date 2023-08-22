@@ -8,6 +8,8 @@ public class FieldString extends TextField implements FieldInterface {
 
     protected FieldString(boolean isEnabled) {
         this.setEditable(isEnabled);
+
+        setValue("");
     }
 
     @Override
@@ -29,7 +31,7 @@ public class FieldString extends TextField implements FieldInterface {
     public void setMaximumLength(int maximumLength) {
         if (maximumLength > 0) {
             FieldValidator fieldValidator = new FieldValidator(LTDataTypes.STRING);
-            fieldValidator.stringPattern(maximumLength);
+            fieldValidator.textPattern(maximumLength);
 
             this.setTextFormatter(fieldValidator.getFormatter());
         }
@@ -37,6 +39,11 @@ public class FieldString extends TextField implements FieldInterface {
 
     @Override
     public void setFractionDigits(int fractionDigits) {
+        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.STRING + " fields.");
+    }
+
+    @Override
+    public void setDateFormat(String dateFormat) {
         throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.STRING + " fields.");
     }
 

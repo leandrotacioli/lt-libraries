@@ -14,6 +14,7 @@ public class FieldText extends TextArea implements FieldInterface {
 
         setFocusProperties();
         setEventHandler();
+        setValue("");
     }
 
     private void setFocusProperties() {
@@ -71,6 +72,11 @@ public class FieldText extends TextArea implements FieldInterface {
 
     @Override
     public void setFractionDigits(int fractionDigits) {
+        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TEXT + " fields.");
+    }
+
+    @Override
+    public void setDateFormat(String dateFormat) {
         throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TEXT + " fields.");
     }
 

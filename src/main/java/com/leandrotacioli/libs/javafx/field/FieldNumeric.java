@@ -27,6 +27,7 @@ public class FieldNumeric extends TextField implements FieldInterface {
         this.setEditable(isEnabled);
 
         setFieldProperties();
+        setValue(0);
     }
 
     private void setFieldProperties() {
@@ -115,6 +116,11 @@ public class FieldNumeric extends TextField implements FieldInterface {
         } else {
             throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
         }
+    }
+
+    @Override
+    public void setDateFormat(String dateFormat) {
+        throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
     }
 
     @Override

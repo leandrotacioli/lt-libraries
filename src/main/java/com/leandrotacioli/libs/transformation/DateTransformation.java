@@ -83,21 +83,34 @@ public class DateTransformation {
 		
 		return dteFinal;
 	}
+
+	/**
+	 * Transforma a parte de data de um objeto <i>Date</i> em um objeto <i>String</i>.
+	 *
+	 * @param dteDate - Data a ser transformada
+	 * @param dteFormat - Formato de data final
+	 *
+	 * @return strDate - Ex: <i>dd/MM/yyyy</i>
+	 */
+	public static String dateToString(Date dteDate, String dteFormat) {
+		return dateToString(dteDate, dteFormat, false);
+	}
 	
 	/**
 	 * Transforma a parte de data de um objeto <i>Date</i> em um objeto <i>String</i>.
 	 * 
 	 * @param dteDate - Data a ser transformada
+	 * @param dteFormat - Formato de data final
 	 * @param blnShowHour - Exibe a hora
 	 * 
 	 * @return strDate - Ex: <i>dd/MM/yyyy</i> ou <i>dd/MM/yyyy HH:mm</i>
 	 */
-	public static String dateToString(Date dteDate, boolean blnShowHour) {
+	public static String dateToString(Date dteDate, String dteFormat, boolean blnShowHour) {
 		String strDate = "";
 		
 		if (dteDate != null) {
 			try {
-				DateFormat dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat());
+				DateFormat dateFormat = new SimpleDateFormat(dteFormat);
 				
 				// Exibe horário apenas se for diferente de 00:00
 				if (blnShowHour) {
@@ -105,7 +118,7 @@ public class DateTransformation {
 					String strMinutes = new SimpleDateFormat("mm").format(dteDate);
 					
 					if (!strHours.equals("00") || !strMinutes.equals("00")) {
-						dateFormat = new SimpleDateFormat(LTParameters.getInstance().getDateFormat() + " HH:mm");
+						dateFormat = new SimpleDateFormat(dteFormat + " HH:mm");
 					}
 				}
 				

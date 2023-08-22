@@ -2,10 +2,14 @@ package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
+import com.leandrotacioli.libs.transformation.DateTransformation;
 import com.leandrotacioli.libs.transformation.DoubleTransformation;
 import javafx.scene.control.TextFormatter;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.regex.Pattern;
 
 public class FieldValidator {
@@ -15,6 +19,7 @@ public class FieldValidator {
 
     private int fractionDigits;
     private int maxLength;
+    private String dateFormat;
 
     protected FieldValidator(LTDataTypes dataType) {
         this.dataType = dataType;
@@ -22,8 +27,9 @@ public class FieldValidator {
         if (this.dataType == LTDataTypes.INTEGER) integerPattern();
         else if (this.dataType == LTDataTypes.LONG) longPattern();
         else if (this.dataType == LTDataTypes.DOUBLE) doublePattern(2);
-        else if (this.dataType == LTDataTypes.STRING) stringPattern(0);
+        else if (this.dataType == LTDataTypes.STRING) textPattern(0);
         else if (this.dataType == LTDataTypes.TEXT) textPattern(0);
+        else if (this.dataType == LTDataTypes.DATE) datePattern(LTParameters.getInstance().getDateFormat());
     }
 
     protected TextFormatter<Object> getFormatter() {
@@ -31,12 +37,14 @@ public class FieldValidator {
             return new TextFormatter<>(this::validateNumericChange);
         } else if (this.dataType == LTDataTypes.STRING || this.dataType == LTDataTypes.TEXT) {
             return new TextFormatter<>(this::validateTextChange);
+        } else if (this.dataType == LTDataTypes.DATE) {
+            return new TextFormatter<>(this::validateDateChange);
         }
 
         return new TextFormatter<>(this::validateDefaultChange);
     }
 
-    private TextFormatter.Change validateDefaultChange(TextFormatter.Change change) {
+    protected TextFormatter.Change validateDefaultChange(TextFormatter.Change change) {
         if (pattern.matcher(change.getControlNewText()).matches()) {
             return change;
         }
@@ -92,6 +100,22 @@ public class FieldValidator {
         }
     }
 
+    private TextFormatter.Change validateDateChange(TextFormatter.Change change) {
+        // TODO: Date Regex not working properly
+        // That's why we are also validating the date
+        if (pattern.matcher(change.getControlNewText()).matches()) {
+            return change;
+        } else {
+            try {
+                validateDateValue(dateFormat, change.getControlNewText());
+                return change;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                return null;
+            }
+        }
+    }
+
     protected void integerPattern() {
         this.pattern = Pattern.compile("-?\\d*");
     }
@@ -104,7 +128,7 @@ public class FieldValidator {
         this.pattern = Pattern.compile("-?\\d*(\\" + LTParameters.getInstance().getDecimalFormatSymbols().getDecimalSeparator() + "\\d{0," + fractionDigits + "})?");
     }
 
-    protected void stringPattern(int maxLength) {
+    protected void textPattern(int maxLength) {
         this.maxLength = maxLength;
 
         if (maxLength <= 0) {
@@ -114,13 +138,29 @@ public class FieldValidator {
         }
     }
 
-    protected void textPattern(int maxLength) {
-        this.maxLength = maxLength;
+    protected void datePattern(String dateFormat) {
+        this.dateFormat = dateFormat;
 
-        if (maxLength <= 0) {
-            this.pattern = Pattern.compile(".");
-        } else {
-            this.pattern = Pattern.compile(".{0," + maxLength + "}");
+        if (dateFormat.equals("dd/MM/yyyy")) {
+            this.pattern = Pattern.compile(
+                    "^(29/02/(2000|2400|2800|(19|2[0-9])(0[48]|[2468][048]|[13579][26])))$|" +
+                          "^((0[1-9]|1[0-9]|2[0-8])/02/((19|2[0-9])[0-9]{2}))$|" +
+                          "^((0[1-9]|[12][0-9]|3[01])/(0[13578]|10|12)/((19|2[0-9])[0-9]{2}))$|" +
+                          "^((0[1-9]|[12][0-9]|30)/(0[469]|11)/((19|2[0-9])[0-9]{2}))$");
+
+        } else if (dateFormat.equals("MM/dd/yyyy")) {
+            this.pattern = Pattern.compile(
+                    "^(02/29/(2000|2400|2800|(19|2[0-9])(0[48]|[2468][048]|[13579][26])))$|" +
+                          "^(02/((19|2[0-9])[0-9]{2})/(0[1-9]|1[0-9]|2[0-8]))$|" +
+                          "^((0[13578]|10|12)/(0[1-9]|[12][0-9]|3[01])/((19|2[0-9])[0-9]{2}))$|" +
+                          "^((0[469]|11)/(0[1-9]|[12][0-9]|30)/((19|2[0-9])[0-9]{2}))$");
+
+        } else if (dateFormat.equals("yyyy-MM-dd")) {
+            this.pattern = Pattern.compile(
+                    "^((2000|2400|2800|(19|2[0-9])(0[48]|[2468][048]|[13579][26]))-02-29)$|" +
+                          "^(((19|2[0-9])[0-9]{2})-02-(0[1-9]|1[0-9]|2[0-8]))$|" +
+                          "^(((19|2[0-9])[0-9]{2})-(0[13578]|10|12)-(0[1-9]|[12][0-9]|3[01]))$|" +
+                          "^(((19|2[0-9])[0-9]{2})-(0[469]|11)-(0[1-9]|[12][0-9]|30))$");
         }
     }
 
@@ -154,6 +194,20 @@ public class FieldValidator {
             }
         } catch (Exception e) {
             throw new IllegalArgumentException("Error on field validation - Invalid DOUBLE value (" + value + ").");
+        }
+    }
+
+    protected static LocalDate validateDateValue(String dateFormat, Object value) throws IllegalArgumentException {
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
+            simpleDateFormat.setLenient(false);
+
+            Date date = simpleDateFormat.parse((String) value);
+
+            return LocalDate.parse(DateTransformation.dateToString(date, "yyyy-MM-dd"));
+
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error on field validation - Invalid DATE value (" + value + ") - Expected format: " + dateFormat + ".");
         }
     }
 }

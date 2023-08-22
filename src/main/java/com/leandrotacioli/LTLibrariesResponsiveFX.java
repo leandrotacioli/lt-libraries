@@ -119,6 +119,31 @@ public class LTLibrariesResponsiveFX extends Application {
             if (oldVal) System.out.println("Double Lost Focus: " + fieldDouble.getValue());
         });
 
+        LTField fieldDate1 = new LTField("Date (dd/MM/yyyy):", LTDataTypes.DATE, true, false);
+        fieldDate1.setDateFormat("dd/MM/yyyy");
+        fieldDate1.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Date Focus: " + fieldDate1.getValue());
+            if (oldVal) System.out.println("Date Lost Focus: " + fieldDate1.getValue());
+        });
+        fieldDate1.setValue("15/01/2023");
+
+        LTField fieldDate2 = new LTField("Date (MM/dd/yyyy):", LTDataTypes.DATE, true, false);
+        fieldDate2.setDateFormat("MM/dd/yyyy");
+        fieldDate2.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Date Focus: " + fieldDate2.getValue());
+            if (oldVal) System.out.println("Date Lost Focus: " + fieldDate2.getValue());
+        });
+        fieldDate2.setValue("02/28/2023");
+
+        LTField fieldDate3 = new LTField("Date (yyyy-MM-dd):", LTDataTypes.DATE, true, false);
+        fieldDate3.setDateFormat("yyyy-MM-dd");
+        fieldDate3.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Date Focus: " + fieldDate3.getValue());
+            if (oldVal) System.out.println("Date Lost Focus: " + fieldDate3.getValue());
+        });
+        fieldDate3.setValue("2023-20-20");  // Error
+        fieldDate3.setValue("2023-06-20");
+
         LTField fieldText = new LTField("Text:", LTDataTypes.TEXT, true, false);
         fieldText.setMaximumLength(200);
         fieldText.setMinHeight(150);
@@ -129,6 +154,9 @@ public class LTLibrariesResponsiveFX extends Application {
         row.addColumn(new GridColumn(fieldInteger, 4));
         row.addColumn(new GridColumn(fieldLong, 4));
         row.addColumn(new GridColumn(fieldDouble, 4));
+        row.addColumn(new GridColumn(fieldDate1, 4));
+        row.addColumn(new GridColumn(fieldDate2, 4));
+        row.addColumn(new GridColumn(fieldDate3, 4));
         row.addColumn(new GridColumn(fieldText, 12));
 
         return row;

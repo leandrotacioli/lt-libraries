@@ -14,6 +14,8 @@ public interface FieldInterface {
 
     public void setFractionDigits(int fractionDigits);
 
+    public void setDateFormat(String dateFormat);
+
     public void addFocusListener(ChangeListener<Boolean> changeListener);
 
 }

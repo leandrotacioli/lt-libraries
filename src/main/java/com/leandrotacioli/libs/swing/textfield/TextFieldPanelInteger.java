@@ -13,11 +13,9 @@ import com.leandrotacioli.libs.swing.textfield.ltinteger.TextFieldInteger;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 02/Mai/2016
  */
 public class TextFieldPanelInteger extends TextField implements FocusListener {
-	private static final long serialVersionUID = -311259449788891812L;
-	
+
 	private TextFieldPanel objTextFieldPanel;
 	
 	private TextFieldInteger txtIntegerField;

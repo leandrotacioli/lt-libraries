@@ -15,8 +15,7 @@ import com.leandrotacioli.libs.swing.LTSwing;
  * @author Leandro Tacioli
  */
 public class TableRendererBoolean extends JCheckBox implements TableCellRenderer {
-	private static final long serialVersionUID = -3981049152248920887L;
-	
+
 	private boolean blnReadOnly;
 	private boolean blnFullRowSelection;
 	

@@ -1,4 +1,4 @@
-package com.leandrotacioli.libs.swing.textfield.lthour;
+package com.leandrotacioli.libs.swing.textfield.lttime;
 
 import javax.swing.JFormattedTextField;
 
@@ -7,47 +7,45 @@ import com.leandrotacioli.libs.swing.textfield.ltstring.TextFieldStringDocument;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 09/Jun/2020
  */
-public class TextFieldHour extends JFormattedTextField {
-	private static final long serialVersionUID = 393750898707041886L;
+public class TextFieldTime extends JFormattedTextField {
+
+	private String strTime;
 	
-	private String strHour;
-	
-	public String getHour() {
-		return strHour;
+	public String getTime() {
+		return strTime;
 	}
 
-	protected void setHour(String strHour) {
-		this.strHour = strHour;
+	protected void setTime(String strTime) {
+		this.strTime = strTime;
 	}
 	
 	/**
 	 * 
 	 */
-	public TextFieldHour() {
+	public TextFieldTime() {
 		setHorizontalAlignment(JFormattedTextField.LEFT);
-		setHourFormat();
+		setTimeFormat();
 	}
 	
 	/**
 	 * Estabelece o formato padrão da hora.
 	 */
-	public void setHourFormat() {
-		setFormatterFactory(TextFieldHourFormatterFactory.hourFormatterFactory());
-		setInputVerifier(new TextFieldHourVerifier(this));
+	public void setTimeFormat() {
+		setFormatterFactory(TextFieldTimeFormatterFactory.timeFormatterFactory());
+		setInputVerifier(new TextFieldTimeVerifier(this));
 		setDocument(new TextFieldStringDocument(5));
 	}
 	
 	@Override
 	public Object getValue() {
-		return strHour;
+		return strTime;
 	}
 	
 	@Override
 	public void setValue(Object objValue) {
 		if (objValue == null || objValue.toString().length() == 0) {
-			strHour = null;
+			strTime = null;
 			
 			setFormatterFactory(null);
 			setInputVerifier(null);
@@ -56,10 +54,10 @@ public class TextFieldHour extends JFormattedTextField {
 		} else {
 			// Se o formato padrão da data for "HH:mm"
 			if (objValue.toString().substring(2, 3).equals(":")) {
-				strHour = (String) objValue;
+				strTime = (String) objValue;
 				
-				setHourFormat();
-				setText(strHour);
+				setTimeFormat();
+				setText(strTime);
 			}
 		}
 	}

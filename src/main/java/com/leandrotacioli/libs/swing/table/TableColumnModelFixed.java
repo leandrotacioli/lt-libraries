@@ -7,11 +7,9 @@ import javax.swing.table.AbstractTableModel;
  * exclusivamente, para a tabela fixa.
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 10/Set/2015
  */
 public class TableColumnModelFixed extends AbstractTableModel {
-	private static final long serialVersionUID = -7620090463201928209L;
-	
+
 	private int intRowCount;
 	
 	/**

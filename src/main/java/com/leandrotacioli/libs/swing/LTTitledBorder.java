@@ -14,10 +14,8 @@ import javax.swing.border.TitledBorder;
  * e altera a fonte do título da borda.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 29/Abr/2015
  */
 public class LTTitledBorder extends TitledBorder {
-	private static final long serialVersionUID = -3604949041695752341L;
 
 	public LTTitledBorder(Border arg0, String arg1, int arg2, int arg3, Font arg4, Color arg5) {
 		super(arg0, arg1, arg2, arg3, arg4, arg5);

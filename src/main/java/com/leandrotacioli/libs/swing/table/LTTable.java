@@ -19,8 +19,7 @@ import com.leandrotacioli.libs.swing.LTSwing;
  * @author Leandro Tacioli
  */
 public class LTTable extends JScrollPane implements TableInterface {
-	private static final long serialVersionUID = -3832122577742129437L;
-	
+
 	private Table objTable;
 	
 	/**

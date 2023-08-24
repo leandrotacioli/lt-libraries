@@ -7,7 +7,6 @@ import javax.swing.JTextField;
  * @author Leandro Tacioli
  */
 public class TextFieldString extends JTextField {
-	private static final long serialVersionUID = 3190372699935806445L;
 
 	private int intMaximumLength;
 	

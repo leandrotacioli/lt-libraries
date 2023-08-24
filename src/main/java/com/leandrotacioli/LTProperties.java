@@ -37,7 +37,6 @@ import com.leandrotacioli.libs.LTDataTypes;
  * Cria os parâmetros necessários para a execução do </i>LT Libraries</i>.
  * 
  * @author Leandro Tacioli
- * @version 2.0 - 08/Ago/2017
  */
 public class LTProperties {
 	private JFrame frame;

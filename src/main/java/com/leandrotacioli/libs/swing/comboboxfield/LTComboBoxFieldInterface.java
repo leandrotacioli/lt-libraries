@@ -8,7 +8,6 @@ import java.awt.event.KeyListener;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.6 - 28/Dez/2018
  */
 public interface LTComboBoxFieldInterface {
 	

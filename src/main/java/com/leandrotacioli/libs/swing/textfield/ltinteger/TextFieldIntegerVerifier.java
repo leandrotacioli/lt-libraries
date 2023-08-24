@@ -8,7 +8,6 @@ import javax.swing.JFormattedTextField;
  * Verifica se o campo <i>INTEGER</i> está vazio.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 02/Abr/2015
  */
 public class TextFieldIntegerVerifier extends InputVerifier {
 	private JFormattedTextField textField;

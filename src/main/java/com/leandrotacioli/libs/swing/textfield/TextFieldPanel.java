@@ -15,11 +15,9 @@ import com.leandrotacioli.libs.LTParameters;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 28/Dez/2018
  */
 public class TextFieldPanel extends JPanel {
-	private static final long serialVersionUID = 3500342282829187859L;
-	
+
 	private JLabel lblLabel;
 	private JLabel lblAlert;
 	

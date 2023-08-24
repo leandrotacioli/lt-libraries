@@ -28,11 +28,9 @@ import com.leandrotacioli.libs.swing.table.TableExtension;
  * 'http://www.camick.com/java/source/ButtonColumn.java'
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 21/Nov/2020
  */
 public class TableRendererButton extends AbstractCellEditor implements TableCellRenderer, TableCellEditor, ActionListener, MouseListener {
-	private static final long serialVersionUID = 3542107700428307692L;
-	
+
 	private TableExtension objTable;
 	private Action action;
 	private Border originalBorder;

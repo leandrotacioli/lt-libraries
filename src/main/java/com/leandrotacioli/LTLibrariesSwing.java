@@ -45,7 +45,7 @@ public class LTLibrariesSwing implements TableListener {
 	private LTTextField txtDouble;
 	private LTTextField txtDoubleAsPercentage;
 	private LTTextField txtDate;
-	private LTTextField txtHour;
+	private LTTextField txtTime;
 	private LTTextField txtText;
 	private LTTextField txtBoolean;
 	private LTComboBoxField comboBox;
@@ -160,7 +160,7 @@ public class LTLibrariesSwing implements TableListener {
 		
 		txtText = new LTTextField(getLabelFromBundle("field_text"), LTDataTypes.TEXT, true, true);
 		txtDate = new LTTextField(getLabelFromBundle("field_date"), LTDataTypes.DATE, true, true);
-		txtHour = new LTTextField(getLabelFromBundle("field_hour"), LTDataTypes.HOUR, true, true);
+		txtTime = new LTTextField(getLabelFromBundle("field_time"), LTDataTypes.TIME, true, true);
 		txtBoolean = new LTTextField(getLabelFromBundle("field_boolean"), LTDataTypes.BOOLEAN, true, true);
 		
 		comboBox = new LTComboBoxField(getLabelFromBundle("field_combo_box"), true, true);
@@ -183,7 +183,7 @@ public class LTLibrariesSwing implements TableListener {
 		
 		panelFields.add(comboBox, "cell 0 3, grow, width 200");
 		panelFields.add(txtDate, "cell 0 3, width 100, grow");
-		panelFields.add(txtHour, "cell 0 3, width 100, grow");
+		panelFields.add(txtTime, "cell 0 3, width 100, grow");
 		panelFields.add(txtBoolean, "cell 0 3, width 200, aligny bottom");
 	    
 		// *********************************************************************************************************************
@@ -204,7 +204,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addColumn("string_read_only", getLabelFromBundle("field_string") + " - " + getLabelFromBundle("read_only"), LTDataTypes.STRING, 140, false);
 		objTable.addColumn("text", getLabelFromBundle("field_text"), LTDataTypes.TEXT, 140, true);
 		objTable.addColumn("date", getLabelFromBundle("field_date"), LTDataTypes.DATE, 100, true);
-		objTable.addColumn("hour", getLabelFromBundle("field_hour"), LTDataTypes.HOUR, 100, true);
+		objTable.addColumn("time", getLabelFromBundle("field_time"), LTDataTypes.TIME, 100, true);
 		objTable.addColumn("boolean", getLabelFromBundle("field_boolean"), LTDataTypes.BOOLEAN, 80, true);
 		objTable.addMouseListener(new TableMouseAdapter());
 		objTable.addTableListener(LTLibrariesSwing.this);
@@ -234,7 +234,7 @@ public class LTLibrariesSwing implements TableListener {
 			System.out.println(getLabelFromBundle("field_string") + " (" + getLabelFromBundle("alignment_right") + "): " + txtStringRightAligned.getValue());
 			System.out.println(getLabelFromBundle("field_text") + ": " + txtText.getValue());
 			System.out.println(getLabelFromBundle("field_date") + ": " + txtDate.getValue());
-			System.out.println(getLabelFromBundle("field_hour") + ": " + txtHour.getValue());
+			System.out.println(getLabelFromBundle("field_time") + ": " + txtTime.getValue());
 			System.out.println(getLabelFromBundle("field_boolean") + ": " + txtBoolean.getValue());
 			System.out.println(getLabelFromBundle("field_combo_box") + " (" + getLabelFromBundle("value_select") + "): " + comboBox.getValue());
 			System.out.println(getLabelFromBundle("field_combo_box") + " (" + getLabelFromBundle("value_select") + " " + getLabelFromBundle("description") + "): " + comboBox.getValueDescription());
@@ -263,7 +263,7 @@ public class LTLibrariesSwing implements TableListener {
 
 			txtDate.setValue("05/05/2015");
 
-			txtHour.setValue("12:12");
+			txtTime.setValue("12:12");
 
 			txtString.setValue("XPTO");
 
@@ -371,7 +371,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string_read_only", "Primeiro Fixo");
 		objTable.addRowData("text", "Primeiro livre");
 		objTable.addRowData("date", "01/01/2001");
-		objTable.addRowData("hour", "08:00");
+		objTable.addRowData("time", "08:00");
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
@@ -387,7 +387,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string_read_only", "Segundo Fixo");
 		objTable.addRowData("text", "Segundo livre");
 		objTable.addRowData("date", "02/02/2002");
-		objTable.addRowData("hour", "09:25");
+		objTable.addRowData("time", "09:25");
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
@@ -400,7 +400,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string_read_only", "Terceiro Fixo");
 		objTable.addRowData("text", "Terceiro livre");
 		objTable.addRowData("date", "03/03/2003");
-		objTable.addRowData("hour", "12:30");
+		objTable.addRowData("time", "12:30");
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
@@ -412,7 +412,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Quarto");
 		objTable.addRowData("text", "Quarto livre");
 		objTable.addRowData("date", "04/04/2004");
-		objTable.addRowData("hour", "17:00");
+		objTable.addRowData("time", "17:00");
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
@@ -425,7 +425,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Quinto");
 		objTable.addRowData("text", "Quinto livre");
 		objTable.addRowData("date", "05/05/2005");
-		objTable.addRowData("hour", "00:00");
+		objTable.addRowData("time", "00:00");
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
@@ -436,7 +436,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Sexto");
 		objTable.addRowData("text", "Sexto livre");
 		objTable.addRowData("date", "06/06/2006");
-		objTable.addRowData("hour", "05:35");
+		objTable.addRowData("time", "05:35");
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
@@ -447,7 +447,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Sétimo");
 		objTable.addRowData("text", "Sétimo livre");
 		objTable.addRowData("date", "07/07/2007");
-		objTable.addRowData("hour", "08:00");
+		objTable.addRowData("time", "08:00");
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
@@ -459,7 +459,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Oitavo");
 		objTable.addRowData("text", "Oitavo livre");
 		objTable.addRowData("date", "08/08/2008");
-		objTable.addRowData("hour", "08:15");
+		objTable.addRowData("time", "08:15");
 		objTable.addRowData("boolean", false);
 				
 		objTable.addRow();
@@ -471,7 +471,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Nono");
 		objTable.addRowData("text", "Nono livre");
 		objTable.addRowData("date", "09/09/2009");
-		objTable.addRowData("hour", "08:00");
+		objTable.addRowData("time", "08:00");
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
@@ -482,7 +482,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("string", "Décimo");
 		objTable.addRowData("text", "Décimo livre");
 		objTable.addRowData("date", "10/10/2010");
-		objTable.addRowData("hour", "10:10");
+		objTable.addRowData("time", "10:10");
 		objTable.addRowData("boolean", false);
 		
 		objTable.setRowColor(1, Color.LIGHT_GRAY);
@@ -514,7 +514,7 @@ public class LTLibrariesSwing implements TableListener {
 		txtText.setLabel(getLabelFromBundle("field_text"));
 		comboBox.setLabel(getLabelFromBundle("field_combo_box"));
 		txtDate.setLabel(getLabelFromBundle("field_date"));
-		txtHour.setLabel(getLabelFromBundle("field_hour"));
+		txtTime.setLabel(getLabelFromBundle("field_time"));
 
 		objTable.setColumnDescription("image", getLabelFromBundle("image"));
 		objTable.setColumnDescription("integer", getLabelFromBundle("field_integer"));
@@ -528,7 +528,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.setColumnDescription("string_read_only", getLabelFromBundle("field_string") + " - " + getLabelFromBundle("read_only"));
 		objTable.setColumnDescription("text", getLabelFromBundle("field_text"));
 		objTable.setColumnDescription("date", getLabelFromBundle("field_date"));
-		objTable.setColumnDescription("hour", getLabelFromBundle("field_hour"));
+		objTable.setColumnDescription("time", getLabelFromBundle("field_time"));
 		objTable.setColumnDescription("boolean", getLabelFromBundle("field_boolean"));
 	}
 	

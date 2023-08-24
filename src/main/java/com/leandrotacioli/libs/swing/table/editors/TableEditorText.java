@@ -14,8 +14,7 @@ import com.leandrotacioli.libs.swing.LTSwing;
  * @author Leandro Tacioli
  */
 public class TableEditorText extends DefaultCellEditor {
-	private static final long serialVersionUID = 764663649164438553L;
-	
+
 	private int intHorizontalAlignment;
 	
 	public TableEditorText() {

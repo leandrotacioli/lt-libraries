@@ -14,11 +14,9 @@ import net.miginfocom.swing.MigLayout;
  * Campo Boolean.
  * 
  * @author Leandro Tacioli
- * @version 1.2 - 12/Set/2016
  */
 public class TextFieldPanelBoolean extends TextField {
-	private static final long serialVersionUID = 7545050499375148923L;
-	
+
 	private TextFieldPanel objTextFieldPanel;
 	
 	private JCheckBox txtBooleanField;

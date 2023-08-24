@@ -13,11 +13,9 @@ import com.leandrotacioli.libs.swing.textfield.ltdate.TextFieldDate;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 02/Mai/2016
  */
 public class TextFieldPanelDate extends TextField implements FocusListener {
-	private static final long serialVersionUID = -6513521813043168930L;
-	
+
 	private TextFieldPanel objTextFieldPanel;
 	
 	private TextFieldDate txtDateField;

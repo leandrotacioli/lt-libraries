@@ -13,7 +13,6 @@ import com.leandrotacioli.libs.swing.LTSwing;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 14/Abr/2015
  */
 public class TextFieldDateVerifier extends InputVerifier {
 	private TextFieldDate textField;

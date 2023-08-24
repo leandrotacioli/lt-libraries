@@ -14,7 +14,6 @@ import com.leandrotacioli.libs.swing.textfield.ltlong.TextFieldLong;
  * @author Leandro Tacioli
  */
 public class TableEditorLong extends DefaultCellEditor {
-	private static final long serialVersionUID = -1479599424775321309L;
 
 	private int intHorizontalAlignment;
 	

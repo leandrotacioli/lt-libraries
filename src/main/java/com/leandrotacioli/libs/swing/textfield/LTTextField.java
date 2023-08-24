@@ -19,8 +19,7 @@ import net.miginfocom.swing.MigLayout;
  * @author Leandro Tacioli
  */
 public class LTTextField extends JPanel implements TextFieldInterface {
-	private static final long serialVersionUID = 7550401382977332304L;
-	
+
 	private TextField objTextField;
 	
 	private String strColumnDatabase;
@@ -86,8 +85,8 @@ public class LTTextField extends JPanel implements TextFieldInterface {
 			} else if (objDataType == LTDataTypes.DATE) {
 				objTextField = new TextFieldPanelDate(strLabel, blnEnabled, blnMandatoryField);
 				
-			} else if (objDataType == LTDataTypes.HOUR) {
-				objTextField = new TextFieldPanelHour(strLabel, blnEnabled, blnMandatoryField);
+			} else if (objDataType == LTDataTypes.TIME) {
+				objTextField = new TextFieldPanelTime(strLabel, blnEnabled, blnMandatoryField);
 
 			} else if (objDataType == LTDataTypes.BOOLEAN) {
 				objTextField = new TextFieldPanelBoolean(strLabel, blnEnabled, blnMandatoryField);

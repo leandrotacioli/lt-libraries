@@ -23,8 +23,7 @@ import javax.swing.text.JTextComponent;
  * @author Leandro Tacioli
  */
 public class TableExtension extends JTable {
-	private static final long serialVersionUID = 6023069067252460359L;
-	
+
 	private boolean blnReadOnly;
 	
 	private List<TableExtensionRowColor> lstRowColor;
@@ -71,8 +70,6 @@ public class TableExtension extends JTable {
     @Override
 	protected JTableHeader createDefaultTableHeader() {
 		return new JTableHeader(columnModel) {
-			private static final long serialVersionUID = 6589880105462434748L;
-			
 			public String getToolTipText(MouseEvent e) {
 				Point point = e.getPoint();
 				int columnIndex = columnModel.getColumnIndexAtX(point.x);

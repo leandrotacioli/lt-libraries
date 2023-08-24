@@ -21,8 +21,7 @@ import javax.swing.border.Border;
  * Create a JButton default for the Menu Panel
  */
 public class LTMenuButton extends JButton {
-	private static final long serialVersionUID = 6579187171917234026L;
-	
+
 	private String strLabel;
 	private ImageIcon iconButton;
 	private int intWidth, intHeight;

@@ -12,11 +12,9 @@ import com.leandrotacioli.libs.swing.textfield.ltstring.TextFieldStringDocument;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 28/Dez/2018
  */
 public class TextFieldDate extends JFormattedTextField {
-	private static final long serialVersionUID = -2593674760196876116L;
-	
+
 	private String strDate;
 	
 	public String getDate() {

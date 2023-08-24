@@ -9,7 +9,6 @@ import javax.swing.text.PlainDocument;
  * @author Leandro Tacioli
  */
 public class TextFieldIntegerDocument extends PlainDocument {
-	private static final long serialVersionUID = 6121219651008957847L;
 
 	/**
 	 * 

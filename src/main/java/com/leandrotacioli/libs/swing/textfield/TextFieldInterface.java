@@ -8,7 +8,6 @@ import java.awt.event.KeyListener;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.5 - 12/Set/2016
  */
 public interface TextFieldInterface {
 	

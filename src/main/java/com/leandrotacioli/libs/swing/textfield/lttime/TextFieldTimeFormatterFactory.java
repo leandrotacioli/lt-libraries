@@ -1,4 +1,4 @@
-package com.leandrotacioli.libs.swing.textfield.lthour;
+package com.leandrotacioli.libs.swing.textfield.lttime;
 
 import java.text.ParseException;
 
@@ -8,25 +8,24 @@ import javax.swing.text.MaskFormatter;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 09/Jun/2020
  */
-public class TextFieldHourFormatterFactory {
+public class TextFieldTimeFormatterFactory {
 	
 	/**
 	 * Estabelece o formato padrão de hora. (HH:mm)
 	 */
-	public static DefaultFormatterFactory hourFormatterFactory() {
-		DefaultFormatterFactory hourFormatterFactory = null;
+	public static DefaultFormatterFactory timeFormatterFactory() {
+		DefaultFormatterFactory timeFormatterFactory = null;
 		
 		try {
-			MaskFormatter maskFormatter = new HourMaskFormatter("##:##");
-			hourFormatterFactory = new DefaultFormatterFactory(maskFormatter);
+			MaskFormatter maskFormatter = new TimeMaskFormatter("##:##");
+            timeFormatterFactory = new DefaultFormatterFactory(maskFormatter);
 			
 		} catch (ParseException e) {
 			e.printStackTrace();
 		} 
 		
-		return hourFormatterFactory;
+		return timeFormatterFactory;
 	}
 }
 
@@ -34,11 +33,9 @@ public class TextFieldHourFormatterFactory {
  * Permite que <i>MaskFormatter</i> aceite valores em branco.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 09/Jun/2020
  */
-class HourMaskFormatter extends MaskFormatter {
-	private static final long serialVersionUID = -147170285796703763L;
-	
+class TimeMaskFormatter extends MaskFormatter {
+
 	private String strBlankRepresentation;
 	
 	private boolean blnAllowBlankField;
@@ -64,7 +61,7 @@ class HourMaskFormatter extends MaskFormatter {
     /**
      * Permite que <i>MaskFormatter</i> aceite valores em branco.
      */
-    protected HourMaskFormatter(String strMask) throws ParseException {
+    protected TimeMaskFormatter(String strMask) throws ParseException {
         super(strMask);
     }
 
@@ -90,15 +87,11 @@ class HourMaskFormatter extends MaskFormatter {
     // Checa a representação em branco
     @Override 
     public Object stringToValue(String strValue) throws ParseException {
-    	Object objValue = strValue;
-        
         if (getAllowBlankField() && strBlankRepresentation != null && strBlankRepresentation.equals(strValue)) {
-        	objValue = null;
+        	return null;
         } else {
-        	objValue = super.stringToValue(strValue);
+        	return super.stringToValue(strValue);
         }
-        
-        return objValue;
     }
 
 	// *************************************************************************

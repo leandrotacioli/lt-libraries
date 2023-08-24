@@ -17,8 +17,7 @@ import com.leandrotacioli.libs.swing.textfield.ltdate.TextFieldDate;
  * @author Leandro Tacioli
  */
 public class TableEditorDate extends DefaultCellEditor {
-	private static final long serialVersionUID = -9025778248402406514L;
-	
+
 	private static TextFieldDate txtFieldDate = new TextFieldDate();
 	
 	private int intHorizontalAlignment;

@@ -17,8 +17,7 @@ import com.leandrotacioli.libs.transformation.DoubleTransformation;
  * @author Leandro Tacioli
  */
 public class TableEditorDouble extends DefaultCellEditor {
-	private static final long serialVersionUID = 8304313692833448805L;
-	
+
 	private int intHorizontalAlignment;
 	private int intColumnDoubleFractionDigits;
 	private boolean blnColumnDoubleShowAsPercentage;

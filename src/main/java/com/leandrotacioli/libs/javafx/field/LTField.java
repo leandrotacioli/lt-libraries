@@ -79,7 +79,7 @@ public class LTField implements FieldInterface {
         } else if (this.dataType == LTDataTypes.DATE) {
             fieldDate = new FieldDate(isEnabled);
 
-        } else if (this.dataType == LTDataTypes.HOUR) {
+        } else if (this.dataType == LTDataTypes.TIME) {
             throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
 
         } else if (this.dataType == LTDataTypes.BOOLEAN) {

@@ -8,19 +8,17 @@ import java.awt.event.KeyListener;
 import com.leandrotacioli.libs.swing.LTSwing;
 import net.miginfocom.swing.MigLayout;
 
-import com.leandrotacioli.libs.swing.textfield.lthour.TextFieldHour;
+import com.leandrotacioli.libs.swing.textfield.lttime.TextFieldTime;
 
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 09/Jun/2020
  */
-public class TextFieldPanelHour extends TextField implements FocusListener {
-	private static final long serialVersionUID = -8051708775213719117L;
+public class TextFieldPanelTime extends TextField implements FocusListener {
 
 	private TextFieldPanel objTextFieldPanel;
 	
-	private TextFieldHour txtHourField;
+	private TextFieldTime txtTimeField;
 
 	/**
 	 * 
@@ -28,32 +26,32 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 	 * @param blnEnabled
 	 * @param blnMandatoryField
 	 */
-	protected TextFieldPanelHour(String strLabel, boolean blnEnabled, boolean blnMandatoryField) {
+	protected TextFieldPanelTime(String strLabel, boolean blnEnabled, boolean blnMandatoryField) {
 		super(strLabel, blnEnabled, blnMandatoryField);
+
+		txtTimeField = new TextFieldTime();
+		txtTimeField.setBorder(LTSwing.getInstance().getBorderComponent());
+		txtTimeField.setFont(LTSwing.getInstance().getFontComponentTextField());
+		txtTimeField.addFocusListener(this);
 		
-		txtHourField = new TextFieldHour();
-		txtHourField.setBorder(LTSwing.getInstance().getBorderComponent());
-		txtHourField.setFont(LTSwing.getInstance().getFontComponentTextField());
-		txtHourField.addFocusListener(this);
-		
-		objTextFieldPanel = new TextFieldPanel(txtHourField, strLabel);
+		objTextFieldPanel = new TextFieldPanel(txtTimeField, strLabel);
 		
 		setLayout(new MigLayout("insets 0", "[grow]", "[grow]"));
 		add(objTextFieldPanel, "cell 0 0, grow");
 		
-		setHourProperties();
+		setTimeProperties();
 	}
 	
 	/**
 	 * Estabelece as propriedades da STRING.
 	 */
-	private void setHourProperties() {
-		txtHourField.setEnabled(getEnabled());
-		txtHourField.setForeground(LTSwing.getInstance().getColorComponentForeground());
-		txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackground());
+	private void setTimeProperties() {
+		txtTimeField.setEnabled(getEnabled());
+		txtTimeField.setForeground(LTSwing.getInstance().getColorComponentForeground());
+		txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackground());
 		
 		if (!getEnabled()) {
-			txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
+			txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
 			objTextFieldPanel.setAlertVisible(false);
 		}
 	}
@@ -65,7 +63,7 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 	
 	@Override
 	public boolean getIsMandatoryFieldEmpty() {
-		if (txtHourField.getValue() == null && getMandatoryField()) {
+		if (txtTimeField.getValue() == null && getMandatoryField()) {
 			objTextFieldPanel.setAlertVisible(true);
 			return true;
 		} else {
@@ -76,7 +74,7 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 	
 	@Override
 	public Object getValue() {
-		return txtHourField.getText();
+		return txtTimeField.getText();
 	}
 	
 	@Override
@@ -84,12 +82,12 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 		String strValue = (String) objValue;
 		
 		if (strValue == null) {
-			txtHourField.setFormatterFactory(null);
-			txtHourField.setInputVerifier(null);
-			txtHourField.setText("");
+			txtTimeField.setFormatterFactory(null);
+			txtTimeField.setInputVerifier(null);
+			txtTimeField.setText("");
 		
 		} else {
-			txtHourField.setValue(strValue);
+			txtTimeField.setValue(strValue);
 		}
 	}
 	
@@ -97,27 +95,27 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 	public void setEnabled(boolean blnEnabled) {
 		super.setEnabled(blnEnabled);
 		
-		setHourProperties();
+		setTimeProperties();
 	}
 	
 	@Override
 	public void setFocus() {
-		txtHourField.requestFocus();
+		txtTimeField.requestFocus();
 	}
 	
 	@Override
 	public void addActionListener(ActionListener actionListener) {
-		txtHourField.addActionListener(actionListener);
+		txtTimeField.addActionListener(actionListener);
 	}
 	
 	@Override
 	public void addKeyListener(KeyListener keyListener) {
-		txtHourField.addKeyListener(keyListener);
+		txtTimeField.addKeyListener(keyListener);
 	}
 	
 	@Override
 	public void addFocusListener(FocusListener focusListener) {
-		txtHourField.addFocusListener(focusListener);
+		txtTimeField.addFocusListener(focusListener);
 	}
 
 	// *********************************************************************
@@ -125,22 +123,22 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 	@Override
 	public void focusGained(FocusEvent event) {
 		if (getEnabled()) {
-			txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackgroundFocus());
-			txtHourField.setHourFormat();
+			txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackgroundFocus());
+			txtTimeField.setTimeFormat();
 		} else {
-			txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
+			txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
 		}
 	}
 	
 	@Override
 	public void focusLost(FocusEvent event) {
-		if (txtHourField.getHour() == null || txtHourField.getHour().length() == 0) {
-			txtHourField.setFormatterFactory(null);
-			txtHourField.setInputVerifier(null);
-			txtHourField.setText(txtHourField.getHour());
+		if (txtTimeField.getTime() == null || txtTimeField.getTime().length() == 0) {
+			txtTimeField.setFormatterFactory(null);
+			txtTimeField.setInputVerifier(null);
+			txtTimeField.setText(txtTimeField.getTime());
 		}
-		
-		txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackground());
+
+		txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackground());
 		
 		if (getEnabled()) {
 			if (getIsMandatoryFieldEmpty()) {
@@ -149,7 +147,7 @@ public class TextFieldPanelHour extends TextField implements FocusListener {
 				objTextFieldPanel.setAlertVisible(false);
 			}
 		} else {
-			txtHourField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
+			txtTimeField.setBackground(LTSwing.getInstance().getColorComponentBackgroundDisabled());
 			objTextFieldPanel.setAlertVisible(false);
 		}
 	}

@@ -14,7 +14,6 @@ import com.leandrotacioli.libs.swing.textfield.ltinteger.TextFieldInteger;
  * @author Leandro Tacioli
  */
 public class TableEditorInteger extends DefaultCellEditor {
-	private static final long serialVersionUID = 4667845356960784235L;
 
 	private int intHorizontalAlignment;
 	

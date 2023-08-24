@@ -12,7 +12,6 @@ import javax.swing.JPanel;
  * @author Leandro Tacioli
  */
 public class TextField extends JPanel implements TextFieldInterface {
-	private static final long serialVersionUID = 9058121922409010383L;
 
 	private String strLabel;
 

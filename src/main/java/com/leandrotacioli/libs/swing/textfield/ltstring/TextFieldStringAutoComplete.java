@@ -14,8 +14,7 @@ import javax.swing.event.DocumentListener;
  * types part of it. It is necessary to inform a list of possibilities
  */
 public class TextFieldStringAutoComplete extends JTextField implements DocumentListener {
-	private static final long serialVersionUID = 862244745434735175L;
-	
+
 	private ArrayList<String> lstPossibilities;
     private Color incompleteColor;
     private int currentGuess;

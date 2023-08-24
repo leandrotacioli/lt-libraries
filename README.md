@@ -2,7 +2,7 @@
 
 Do you need help on handling fields and tables in Java? LT Libraries is here for you!
 
-LT Libraries allows you to easily create custom fields (Integer, Long, Double, String, Text, Date, Hour, Boolean) and to manipulate tables for graphical user interface (GUI) Java programs using Swing.
+LT Libraries allows you to easily create custom fields (Integer, Long, Double, String, Text, Date, Time, Boolean) and to manipulate tables for graphical user interface (GUI) Java programs using Swing.
 
 Create a JavaFX Responsive Layout similar to Bootstrap CSS Framework.
 

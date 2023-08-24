@@ -16,8 +16,7 @@ import com.leandrotacioli.libs.swing.textfield.ltdouble.TextFieldDouble;
  * @author Leandro Tacioli
  */
 public class TextFieldPanelDouble extends TextField implements FocusListener {
-	private static final long serialVersionUID = 2873124544129027700L;
-	
+
 	private TextFieldPanel objTextFieldPanel;
 	
 	private TextFieldDouble txtDoubleField;

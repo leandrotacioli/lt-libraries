@@ -17,8 +17,7 @@ import com.leandrotacioli.libs.transformation.DoubleTransformation;
  * @author Leandro Tacioli
  */
 public class TableRendererDefault extends DefaultTableCellRenderer {
-	private static final long serialVersionUID = 3585207723628352892L;
-	
+
 	private LTDataTypes objDataType;
 	
 	private boolean blnReadOnly;

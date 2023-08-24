@@ -34,7 +34,6 @@ import com.leandrotacioli.libs.LTParameters;
  * @author Leandro Tacioli
  */
 public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface, MouseListener, FocusListener, KeyListener, ItemListener {
-	private static final long serialVersionUID = -2715899779863536880L;
 
 	private String strLabel;
 	private String strValue;
@@ -168,8 +167,6 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	 */
 	private void setDefaultRenderer() {
 		comboBox.setRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = -3834160234417617219L;
-			
 			@Override
 			public void paint(Graphics g) {
 			comboBox.setBackground(LTSwing.getInstance().getColorComponentBackground());
@@ -185,8 +182,6 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	 */
 	private void setFocusRenderer() {
 		comboBox.setRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = 3198399646742098137L;
-
 			@Override
 			public void paint(Graphics g) {
 			comboBox.setBackground(LTSwing.getInstance().getColorComponentBackgroundFocus());
@@ -481,8 +476,6 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 	 * Cria um renderizador o popup com os valores atribuídos ao campo.
 	 */
 	private class ComboBoxCellRenderer extends DefaultListCellRenderer {
-		private static final long serialVersionUID = -1553302519977810202L;
-		
 		@Override
 	    public Component getListCellRendererComponent(final JList<?> list, final Object value, final int index, final boolean isSelected, final boolean cellHasFocus) {
 	    	this.setText((String) value);

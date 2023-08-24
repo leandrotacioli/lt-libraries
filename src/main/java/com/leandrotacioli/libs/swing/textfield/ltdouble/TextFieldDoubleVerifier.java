@@ -13,7 +13,6 @@ import com.leandrotacioli.libs.swing.LTSwing;
  * Verifica se o campo <i>DOUBLE</i> está preenchido corretamente.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 02/Abr/2015
  */
 public class TextFieldDoubleVerifier extends InputVerifier {
 	private JFormattedTextField textField;

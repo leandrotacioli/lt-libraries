@@ -5,10 +5,8 @@ import javax.swing.JFormattedTextField;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 07/Abr/2015
  */
 public class TextFieldInteger extends JFormattedTextField {
-	private static final long serialVersionUID = 6256296659723863717L;
 
 	private int intValue;
 	

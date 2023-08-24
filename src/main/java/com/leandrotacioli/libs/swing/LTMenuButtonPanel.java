@@ -19,7 +19,6 @@ import net.miginfocom.swing.MigLayout;
  * Creates a default Button Panel
  */
 public class LTMenuButtonPanel extends JPanel {
-	private static final long serialVersionUID = 3097720929428167821L;
 
 	// Constructor
 	public LTMenuButtonPanel() {

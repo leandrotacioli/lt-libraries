@@ -16,11 +16,9 @@ import net.miginfocom.swing.MigLayout;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 02/Mai/2016
  */
 public class TextFieldPanelText extends TextField implements FocusListener, KeyListener {
-	private static final long serialVersionUID = -1135666578204973748L;
-	
+
 	private TextFieldPanel objTextFieldPanel;
 	
 	private JScrollPane txtTextField;

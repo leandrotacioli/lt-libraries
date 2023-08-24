@@ -49,7 +49,7 @@ import com.leandrotacioli.libs.swing.table.renderers.TableRendererDefault;
 import com.leandrotacioli.libs.swing.table.renderers.TableRendererFixed;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorDate;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorDouble;
-import com.leandrotacioli.libs.swing.table.editors.TableEditorHour;
+import com.leandrotacioli.libs.swing.table.editors.TableEditorTime;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorInteger;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorLong;
 import com.leandrotacioli.libs.swing.table.editors.TableEditorString;
@@ -61,8 +61,7 @@ import com.leandrotacioli.libs.swing.table.editors.TableEditorText;
  * @author Leandro Tacioli
  */
 public class Table extends AbstractTableModel implements TableInterface, ActionListener {	
-	private static final long serialVersionUID = 755268795533847516L;
-	
+
 	private TableExtension objTable; 
 	private TableExtension objTableFixed;
 	
@@ -404,8 +403,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TEXT, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.TEXT), LTSwing.getInstance().getColorTable());
 		} else if (objDataType == LTDataTypes.DATE) {
 			objTableCellRenderer = new TableRendererDefault(LTDataTypes.DATE, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.DATE), LTSwing.getInstance().getColorTable());
-		} else if (objDataType == LTDataTypes.HOUR) {
-			objTableCellRenderer = new TableRendererDefault(LTDataTypes.HOUR, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.HOUR), LTSwing.getInstance().getColorTable());
+		} else if (objDataType == LTDataTypes.TIME) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TIME, blnReadOnly, blnFullRowSelection, getColumnHorizontalAlignment(LTDataTypes.TIME), LTSwing.getInstance().getColorTable());
 		} else if (objDataType == LTDataTypes.BOOLEAN) {
 			objTableCellRenderer = new TableRendererBoolean(blnReadOnly, blnFullRowSelection, LTSwing.getInstance().getColorTable());
 		}
@@ -438,8 +437,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TEXT, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {
 			objTableCellRenderer = new TableRendererDefault(LTDataTypes.DATE, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
-		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.HOUR) {
-			objTableCellRenderer = new TableRendererDefault(LTDataTypes.HOUR, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TIME) {
+			objTableCellRenderer = new TableRendererDefault(LTDataTypes.TIME, blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnHorizontalAlignment(), objTableColumnParameters.getColumnColor());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.BOOLEAN) {
 			objTableCellRenderer = new TableRendererBoolean(blnReadOnly, blnFullRowSelection, objTableColumnParameters.getColumnColor());
 		}
@@ -465,8 +464,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			objTableCellEditor = new TableEditorText();
 		} else if (objDataType == LTDataTypes.DATE) {
 			objTableCellEditor = new TableEditorDate();
-		} else if (objDataType == LTDataTypes.HOUR) {
-			objTableCellEditor = new TableEditorHour();
+		} else if (objDataType == LTDataTypes.TIME) {
+			objTableCellEditor = new TableEditorTime();
 		} else if (objDataType == LTDataTypes.BOOLEAN) {
 			objTableCellEditor = null;
 		}
@@ -492,8 +491,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			objTableCellEditor = new TableEditorText(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.DATE) {
 			objTableCellEditor = new TableEditorDate(objTableColumnParameters.getColumnHorizontalAlignment());
-		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.HOUR) {
-			objTableCellEditor = new TableEditorHour(objTableColumnParameters.getColumnHorizontalAlignment());
+		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.TIME) {
+			objTableCellEditor = new TableEditorTime(objTableColumnParameters.getColumnHorizontalAlignment());
 		} else if (objTableColumnParameters.getColumnDataType() == LTDataTypes.BOOLEAN) {
 			objTableCellEditor = null;
 		}
@@ -804,7 +803,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 	  			classType = String.class;
 	    	} else if (objDataType == LTDataTypes.DATE) {
 	  			classType = Date.class;
-	    	} else if (objDataType == LTDataTypes.HOUR) {
+	    	} else if (objDataType == LTDataTypes.TIME) {
 	  			classType = String.class;
 	    	} else if (objDataType == LTDataTypes.BOOLEAN) {
 	  			classType = Boolean.class;
@@ -1047,7 +1046,7 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 			    		}
 			    	}
 			    	
-			    } else if (objDataType == LTDataTypes.HOUR) {
+			    } else if (objDataType == LTDataTypes.TIME) {
 			    	if (objValue != null && !objValue.equals("")) {
 			    		lstColumnModel.get(intRowIndex).setValue(intColumnIndex, (String) objValue);
 			    	}

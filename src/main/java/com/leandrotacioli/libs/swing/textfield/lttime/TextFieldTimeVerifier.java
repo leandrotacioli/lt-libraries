@@ -1,4 +1,4 @@
-package com.leandrotacioli.libs.swing.textfield.lthour;
+package com.leandrotacioli.libs.swing.textfield.lttime;
 
 import javax.swing.InputVerifier;
 import javax.swing.JComponent;
@@ -8,47 +8,46 @@ import com.leandrotacioli.libs.swing.LTSwing;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 09/Jun/2020
  */
-public class TextFieldHourVerifier extends InputVerifier {
-	private TextFieldHour textField;
-	private String strHour;
+public class TextFieldTimeVerifier extends InputVerifier {
+	private TextFieldTime textField;
+	private String strTime;
 
 	/**
 	 * 
 	 * @param textField
 	 */
-    public TextFieldHourVerifier(TextFieldHour textField) {
+    public TextFieldTimeVerifier(TextFieldTime textField) {
         this.textField = textField;
     }
 
     @Override
     public boolean verify(JComponent component) {
         if (component == textField) {
-        	strHour = textField.getText();
-        	strHour = strHour.trim();       // Remove espaços em branco
+			strTime = textField.getText();
+			strTime = strTime.trim();       // Remove espaços em branco
             
             try {
-            	if (strHour.length() == 0) {
-            		strHour = "";
+            	if (strTime.length() == 0) {
+					strTime = "";
             		return true;
             		
-            	} else if (strHour.substring(0, 1).equals(":")) {
-            		String strHourTemp = strHour.replace(":", "");
-            		strHourTemp = strHourTemp.trim();
+            	} else if (strTime.substring(0, 1).equals(":")) {
+            		String strTimeTemp = strTime.replace(":", "");
+					strTimeTemp = strTimeTemp.trim();
             		
             		// Foi preenchido fora do padrão
-            		if (strHourTemp.length() > 0) {
+            		if (strTimeTemp.length() > 0) {
             			return false;
             			
             		// Campo está vazio
             		} else {
-            			strHour = "";
+						strTime = "";
                 		return true;
             		}
 
             	} else {
-            		if (strHour.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
+            		if (strTime.matches("^([0-9]|0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$")) {
             			return true;	
             		} else {
             			return false;
@@ -79,8 +78,8 @@ public class TextFieldHourVerifier extends InputVerifier {
         	blnValid = false;
         }
         
-        textField.setText(strHour);
-        textField.setValue(strHour);
+        textField.setText(strTime);
+        textField.setValue(strTime);
         
         return blnValid;
     }

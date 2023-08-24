@@ -8,11 +8,9 @@ import javax.swing.text.PlainDocument;
  * Define a quantidade de caracteres que a <i>STRING</i> pode conter.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 02/Abr/2015
  */
 public class TextFieldStringDocument extends PlainDocument {
-	private static final long serialVersionUID = -8549677728067435917L;
-	
+
 	private int intMaximumLength;
 
 	/**

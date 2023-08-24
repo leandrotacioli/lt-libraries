@@ -10,9 +10,9 @@ public enum LTDataTypes {
 	LONG,
 	DOUBLE,
 	STRING,
-	TEXT,       // Textos sem limite de caracteres
+	TEXT,
 	DATE,
-	HOUR,       // HH:mm
+	TIME,       // HH:mm
 	BOOLEAN,
 	BUTTON      // Botões serão utilizadas apenas na LTTable
 }

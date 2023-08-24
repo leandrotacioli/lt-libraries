@@ -20,11 +20,9 @@ import javax.swing.KeyStroke;
  * pressionando o botão ESC.
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 08/Out/2014
  */
 public class LTDialog extends JDialog {
-	private static final long serialVersionUID = -7947343252579970101L;
-	
+
 	private boolean blnAllowClosingByPressingEsc;
 	
 	public LTDialog(boolean blnAllowClosingByPressingEsc) {
@@ -55,8 +53,6 @@ public class LTDialog extends JDialog {
 	    KeyStroke stroke = KeyStroke.getKeyStroke("ESCAPE");
 	    
 	    Action actionListener = new AbstractAction() {
-			private static final long serialVersionUID = 36309521709495007L;
-
 			public void actionPerformed(ActionEvent actionEvent) {
 	    		if (blnAllowClosingByPressingEsc) {
 	    			setVisible(false);

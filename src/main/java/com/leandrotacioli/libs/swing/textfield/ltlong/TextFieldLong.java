@@ -5,11 +5,9 @@ import javax.swing.JFormattedTextField;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 07/Abr/2015
  */
 public class TextFieldLong extends JFormattedTextField {
-	private static final long serialVersionUID = 8527144124813017265L;
-	
+
 	private long lgnValue;
 	
 	/**

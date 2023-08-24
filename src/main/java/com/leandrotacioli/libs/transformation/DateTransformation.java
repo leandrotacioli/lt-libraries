@@ -45,38 +45,38 @@ public class DateTransformation {
 	 * @return Date
 	 */
 	public static Date stringToDate(String strDate, String strDateFormat) {
-		String strHour = null;
+		String strTime = null;
 		
 		if (strDate.length() > 10) {
 			String[] arrayDate = strDate.split(" ");
 			
 			if (arrayDate.length > 1) {
 				strDate = arrayDate[0];
-				strHour = arrayDate[1].substring(0, 5);
+				strTime = arrayDate[1].substring(0, 5);
 			}
 		}
 		
-		return stringToDate(strDate, strHour, strDateFormat);
+		return stringToDate(strDate, strTime, strDateFormat);
 	}
 	
 	/**
 	 * Transforma uma <i>String</i> em um objeto <i>Date</i>.
 	 * 
 	 * @param strDate - Parte da Data a ser transformada
-	 * @param strHour - Parte da Hora a ser transformada
+	 * @param strTime - Parte da Hora a ser transformada
 	 * @param strDateFormat - Formato da data a ser transformada. Ex: dd/MM/yyyy
 	 * 
 	 * @return Date
 	 */
-	public static Date stringToDate(String strDate, String strHour, String strDateFormat) {
+	public static Date stringToDate(String strDate, String strTime, String strDateFormat) {
 		Date dteFinal = null;
 		
 		try {
-			if (strHour == null || strHour.equals("")) {
-				strHour = "00:00";
+			if (strTime == null || strTime.equals("")) {
+				strTime = "00:00";
 			}
 			
-			dteFinal = new SimpleDateFormat(strDateFormat + " HH:mm").parse(strDate + " " + strHour);
+			dteFinal = new SimpleDateFormat(strDateFormat + " HH:mm").parse(strDate + " " + strTime);
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
@@ -101,11 +101,11 @@ public class DateTransformation {
 	 * 
 	 * @param dteDate - Data a ser transformada
 	 * @param dteFormat - Formato de data final
-	 * @param blnShowHour - Exibe a hora
+	 * @param blnShowTime - Exibe a hora
 	 * 
 	 * @return strDate - Ex: <i>dd/MM/yyyy</i> ou <i>dd/MM/yyyy HH:mm</i>
 	 */
-	public static String dateToString(Date dteDate, String dteFormat, boolean blnShowHour) {
+	public static String dateToString(Date dteDate, String dteFormat, boolean blnShowTime) {
 		String strDate = "";
 		
 		if (dteDate != null) {
@@ -113,7 +113,7 @@ public class DateTransformation {
 				DateFormat dateFormat = new SimpleDateFormat(dteFormat);
 				
 				// Exibe horário apenas se for diferente de 00:00
-				if (blnShowHour) {
+				if (blnShowTime) {
 					String strHours = new SimpleDateFormat("HH").format(dteDate);
 					String strMinutes = new SimpleDateFormat("mm").format(dteDate);
 					
@@ -136,21 +136,21 @@ public class DateTransformation {
 	 * 
 	 * @param dteDate - Data a ser transformada
 	 * 
-	 * @return Date - HH:mm
+	 * @return Time - HH:mm
 	 */
-	public static String hourToString(Date dteDate) {
-		String strHour = "";
+	public static String timeToString(Date dteDate) {
+		String strTime = "";
 		
 		if (dteDate != null) {
 			try {
-				DateFormat hourFormat = new SimpleDateFormat("HH:mm");
-				strHour = hourFormat.format(dteDate);
+				DateFormat timeFormat = new SimpleDateFormat("HH:mm");
+				strTime = timeFormat.format(dteDate);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		}
 		
-		return strHour;
+		return strTime;
 	}
 	
 	/**

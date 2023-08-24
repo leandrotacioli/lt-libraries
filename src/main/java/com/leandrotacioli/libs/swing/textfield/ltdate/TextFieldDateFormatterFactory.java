@@ -8,7 +8,6 @@ import javax.swing.text.MaskFormatter;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 03/Abr/2015
  */
 public class TextFieldDateFormatterFactory {
 	
@@ -34,11 +33,9 @@ public class TextFieldDateFormatterFactory {
  * Permite que <i>MaskFormatter</i> aceite valores em branco.
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 03/Abr/2015
  */
 class DateMaskFormatter extends MaskFormatter {
-	private static final long serialVersionUID = -147170285796703763L;
-	
+
 	private String strBlankRepresentation;
 	
 	private boolean blnAllowBlankField;

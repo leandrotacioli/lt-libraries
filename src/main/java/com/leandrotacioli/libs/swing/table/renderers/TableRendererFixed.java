@@ -10,10 +10,8 @@ import com.leandrotacioli.libs.swing.LTSwing;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.0 - 24/Abr/2015
  */
 public class TableRendererFixed extends DefaultTableCellRenderer {
-	private static final long serialVersionUID = -4336868718200331253L;
 
 	/**
 	 * 

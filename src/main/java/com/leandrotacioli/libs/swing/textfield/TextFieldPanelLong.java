@@ -13,10 +13,8 @@ import com.leandrotacioli.libs.swing.textfield.ltlong.TextFieldLong;
 /**
  * 
  * @author Leandro Tacioli
- * @version 1.1 - 02/Mai/2016
  */
 public class TextFieldPanelLong extends TextField implements FocusListener {
-	private static final long serialVersionUID = 3971201519880334285L;
 
 	private TextFieldPanel objTextFieldPanel;
 	

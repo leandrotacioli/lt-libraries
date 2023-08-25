@@ -39,34 +39,49 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
     private void setFieldMask() {
         datePicker.getEditor().setOnKeyTyped((KeyEvent keyEvent) -> {
-            if (!"0123456789".contains(keyEvent.getCharacter())) {
-                if ((datePicker.getEditor().getText().length() < 10 && (Character.isLetter(keyEvent.getCharacter().charAt(0)) || keyEvent.getCharacter().equals("/"))) ||
-                        (datePicker.getEditor().getText().length() == 10 && Character.isLetter(datePicker.getEditor().getText().charAt(9)) || keyEvent.getCharacter().equals("/"))) {
+            if (datePicker.getEditor().getText().length() >= 1 && datePicker.getEditor().getText().length() <= 10) {
+                if (removeCharacter(datePicker.getEditor().getText(), keyEvent.getCharacter())) {
                     datePicker.getEditor().setText(datePicker.getEditor().getText().substring(0, datePicker.getEditor().getText().length() - 1));
                     datePicker.getEditor().positionCaret(datePicker.getEditor().getText().length());
                 }
-
-                keyEvent.consume();
             }
 
-            // Clear / Backspace
-            if (keyEvent.getCharacter().trim().length() == 0) {
-                switch (datePicker.getEditor().getText().length()) {
-                    case 2, 5:
-                        datePicker.getEditor().setText(datePicker.getEditor().getText().substring(0, datePicker.getEditor().getText().length()));
-                        datePicker.getEditor().positionCaret(datePicker.getEditor().getText().length());
-                        break;
-                }
-            } else {
-                // Add date separator '/'
-                switch (datePicker.getEditor().getText().length()) {
-                    case 2, 5:
+            // Add date separator '/' or '-'
+            if (keyEvent.getCharacter().trim().length() > 0) {
+                if (dateFormat.equals("dd/MM/yyyy") || dateFormat.equals("MM/dd/yyyy")) {
+                    if (datePicker.getEditor().getText().length() == 2 || datePicker.getEditor().getText().length() == 5) {
                         datePicker.getEditor().setText(datePicker.getEditor().getText() + "/");
                         datePicker.getEditor().positionCaret(datePicker.getEditor().getText().length());
-                        break;
+                    }
+                } else if (dateFormat.equals("yyyy-MM-dd")) {
+                    if (datePicker.getEditor().getText().length() == 4 || datePicker.getEditor().getText().length() == 7) {
+                        datePicker.getEditor().setText(datePicker.getEditor().getText() + "-");
+                        datePicker.getEditor().positionCaret(datePicker.getEditor().getText().length());
+                    }
                 }
             }
         });
+    }
+
+    protected boolean removeCharacter(String date, String lastCharacter) {
+        if (lastCharacter.equals("\b")) return false;      // Backspace
+        if (lastCharacter.equals("\t")) return false;      // TAB
+        if (lastCharacter.equals("\n")) return false;      // ENTER
+        if (lastCharacter.equals("\u001B")) return false;  // ESC
+        if (lastCharacter.equals("\u007F")) return false;  // DEL
+
+        if (dateFormat.equals("dd/MM/yyyy") || dateFormat.equals("MM/dd/yyyy")) {
+            if ((date.length() == 3 || date.length() == 6) && lastCharacter.equals("/"))              return false;  // Date separator '/'
+            if ((date.length() == 3 || date.length() == 6) && "0123456789".contains(lastCharacter))   return true;   // Avoid digit as third and fifth character
+        } else if (dateFormat.equals("yyyy-MM-dd")) {
+            if ((date.length() == 5 || date.length() == 8) && lastCharacter.equals("-"))              return false;  // Date separator '-'
+            if ((date.length() == 5 || date.length() == 8) && "0123456789".contains(lastCharacter))   return true;   // Avoid digit as third and fifth character
+        }
+
+        if ("0123456789".contains(lastCharacter)) return false;
+        if (date.length() == 10 && "0123456789".contains(date.substring(date.length() - 1))) return false;
+
+        return true;
     }
 
     private void setFocusProperties() {
@@ -84,9 +99,7 @@ public class FieldDate extends AnchorPane implements FieldInterface {
             if (oldVal) {
                 if (datePicker.getEditor().getText() != null && datePicker.getEditor().getText().length() > 0) {
                     try {
-                        LocalDate localDate = FieldValidator.validateDateValue(dateFormat, datePicker.getEditor().getText());
-
-                        datePicker.setValue(localDate);
+                        datePicker.setValue(FieldValidator.validateDateValue(dateFormat, datePicker.getEditor().getText()));
                         datePicker.setBackground(null);
 
                     } catch (Exception e) {
@@ -120,9 +133,7 @@ public class FieldDate extends AnchorPane implements FieldInterface {
     @Override
     public void setValue(Object value) {
         try {
-            LocalDate localDate = null;
-            if (value != null) localDate = FieldValidator.validateDateValue(dateFormat, value);
-            datePicker.setValue(localDate);
+            datePicker.setValue(value != null ? FieldValidator.validateDateValue(dateFormat, value) : null);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             datePicker.setValue(null);

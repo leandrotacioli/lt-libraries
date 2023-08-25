@@ -23,6 +23,7 @@ public class LTField implements FieldInterface {
     private FieldString fieldString;
     private FieldText fieldText;
     private FieldDate fieldDate;
+    private FieldTime fieldTime;
 
     private LTDataTypes dataType;
     private boolean isEnabled;
@@ -80,7 +81,7 @@ public class LTField implements FieldInterface {
             fieldDate = new FieldDate(isEnabled);
 
         } else if (this.dataType == LTDataTypes.TIME) {
-            throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
+            fieldTime = new FieldTime(isEnabled);
 
         } else if (this.dataType == LTDataTypes.BOOLEAN) {
             throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
@@ -95,6 +96,7 @@ public class LTField implements FieldInterface {
         addFieldToPane(fieldString);
         addFieldToPane(fieldText);
         addFieldToPane(fieldDate);
+        addFieldToPane(fieldTime);
     }
 
     private void addFieldToPane(Node field) {
@@ -132,6 +134,7 @@ public class LTField implements FieldInterface {
         if (fieldString != null) fieldString.setMinHeight(minHeight);
         if (fieldText != null) fieldText.setMinHeight(minHeight);
         if (fieldDate != null) fieldDate.setMinHeight(minHeight);
+        if (fieldTime != null) fieldTime.setMinHeight(minHeight);
     }
 
     /**
@@ -144,6 +147,8 @@ public class LTField implements FieldInterface {
             fieldNumeric.setAlignment(horizontalAlignment);
         } else if (fieldString != null) {
             fieldString.setAlignment(horizontalAlignment);
+        } else if (fieldTime != null) {
+            fieldTime.setAlignment(horizontalAlignment);
         } else {
             System.err.println("setHorizontalAlignment - This method is not allowed for " + this.dataType + " fields.");
         }
@@ -155,6 +160,7 @@ public class LTField implements FieldInterface {
         if (fieldString != null) fieldString.setEnabled(isEnabled);
         if (fieldText != null) fieldText.setEnabled(isEnabled);
         if (fieldDate != null) fieldDate.setEnabled(isEnabled);
+        if (fieldTime != null) fieldTime.setEnabled(isEnabled);
     }
 
     @Override
@@ -163,6 +169,7 @@ public class LTField implements FieldInterface {
         if (fieldString != null) return fieldString.getValue();
         if (fieldText != null) return fieldText.getValue();
         if (fieldDate != null) return fieldDate.getValue();
+        if (fieldTime != null) return fieldTime.getValue();
 
         throw new UnsupportedOperationException("getValue - Not supported yet for " + this.dataType + " field.");
     }
@@ -173,6 +180,7 @@ public class LTField implements FieldInterface {
         if (fieldString != null) fieldString.setValue(value);
         if (fieldText != null) fieldText.setValue(value);
         if (fieldDate != null) fieldDate.setValue(value);
+        if (fieldTime != null) fieldTime.setValue(value);
     }
 
     @Override
@@ -209,6 +217,7 @@ public class LTField implements FieldInterface {
         if (fieldString != null) fieldString.addFocusListener(changeListener);
         if (fieldText != null) fieldText.addFocusListener(changeListener);
         if (fieldDate != null) fieldDate.addFocusListener(changeListener);
+        if (fieldTime != null) fieldTime.addFocusListener(changeListener);
     }
 
 }

@@ -2,14 +2,13 @@ package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
-import com.leandrotacioli.libs.transformation.DateTransformation;
 import com.leandrotacioli.libs.transformation.DoubleTransformation;
 import javafx.scene.control.TextFormatter;
 
 import java.math.BigDecimal;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Date;
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.regex.Pattern;
 
 public class FieldValidator {
@@ -30,6 +29,7 @@ public class FieldValidator {
         else if (this.dataType == LTDataTypes.STRING) textPattern(0);
         else if (this.dataType == LTDataTypes.TEXT) textPattern(0);
         else if (this.dataType == LTDataTypes.DATE) datePattern(LTParameters.getInstance().getDateFormat());
+        else if (this.dataType == LTDataTypes.TIME) timePattern();
     }
 
     protected TextFormatter<Object> getFormatter() {
@@ -39,6 +39,8 @@ public class FieldValidator {
             return new TextFormatter<>(this::validateTextChange);
         } else if (this.dataType == LTDataTypes.DATE) {
             return new TextFormatter<>(this::validateDateChange);
+        } else if (this.dataType == LTDataTypes.TIME) {
+            return new TextFormatter<>(this::validateTimeChange);
         }
 
         return new TextFormatter<>(this::validateDefaultChange);
@@ -116,6 +118,20 @@ public class FieldValidator {
         }
     }
 
+    protected TextFormatter.Change validateTimeChange(TextFormatter.Change change) {
+        if (pattern.matcher(change.getControlNewText()).matches()) {
+            return change;
+        } else {
+            try {
+                validateTimeValue(change.getControlNewText());
+                return change;
+            } catch (Exception e) {
+                System.err.println(e.getMessage());
+                return null;
+            }
+        }
+    }
+
     protected void integerPattern() {
         this.pattern = Pattern.compile("-?\\d*");
     }
@@ -164,6 +180,10 @@ public class FieldValidator {
         }
     }
 
+    protected void timePattern() {
+        this.pattern = Pattern.compile("^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$");
+    }
+
     protected static int validateIntegerValue(Object value) throws IllegalArgumentException {
         try {
             return Integer.parseInt(value.toString());
@@ -199,15 +219,19 @@ public class FieldValidator {
 
     protected static LocalDate validateDateValue(String dateFormat, Object value) throws IllegalArgumentException {
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat(dateFormat);
-            simpleDateFormat.setLenient(false);
-
-            Date date = simpleDateFormat.parse((String) value);
-
-            return LocalDate.parse(DateTransformation.dateToString(date, "yyyy-MM-dd"));
-
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern(dateFormat);
+            return LocalDate.parse((String) value, formatter);
         } catch (Exception e) {
             throw new IllegalArgumentException("Error on field validation - Invalid DATE value (" + value + ") - Expected format: " + dateFormat + ".");
+        }
+    }
+
+    protected static LocalTime validateTimeValue(Object value) throws IllegalArgumentException {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            return LocalTime.parse((String) value, formatter);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error on field validation - Invalid TIME value (" + value + ") - Expected format: " + "HH:mm" + ".");
         }
     }
 }

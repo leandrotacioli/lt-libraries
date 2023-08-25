@@ -101,6 +101,7 @@ public class LTLibrariesResponsiveFX extends Application {
         LTField fieldString3 = new LTField("String 3 - Max Length 20 - Right Aligned:", LTDataTypes.STRING, true, false);
         fieldString3.setMaximumLength(20);
         fieldString3.setHorizontalAlignment(Pos.CENTER_RIGHT);
+        fieldString3.setValue(null);
 
         LTField fieldInteger = new LTField("Integer:", LTDataTypes.INTEGER, true, false);
         fieldInteger.setValue(10);
@@ -144,6 +145,14 @@ public class LTLibrariesResponsiveFX extends Application {
         fieldDate3.setValue("2023-20-20");  // Error
         fieldDate3.setValue("2023-06-20");
 
+        LTField fieldTime = new LTField("Time (HH:mm):", LTDataTypes.TIME, true, false);
+        fieldTime.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Time Focus: " + fieldTime.getValue());
+            if (oldVal) System.out.println("Time Lost Focus: " + fieldTime.getValue());
+        });
+        fieldTime.setValue("25:15");  // Error
+        fieldTime.setValue("12:15");
+
         LTField fieldText = new LTField("Text:", LTDataTypes.TEXT, true, false);
         fieldText.setMaximumLength(200);
         fieldText.setMinHeight(150);
@@ -151,12 +160,16 @@ public class LTLibrariesResponsiveFX extends Application {
         row.addColumn(new GridColumn(fieldString1, 4));
         row.addColumn(new GridColumn(fieldString2, 4));
         row.addColumn(new GridColumn(fieldString3, 4));
+
         row.addColumn(new GridColumn(fieldInteger, 4));
         row.addColumn(new GridColumn(fieldLong, 4));
         row.addColumn(new GridColumn(fieldDouble, 4));
-        row.addColumn(new GridColumn(fieldDate1, 4));
-        row.addColumn(new GridColumn(fieldDate2, 4));
-        row.addColumn(new GridColumn(fieldDate3, 4));
+
+        row.addColumn(new GridColumn(fieldDate1, 3));
+        row.addColumn(new GridColumn(fieldDate2, 3));
+        row.addColumn(new GridColumn(fieldDate3, 3));
+        row.addColumn(new GridColumn(fieldTime, 3));
+
         row.addColumn(new GridColumn(fieldText, 12));
 
         return row;

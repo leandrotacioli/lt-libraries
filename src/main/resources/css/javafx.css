@@ -1,0 +1,43 @@
+* {
+   -default-color-background: #FFFFFF;
+   -default-color-focus: #FFFFBB;
+   -default-color-disabled: #D2D2D2;
+   -default-color-error: #FFC8C8;
+   -default-border-color: #BABABA;
+}
+
+.label {
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+}
+
+.check-box {
+    -fx-font-size: 13;
+    -fx-font-weight: bold;
+}
+
+.check-box > .box {
+    -fx-padding: 2px;
+    -fx-border-color: -default-border-color;
+    -fx-border-style: solid;
+    -fx-border-width: 2;
+    -fx-border-insets: -1;
+    -fx-border-radius: 0;
+    -fx-background-color: -default-color-background;
+}
+
+.check-box > .box > .mark {
+    -fx-padding: 9px;
+}
+
+.field-focus {
+    -fx-control-inner-background: -default-color-focus;
+}
+
+.field-focus-disabled {
+    -fx-control-inner-background: -default-color-disabled;
+}
+
+.field-focus-error-validation {
+    -fx-control-inner-background: -default-color-error;
+}

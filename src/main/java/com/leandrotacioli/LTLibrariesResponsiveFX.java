@@ -103,6 +103,15 @@ public class LTLibrariesResponsiveFX extends Application {
         fieldString3.setHorizontalAlignment(Pos.CENTER_RIGHT);
         fieldString3.setValue(null);
 
+        LTField fieldBoolean = new LTField("Boolean", LTDataTypes.BOOLEAN, true, false);
+        fieldBoolean.setValue("ABC");  // Error
+        fieldBoolean.setValue(true);
+        fieldBoolean.setHorizontalAlignment(Pos.CENTER_RIGHT);
+        fieldBoolean.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Boolean Focus: " + fieldBoolean.getValue());
+            if (oldVal) System.out.println("Boolean Lost Focus: " + fieldBoolean.getValue());
+        });
+
         LTField fieldInteger = new LTField("Integer:", LTDataTypes.INTEGER, true, false);
         fieldInteger.setValue(10);
         fieldInteger.setMinHeight(10);
@@ -156,10 +165,12 @@ public class LTLibrariesResponsiveFX extends Application {
         LTField fieldText = new LTField("Text:", LTDataTypes.TEXT, true, false);
         fieldText.setMaximumLength(200);
         fieldText.setMinHeight(150);
+        fieldText.setValue("Lorem ipsum");
 
-        row.addColumn(new GridColumn(fieldString1, 4));
-        row.addColumn(new GridColumn(fieldString2, 4));
-        row.addColumn(new GridColumn(fieldString3, 4));
+        row.addColumn(new GridColumn(fieldString1, 3));
+        row.addColumn(new GridColumn(fieldString2, 3));
+        row.addColumn(new GridColumn(fieldString3, 3));
+        row.addColumn(new GridColumn(fieldBoolean, 3));
 
         row.addColumn(new GridColumn(fieldInteger, 4));
         row.addColumn(new GridColumn(fieldLong, 4));

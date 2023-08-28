@@ -6,15 +6,13 @@ import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 /**
  * Custom fields using JavaFX.
  */
 public class LTField implements FieldInterface {
 
-    private final int MINIMUM_HEIGHT = 25;
+    private final int MINIMUM_HEIGHT = 26;
 
     private AnchorPane fieldPane;
     private Label labelField;
@@ -24,6 +22,7 @@ public class LTField implements FieldInterface {
     private FieldText fieldText;
     private FieldDate fieldDate;
     private FieldTime fieldTime;
+    private FieldBoolean fieldBoolean;
 
     private LTDataTypes dataType;
     private boolean isEnabled;
@@ -43,7 +42,6 @@ public class LTField implements FieldInterface {
         this.isMandatoryField = isMandatoryField;
 
         labelField = new Label(label);
-        labelField.setFont(Font.font("System", FontWeight.BOLD, 13));
 
         AnchorPane.setLeftAnchor(labelField, 5.0);
         AnchorPane.setRightAnchor(labelField, 5.0);
@@ -52,6 +50,7 @@ public class LTField implements FieldInterface {
         fieldPane = new AnchorPane();
         fieldPane.minWidth(40);
         fieldPane.minHeight(40);
+        fieldPane.getStylesheets().add(getClass().getResource("/css/javafx.css").toExternalForm());
 
         fieldPane.getChildren().add(labelField);
 
@@ -84,7 +83,8 @@ public class LTField implements FieldInterface {
             fieldTime = new FieldTime(isEnabled);
 
         } else if (this.dataType == LTDataTypes.BOOLEAN) {
-            throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
+            fieldBoolean = new FieldBoolean(labelField.getText(), isEnabled);
+            labelField.setText("");
 
         } else {
             throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
@@ -97,6 +97,7 @@ public class LTField implements FieldInterface {
         addFieldToPane(fieldText);
         addFieldToPane(fieldDate);
         addFieldToPane(fieldTime);
+        addFieldToPane(fieldBoolean);
     }
 
     private void addFieldToPane(Node field) {
@@ -131,10 +132,11 @@ public class LTField implements FieldInterface {
         }
 
         if (fieldNumeric != null) fieldNumeric.setMinHeight(minHeight);
-        if (fieldString != null) fieldString.setMinHeight(minHeight);
-        if (fieldText != null) fieldText.setMinHeight(minHeight);
-        if (fieldDate != null) fieldDate.setMinHeight(minHeight);
-        if (fieldTime != null) fieldTime.setMinHeight(minHeight);
+        else if (fieldString != null) fieldString.setMinHeight(minHeight);
+        else if (fieldText != null) fieldText.setMinHeight(minHeight);
+        else if (fieldDate != null) fieldDate.setMinHeight(minHeight);
+        else if (fieldTime != null) fieldTime.setMinHeight(minHeight);
+        else if (fieldBoolean != null) fieldBoolean.setMinHeight(minHeight);
     }
 
     /**
@@ -143,33 +145,31 @@ public class LTField implements FieldInterface {
      * @param horizontalAlignment
      */
     public void setHorizontalAlignment(Pos horizontalAlignment) {
-        if (fieldNumeric != null) {
-            fieldNumeric.setAlignment(horizontalAlignment);
-        } else if (fieldString != null) {
-            fieldString.setAlignment(horizontalAlignment);
-        } else if (fieldTime != null) {
-            fieldTime.setAlignment(horizontalAlignment);
-        } else {
-            System.err.println("setHorizontalAlignment - This method is not allowed for " + this.dataType + " fields.");
-        }
+        if (fieldNumeric != null) fieldNumeric.setAlignment(horizontalAlignment);
+        else if (fieldString != null) fieldString.setAlignment(horizontalAlignment);
+        else if (fieldTime != null) fieldTime.setAlignment(horizontalAlignment);
+        else if (fieldBoolean != null) fieldBoolean.setAlignment(horizontalAlignment);
+        else System.err.println("setHorizontalAlignment - This method is not allowed for " + this.dataType + " fields.");
     }
 
     @Override
     public void setEnabled(boolean isEnabled) {
         if (fieldNumeric != null) fieldNumeric.setEnabled(isEnabled);
-        if (fieldString != null) fieldString.setEnabled(isEnabled);
-        if (fieldText != null) fieldText.setEnabled(isEnabled);
-        if (fieldDate != null) fieldDate.setEnabled(isEnabled);
-        if (fieldTime != null) fieldTime.setEnabled(isEnabled);
+        else if (fieldString != null) fieldString.setEnabled(isEnabled);
+        else if (fieldText != null) fieldText.setEnabled(isEnabled);
+        else if (fieldDate != null) fieldDate.setEnabled(isEnabled);
+        else if (fieldTime != null) fieldTime.setEnabled(isEnabled);
+        else if (fieldBoolean != null) fieldBoolean.setEnabled(isEnabled);
     }
 
     @Override
     public Object getValue() {
         if (fieldNumeric != null) return fieldNumeric.getValue();
-        if (fieldString != null) return fieldString.getValue();
-        if (fieldText != null) return fieldText.getValue();
-        if (fieldDate != null) return fieldDate.getValue();
-        if (fieldTime != null) return fieldTime.getValue();
+        else if (fieldString != null) return fieldString.getValue();
+        else if (fieldText != null) return fieldText.getValue();
+        else if (fieldDate != null) return fieldDate.getValue();
+        else if (fieldTime != null) return fieldTime.getValue();
+        else if (fieldBoolean != null) return fieldBoolean.getValue();
 
         throw new UnsupportedOperationException("getValue - Not supported yet for " + this.dataType + " field.");
     }
@@ -177,10 +177,11 @@ public class LTField implements FieldInterface {
     @Override
     public void setValue(Object value) {
         if (fieldNumeric != null) fieldNumeric.setValue(value);
-        if (fieldString != null) fieldString.setValue(value);
-        if (fieldText != null) fieldText.setValue(value);
-        if (fieldDate != null) fieldDate.setValue(value);
-        if (fieldTime != null) fieldTime.setValue(value);
+        else if (fieldString != null) fieldString.setValue(value);
+        else if (fieldText != null) fieldText.setValue(value);
+        else if (fieldDate != null) fieldDate.setValue(value);
+        else if (fieldTime != null) fieldTime.setValue(value);
+        else if (fieldBoolean != null) fieldBoolean.setValue(value);
     }
 
     @Override
@@ -214,10 +215,11 @@ public class LTField implements FieldInterface {
     @Override
     public void addFocusListener(ChangeListener<Boolean> changeListener) {
         if (fieldNumeric != null) fieldNumeric.addFocusListener(changeListener);
-        if (fieldString != null) fieldString.addFocusListener(changeListener);
-        if (fieldText != null) fieldText.addFocusListener(changeListener);
-        if (fieldDate != null) fieldDate.addFocusListener(changeListener);
-        if (fieldTime != null) fieldTime.addFocusListener(changeListener);
+        else if (fieldString != null) fieldString.addFocusListener(changeListener);
+        else if (fieldText != null) fieldText.addFocusListener(changeListener);
+        else if (fieldDate != null) fieldDate.addFocusListener(changeListener);
+        else if (fieldTime != null) fieldTime.addFocusListener(changeListener);
+        else if (fieldBoolean != null) fieldBoolean.addFocusListener(changeListener);
     }
 
 }

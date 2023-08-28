@@ -24,8 +24,7 @@ public class FieldNumeric extends TextField implements FieldInterface {
         this.isEnabled = isEnabled;
         this.fractionDigits = fractionDigits;
 
-        this.setEditable(isEnabled);
-
+        setEnabled(isEnabled);
         setFieldProperties();
         setValue(0);
     }
@@ -56,17 +55,22 @@ public class FieldNumeric extends TextField implements FieldInterface {
                 } else {
                     throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
                 }
+
+                this.getStyleClass().add(isEnabled ? FieldStyles.FOCUS : FieldStyles.FOCUS_DISABLED);
             }
 
             // Focus lost
             if (oldVal) {
                 this.setValue(getValue());
+                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
             }
         });
     }
 
     @Override
     public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+
         this.setEditable(isEnabled);
     }
 

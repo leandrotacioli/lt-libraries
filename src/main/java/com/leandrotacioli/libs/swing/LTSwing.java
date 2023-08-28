@@ -126,7 +126,7 @@ public class LTSwing {
         colorComponentBorder = new Color(180, 180, 180);
         colorComponentForeground = new Color(0, 0, 0);
         colorComponentBackground = new Color(255, 255, 254);
-        colorComponentBackgroundFocus = new Color(255, 255, 125);
+        colorComponentBackgroundFocus = new Color(255, 255, 190);
         colorComponentBackgroundDisabled = new Color(240, 240, 240);
 
         colorTable = new Color(255, 255, 255);

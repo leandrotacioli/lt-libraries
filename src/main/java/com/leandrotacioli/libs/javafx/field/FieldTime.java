@@ -7,7 +7,10 @@ import javafx.scene.input.KeyEvent;
 
 public class FieldTime extends TextField implements FieldInterface {
 
+    private boolean isEnabled;
+
     protected FieldTime(boolean isEnabled) {
+        setEnabled(isEnabled);
         setFieldMask();
         setFocusProperties();
         setValue(null);
@@ -59,23 +62,21 @@ public class FieldTime extends TextField implements FieldInterface {
 
                 this.setTextFormatter(fieldValidator.getFormatter());
                 this.positionCaret(this.getText().length());
-                this.setStyle("-fx-focus-color: #FEFFB5;");
-                //this.setStyle("-fx-background-color: #FEFFB5; -fx-text-box-border: #A59B9B;");
+                this.getStyleClass().add(isEnabled ? FieldStyles.FOCUS : FieldStyles.FOCUS_DISABLED);
             }
 
             // Focus lost
             if (oldVal) {
+                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
+
                 if (this.getText() != null && this.getText().length() > 0) {
                     try {
                         this.setValue(String.valueOf(FieldValidator.validateTimeValue(this.getText())));
-                        this.setStyle(null);
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
-                        this.setStyle("-fx-focus-color: #FFB8B8;");
                         this.requestFocus();
+                        this.getStyleClass().add(FieldStyles.FOCUS_ERROR_VALIDATION);
                     }
-                } else {
-                    this.setStyle(null);
                 }
             }
         });
@@ -83,6 +84,8 @@ public class FieldTime extends TextField implements FieldInterface {
 
     @Override
     public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+
         this.setEditable(isEnabled);
     }
 

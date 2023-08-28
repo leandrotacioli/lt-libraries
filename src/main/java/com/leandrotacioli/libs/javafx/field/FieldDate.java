@@ -7,9 +7,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.scene.control.DatePicker;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Background;
-import javafx.scene.layout.BackgroundFill;
-import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 
 import java.time.LocalDate;
@@ -18,13 +15,15 @@ import java.util.Date;
 
 public class FieldDate extends AnchorPane implements FieldInterface {
 
+    private boolean isEnabled;
+
     private DatePicker datePicker;
     private String dateFormat;
 
     protected FieldDate(boolean isEnabled) {
         datePicker = new DatePicker();
-        datePicker.setEditable(isEnabled);
 
+        setEnabled(isEnabled);
         setDateFormat(LTParameters.getInstance().getDateFormat());
         setFieldMask();
         setFocusProperties();
@@ -93,23 +92,21 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
                 datePicker.getEditor().setTextFormatter(fieldValidator.getFormatter());
                 datePicker.getEditor().positionCaret(datePicker.getEditor().getText().length());
+                datePicker.getStyleClass().add(isEnabled ? FieldStyles.FOCUS : FieldStyles.FOCUS_DISABLED);
             }
 
             // Focus lost
             if (oldVal) {
+                datePicker.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
+
                 if (datePicker.getEditor().getText() != null && datePicker.getEditor().getText().length() > 0) {
                     try {
                         datePicker.setValue(FieldValidator.validateDateValue(dateFormat, datePicker.getEditor().getText()));
-                        datePicker.setBackground(null);
-
                     } catch (Exception e) {
                         System.err.println(e.getMessage());
-
-                        datePicker.setBackground(new Background(new BackgroundFill(Color.RED, null, null)));
                         datePicker.requestFocus();
+                        datePicker.getStyleClass().add(FieldStyles.FOCUS_ERROR_VALIDATION);
                     }
-                } else {
-                    datePicker.setBackground(null);
                 }
             }
         });
@@ -117,7 +114,15 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
     @Override
     public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+
         datePicker.setEditable(isEnabled);
+
+        if (isEnabled) {
+            datePicker.getStyleClass().addAll("combo-box-base", "date-picker");
+        } else {
+            datePicker.getStyleClass().removeAll("combo-box-base", "date-picker");
+        }
     }
 
     @Override

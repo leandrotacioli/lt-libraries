@@ -6,14 +6,33 @@ import javafx.scene.control.TextField;
 
 public class FieldString extends TextField implements FieldInterface {
 
-    protected FieldString(boolean isEnabled) {
-        this.setEditable(isEnabled);
+    private boolean isEnabled;
 
-        setValue("");
+    protected FieldString(boolean isEnabled) {
+        setEnabled(isEnabled);
+        setFocusProperties();
+        setValue(null);
+    }
+
+    private void setFocusProperties() {
+        this.addFocusListener((obs, oldVal, newVal) -> {
+            // Focus gained
+            if (newVal) {
+                this.positionCaret(this.getText().length());
+                this.getStyleClass().add(isEnabled ? FieldStyles.FOCUS : FieldStyles.FOCUS_DISABLED);
+            }
+
+            // Focus lost
+            if (oldVal) {
+                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+            }
+        });
     }
 
     @Override
     public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+
         this.setEditable(isEnabled);
     }
 
@@ -24,7 +43,7 @@ public class FieldString extends TextField implements FieldInterface {
 
     @Override
     public void setValue(Object value) {
-        this.setText((String) value);
+        this.setText(value != null ? (String) value : "");
     }
 
     @Override

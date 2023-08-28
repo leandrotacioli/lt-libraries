@@ -9,18 +9,27 @@ import javafx.scene.input.KeyEvent;
 
 public class FieldText extends TextArea implements FieldInterface {
 
-    protected FieldText(boolean isEnabled) {
-        this.setEditable(isEnabled);
+    private boolean isEnabled;
 
+    protected FieldText(boolean isEnabled) {
+        setEnabled(isEnabled);
         setFocusProperties();
         setEventHandler();
-        setValue("");
+        setValue(null);
     }
 
     private void setFocusProperties() {
         this.addFocusListener((obs, oldVal, newVal) -> {
             // Focus gained
-            if (newVal) this.positionCaret(this.getText().length());
+            if (newVal) {
+                this.positionCaret(this.getText() != null ? this.getText().length() : 0);
+                this.getStyleClass().add(isEnabled ? FieldStyles.FOCUS : FieldStyles.FOCUS_DISABLED);
+            }
+
+            // Focus lost
+            if (oldVal) {
+                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+            }
         });
     }
 
@@ -47,6 +56,8 @@ public class FieldText extends TextArea implements FieldInterface {
 
     @Override
     public void setEnabled(boolean isEnabled) {
+        this.isEnabled = isEnabled;
+
         this.setEditable(isEnabled);
     }
 

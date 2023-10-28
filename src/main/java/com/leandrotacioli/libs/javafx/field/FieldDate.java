@@ -2,6 +2,8 @@ package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
 import com.leandrotacioli.libs.LTParameters;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldDate;
 import com.leandrotacioli.libs.transformation.DateTransformation;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.DatePicker;
@@ -13,7 +15,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 
-public class FieldDate extends AnchorPane implements FieldInterface {
+public class FieldDate extends AnchorPane implements IField, IFieldDate {
 
     private boolean isEnabled;
 
@@ -22,6 +24,7 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
     protected FieldDate(boolean isEnabled) {
         datePicker = new DatePicker();
+        datePicker.setMinHeight(FieldStyles.MINIMUM_HEIGHT);
 
         setEnabled(isEnabled);
         setDateFormat(LTParameters.getInstance().getDateFormat());
@@ -85,6 +88,8 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
     private void setFocusProperties() {
         datePicker.focusedProperty().addListener((obs, oldVal, newVal) -> {
+            datePicker.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
+
             // Focus gained
             if (newVal) {
                 FieldValidator fieldValidator = new FieldValidator(LTDataTypes.STRING);
@@ -97,8 +102,6 @@ public class FieldDate extends AnchorPane implements FieldInterface {
 
             // Focus lost
             if (oldVal) {
-                datePicker.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
-
                 if (datePicker.getEditor().getText() != null && datePicker.getEditor().getText().length() > 0) {
                     try {
                         datePicker.setValue(FieldValidator.validateDateValue(dateFormat, datePicker.getEditor().getText()));
@@ -119,9 +122,11 @@ public class FieldDate extends AnchorPane implements FieldInterface {
         datePicker.setEditable(isEnabled);
 
         if (isEnabled) {
-            datePicker.getStyleClass().addAll("combo-box-base", "date-picker");
+            datePicker.getStyleClass().removeAll(FieldStyles.DISABLED);
+            datePicker.getStyleClass().addAll(FieldStyles.ENABLED, FieldStyles.COMBO_BOX_BASE, FieldStyles.DATE_PICKER);
         } else {
-            datePicker.getStyleClass().removeAll("combo-box-base", "date-picker");
+            datePicker.getStyleClass().removeAll(FieldStyles.ENABLED, FieldStyles.COMBO_BOX_BASE, FieldStyles.DATE_PICKER);
+            datePicker.getStyleClass().addAll(FieldStyles.DISABLED);
         }
     }
 
@@ -146,13 +151,8 @@ public class FieldDate extends AnchorPane implements FieldInterface {
     }
 
     @Override
-    public void setMaximumLength(int maximumLength) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.DATE + " fields.");
-    }
-
-    @Override
-    public void setFractionDigits(int fractionDigits) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.DATE + " fields.");
+    public void addFocusListener(ChangeListener<Boolean> changeListener) {
+        datePicker.focusedProperty().addListener(changeListener);
     }
 
     @Override
@@ -181,11 +181,6 @@ public class FieldDate extends AnchorPane implements FieldInterface {
                 return null;
             }
         });
-    }
-
-    @Override
-    public void addFocusListener(ChangeListener<Boolean> changeListener) {
-        datePicker.focusedProperty().addListener(changeListener);
     }
 
 }

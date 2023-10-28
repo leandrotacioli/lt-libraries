@@ -1,11 +1,12 @@
 package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 
-public class FieldTime extends TextField implements FieldInterface {
+public class FieldTime extends TextField implements IField {
 
     private boolean isEnabled;
 
@@ -18,7 +19,6 @@ public class FieldTime extends TextField implements FieldInterface {
 
     private void setFieldMask() {
         this.setOnKeyTyped((KeyEvent keyEvent) -> {
-
             if (this.getText().length() >= 1 && this.getText().length() <= 5) {
                 if (removeCharacter(this.getText(), keyEvent.getCharacter())) {
                     this.setText(this.getText().substring(0, this.getText().length() - 1));
@@ -55,6 +55,8 @@ public class FieldTime extends TextField implements FieldInterface {
 
     private void setFocusProperties() {
         this.addFocusListener((obs, oldVal, newVal) -> {
+            this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
+
             // Focus gained
             if (newVal) {
                 FieldValidator fieldValidator = new FieldValidator(LTDataTypes.STRING);
@@ -67,8 +69,6 @@ public class FieldTime extends TextField implements FieldInterface {
 
             // Focus lost
             if (oldVal) {
-                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED, FieldStyles.FOCUS_ERROR_VALIDATION);
-
                 if (this.getText() != null && this.getText().length() > 0) {
                     try {
                         this.setValue(String.valueOf(FieldValidator.validateTimeValue(this.getText())));
@@ -87,6 +87,7 @@ public class FieldTime extends TextField implements FieldInterface {
         this.isEnabled = isEnabled;
 
         this.setEditable(isEnabled);
+        this.getStyleClass().add(isEnabled ? FieldStyles.ENABLED : FieldStyles.DISABLED);
     }
 
     @Override
@@ -102,21 +103,6 @@ public class FieldTime extends TextField implements FieldInterface {
             System.err.println(e.getMessage());
             this.setText(null);
         }
-    }
-
-    @Override
-    public void setMaximumLength(int maximumLength) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TIME + " fields.");
-    }
-
-    @Override
-    public void setFractionDigits(int fractionDigits) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TIME + " fields.");
-    }
-
-    @Override
-    public void setDateFormat(String dateFormat) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TIME + " fields.");
     }
 
     @Override

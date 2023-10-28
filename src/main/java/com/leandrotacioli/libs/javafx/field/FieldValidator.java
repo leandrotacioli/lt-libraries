@@ -103,8 +103,7 @@ public class FieldValidator {
     }
 
     private TextFormatter.Change validateDateChange(TextFormatter.Change change) {
-        // TODO: Date Regex not working properly
-        // That's why we are also validating the date
+        // Date Regex not working properly - That's why we are also validating the date
         if (pattern.matcher(change.getControlNewText()).matches()) {
             return change;
         } else {

@@ -1,20 +1,14 @@
-package com.leandrotacioli.libs.javafx.field;
+package com.leandrotacioli.libs.javafx.field.interfaces;
 
 import javafx.beans.value.ChangeListener;
 
-public interface FieldInterface {
+public interface IField {
 
     public void setEnabled(boolean isEnabled);
 
     public Object getValue();
 
     public void setValue(Object value);
-
-    public void setMaximumLength(int maximumLength);
-
-    public void setFractionDigits(int fractionDigits);
-
-    public void setDateFormat(String dateFormat);
 
     public void addFocusListener(ChangeListener<Boolean> changeListener);
 

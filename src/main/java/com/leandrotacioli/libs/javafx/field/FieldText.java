@@ -1,13 +1,15 @@
 package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldText;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class FieldText extends TextArea implements FieldInterface {
+public class FieldText extends TextArea implements IField, IFieldText {
 
     private boolean isEnabled;
 
@@ -20,6 +22,8 @@ public class FieldText extends TextArea implements FieldInterface {
 
     private void setFocusProperties() {
         this.addFocusListener((obs, oldVal, newVal) -> {
+            this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+
             // Focus gained
             if (newVal) {
                 this.positionCaret(this.getText() != null ? this.getText().length() : 0);
@@ -28,7 +32,7 @@ public class FieldText extends TextArea implements FieldInterface {
 
             // Focus lost
             if (oldVal) {
-                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+
             }
         });
     }
@@ -59,6 +63,7 @@ public class FieldText extends TextArea implements FieldInterface {
         this.isEnabled = isEnabled;
 
         this.setEditable(isEnabled);
+        this.getStyleClass().add(isEnabled ? FieldStyles.ENABLED : FieldStyles.DISABLED);
     }
 
     @Override
@@ -72,6 +77,11 @@ public class FieldText extends TextArea implements FieldInterface {
     }
 
     @Override
+    public void addFocusListener(ChangeListener<Boolean> changeListener) {
+        this.focusedProperty().addListener(changeListener);
+    }
+
+    @Override
     public void setMaximumLength(int maximumLength) {
         if (maximumLength > 0) {
             FieldValidator fieldValidator = new FieldValidator(LTDataTypes.TEXT);
@@ -79,21 +89,6 @@ public class FieldText extends TextArea implements FieldInterface {
 
             this.setTextFormatter(fieldValidator.getFormatter());
         }
-    }
-
-    @Override
-    public void setFractionDigits(int fractionDigits) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TEXT + " fields.");
-    }
-
-    @Override
-    public void setDateFormat(String dateFormat) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.TEXT + " fields.");
-    }
-
-    @Override
-    public void addFocusListener(ChangeListener<Boolean> changeListener) {
-        this.focusedProperty().addListener(changeListener);
     }
 
 }

@@ -14,5 +14,6 @@ public enum LTDataTypes {
 	DATE,
 	TIME,       // HH:mm
 	BOOLEAN,
+	COMBOBOX,
 	BUTTON      // Botões serão utilizadas apenas na LTTable
 }

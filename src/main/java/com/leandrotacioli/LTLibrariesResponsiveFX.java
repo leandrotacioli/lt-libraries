@@ -31,7 +31,7 @@ public class LTLibrariesResponsiveFX extends Application {
         root.setBackground(new Background(new BackgroundFill(Color.LIGHTGRAY, CornerRadii.EMPTY, Insets.EMPTY)));
 
         primaryStage.setTitle("LT Libraries - JavaFX Responsive Layout");
-        primaryStage.setScene(new Scene(root, 1000, 600));
+        primaryStage.setScene(new Scene(root, 1200, 600));
         primaryStage.show();
     }
 
@@ -88,10 +88,6 @@ public class LTLibrariesResponsiveFX extends Application {
 
         LTField fieldString1 = new LTField("String:", LTDataTypes.STRING, true, false);
         fieldString1.setMaximumLength(15);
-        fieldString1.addFocusListener((obs, oldVal, newVal) -> {
-            if (newVal) System.out.println("String Focus: " + fieldString1.getValue());
-            if (oldVal) System.out.println("String Lost Focus: " + fieldString1.getValue());
-        });
 
         LTField fieldString2 = new LTField("String 2 - Disabled:", LTDataTypes.STRING, false, false);
         fieldString2.setMaximumLength(50);
@@ -112,6 +108,10 @@ public class LTLibrariesResponsiveFX extends Application {
             if (oldVal) System.out.println("Boolean Lost Focus: " + fieldBoolean.getValue());
         });
 
+        LTField fieldBooleanDisabled = new LTField("Boolean Disabled", LTDataTypes.BOOLEAN, false, false);
+        fieldBooleanDisabled.setValue(true);
+        fieldBooleanDisabled.setHorizontalAlignment(Pos.CENTER_RIGHT);
+
         LTField fieldInteger = new LTField("Integer:", LTDataTypes.INTEGER, true, false);
         fieldInteger.setValue(10);
         fieldInteger.setMinHeight(10);
@@ -120,6 +120,7 @@ public class LTLibrariesResponsiveFX extends Application {
         LTField fieldLong = new LTField("Long:", LTDataTypes.LONG, true, false);
         fieldLong.setMinHeight(25);
         fieldLong.setFractionDigits(6);
+        fieldLong.setEnabled(false);
 
         LTField fieldDouble = new LTField("Double:", LTDataTypes.DOUBLE, true, false);
         fieldDouble.setFractionDigits(4);
@@ -137,7 +138,7 @@ public class LTLibrariesResponsiveFX extends Application {
         });
         fieldDate1.setValue("15/01/2023");
 
-        LTField fieldDate2 = new LTField("Date (MM/dd/yyyy):", LTDataTypes.DATE, true, false);
+        LTField fieldDate2 = new LTField("Date (MM/dd/yyyy):", LTDataTypes.DATE, false, false);
         fieldDate2.setDateFormat("MM/dd/yyyy");
         fieldDate2.addFocusListener((obs, oldVal, newVal) -> {
             if (newVal) System.out.println("Date Focus: " + fieldDate2.getValue());
@@ -162,6 +163,41 @@ public class LTLibrariesResponsiveFX extends Application {
         fieldTime.setValue("25:15");  // Error
         fieldTime.setValue("12:15");
 
+        LTField fieldComboBox = new LTField("Combo:", LTDataTypes.COMBOBOX, true, false);
+        fieldComboBox.addValues("1", "Abacate");
+        fieldComboBox.addValues("2", "Ameixa");
+        fieldComboBox.addValues("2", "Amora");    // Error - Duplicated Key
+        fieldComboBox.addValues("3", "Banana prata");
+        fieldComboBox.addValues("4", "Banana maçã");
+        fieldComboBox.addValues("5", "Caju");
+        fieldComboBox.addValues("6", "Goiaba");
+        fieldComboBox.addValues("7", "Laranja");
+        fieldComboBox.addValues("8", "Laranja");  // Error - Duplicated description
+        fieldComboBox.addValues("9", "Manga");
+        fieldComboBox.addValues("10", "Maracujá");
+        fieldComboBox.addValues("11", "Melão");
+        fieldComboBox.addValues("12", "Uva");
+        fieldComboBox.setValue(5);   // Caju
+        fieldComboBox.setEnabled(true);
+
+        fieldComboBox.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("Combo Focus: " + fieldComboBox.getValue());
+            if (oldVal) System.out.println("Combo Lost Focus: " + fieldComboBox.getValue());
+        });
+
+        fieldString1.addFocusListener((obs, oldVal, newVal) -> {
+            if (newVal) System.out.println("String Focus: " + fieldString1.getValue());
+            if (oldVal) System.out.println("String Lost Focus: " + fieldString1.getValue());
+
+            if (fieldString1.getValue().equals("ABC")) {
+                fieldComboBox.setEnabled(false);
+            } else {
+                fieldComboBox.setEnabled(true);
+            }
+        });
+
+
+
         LTField fieldText = new LTField("Text:", LTDataTypes.TEXT, true, false);
         fieldText.setMaximumLength(200);
         fieldText.setMinHeight(150);
@@ -170,7 +206,8 @@ public class LTLibrariesResponsiveFX extends Application {
         row.addColumn(new GridColumn(fieldString1, 3));
         row.addColumn(new GridColumn(fieldString2, 3));
         row.addColumn(new GridColumn(fieldString3, 3));
-        row.addColumn(new GridColumn(fieldBoolean, 3));
+        row.addColumn(new GridColumn(fieldBoolean, 1));
+        row.addColumn(new GridColumn(fieldBooleanDisabled, 2));
 
         row.addColumn(new GridColumn(fieldInteger, 4));
         row.addColumn(new GridColumn(fieldLong, 4));
@@ -180,6 +217,8 @@ public class LTLibrariesResponsiveFX extends Application {
         row.addColumn(new GridColumn(fieldDate2, 3));
         row.addColumn(new GridColumn(fieldDate3, 3));
         row.addColumn(new GridColumn(fieldTime, 3));
+
+        row.addColumn(new GridColumn(fieldComboBox, 6));
 
         row.addColumn(new GridColumn(fieldText, 12));
 

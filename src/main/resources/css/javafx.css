@@ -1,14 +1,39 @@
 * {
-   -default-color-background: #FFFFFF;
+   -default-color-enabled: #FFFFFF;
+   -default-color-disabled: #DBDBDB;
    -default-color-focus: #FFFFBB;
-   -default-color-disabled: #D2D2D2;
    -default-color-error: #FFC8C8;
-   -default-border-color: #BABABA;
+   -default-border-color: #919191;
+   -default-border-color-focus: #039ED3;
 }
 
 .label {
     -fx-font-size: 13;
     -fx-font-weight: bold;
+}
+
+.text-field {
+    -fx-border-color: -default-border-color;
+    -fx-border-radius: 2;
+    -fx-padding: 0 6 0 6;
+}
+
+.text-field:focused {
+    -fx-border-color: -default-border-color-focus;
+    -fx-border-radius: 2;
+    -fx-padding: 0 6 0 6;
+}
+
+.text-area {
+    -fx-border-color: -default-border-color;
+    -fx-border-radius: 2;
+    -fx-padding: 0 0 0 0;
+}
+
+.text-area:focused {
+    -fx-border-color: -default-border-color-focus;
+    -fx-border-radius: 2;
+    -fx-padding: 0 0 0 0;
 }
 
 .check-box {
@@ -23,11 +48,23 @@
     -fx-border-width: 2;
     -fx-border-insets: -1;
     -fx-border-radius: 0;
-    -fx-background-color: -default-color-background;
+    -fx-background-color: -default-color-enabled;
 }
 
 .check-box > .box > .mark {
     -fx-padding: 9px;
+}
+
+.combo-box-base {
+    -fx-background-insets: 0;
+}
+
+.field-enabled {
+    -fx-control-inner-background: -default-color-enabled;
+}
+
+.field-disabled {
+    -fx-control-inner-background: -default-color-disabled;
 }
 
 .field-focus {

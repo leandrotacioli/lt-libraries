@@ -1,10 +1,12 @@
 package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldText;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 
-public class FieldString extends TextField implements FieldInterface {
+public class FieldString extends TextField implements IField, IFieldText {
 
     private boolean isEnabled;
 
@@ -16,6 +18,8 @@ public class FieldString extends TextField implements FieldInterface {
 
     private void setFocusProperties() {
         this.addFocusListener((obs, oldVal, newVal) -> {
+            this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+
             // Focus gained
             if (newVal) {
                 this.positionCaret(this.getText().length());
@@ -24,7 +28,7 @@ public class FieldString extends TextField implements FieldInterface {
 
             // Focus lost
             if (oldVal) {
-                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+
             }
         });
     }
@@ -34,6 +38,7 @@ public class FieldString extends TextField implements FieldInterface {
         this.isEnabled = isEnabled;
 
         this.setEditable(isEnabled);
+        this.getStyleClass().add(isEnabled ? FieldStyles.ENABLED : FieldStyles.DISABLED);
     }
 
     @Override
@@ -47,6 +52,11 @@ public class FieldString extends TextField implements FieldInterface {
     }
 
     @Override
+    public void addFocusListener(ChangeListener<Boolean> changeListener) {
+        this.focusedProperty().addListener(changeListener);
+    }
+
+    @Override
     public void setMaximumLength(int maximumLength) {
         if (maximumLength > 0) {
             FieldValidator fieldValidator = new FieldValidator(LTDataTypes.STRING);
@@ -54,21 +64,6 @@ public class FieldString extends TextField implements FieldInterface {
 
             this.setTextFormatter(fieldValidator.getFormatter());
         }
-    }
-
-    @Override
-    public void setFractionDigits(int fractionDigits) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.STRING + " fields.");
-    }
-
-    @Override
-    public void setDateFormat(String dateFormat) {
-        throw new UnsupportedOperationException("This method is not allowed for " + LTDataTypes.STRING + " fields.");
-    }
-
-    @Override
-    public void addFocusListener(ChangeListener<Boolean> changeListener) {
-        this.focusedProperty().addListener(changeListener);
     }
 
 }

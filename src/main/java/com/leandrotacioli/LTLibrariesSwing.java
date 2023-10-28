@@ -155,10 +155,10 @@ public class LTLibrariesSwing implements TableListener {
 			}
 		});
 		
-		txtStringRightAligned = new LTTextField(getLabelFromBundle("field_string") + " - " + getLabelFromBundle("alignment_right"), LTDataTypes.STRING, true, true, 100);
+		txtStringRightAligned = new LTTextField(getLabelFromBundle("field_string") + " - " + getLabelFromBundle("alignment_right"), LTDataTypes.STRING, false, true, 100);
 		txtStringRightAligned.setHorizontalAlignment(SwingConstants.RIGHT);
 		
-		txtText = new LTTextField(getLabelFromBundle("field_text"), LTDataTypes.TEXT, true, true);
+		txtText = new LTTextField(getLabelFromBundle("field_text"), LTDataTypes.TEXT, false, true);
 		txtDate = new LTTextField(getLabelFromBundle("field_date"), LTDataTypes.DATE, true, true);
 		txtTime = new LTTextField(getLabelFromBundle("field_time"), LTDataTypes.TIME, true, true);
 		txtBoolean = new LTTextField(getLabelFromBundle("field_boolean"), LTDataTypes.BOOLEAN, true, true);

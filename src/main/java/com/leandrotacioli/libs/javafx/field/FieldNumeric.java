@@ -1,13 +1,15 @@
 package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldNumeric;
 import com.leandrotacioli.libs.transformation.DoubleTransformation;
 import javafx.beans.value.ChangeListener;
 import javafx.scene.control.TextField;
 
 import java.text.DecimalFormat;
 
-public class FieldNumeric extends TextField implements FieldInterface {
+public class FieldNumeric extends TextField implements IField, IFieldNumeric {
 
     private LTDataTypes dataType;
     private boolean isEnabled;
@@ -39,6 +41,8 @@ public class FieldNumeric extends TextField implements FieldInterface {
 
     private void setFocusProperties() {
         this.addFocusListener((obs, oldVal, newVal) -> {
+            this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
+
             // Focus gained
             if (newVal) {
                 if (this.dataType == LTDataTypes.INTEGER) {
@@ -62,7 +66,6 @@ public class FieldNumeric extends TextField implements FieldInterface {
             // Focus lost
             if (oldVal) {
                 this.setValue(getValue());
-                this.getStyleClass().removeAll(FieldStyles.FOCUS, FieldStyles.FOCUS_DISABLED);
             }
         });
     }
@@ -72,6 +75,7 @@ public class FieldNumeric extends TextField implements FieldInterface {
         this.isEnabled = isEnabled;
 
         this.setEditable(isEnabled);
+        this.getStyleClass().add(isEnabled ? FieldStyles.ENABLED : FieldStyles.DISABLED);
     }
 
     @Override
@@ -107,8 +111,8 @@ public class FieldNumeric extends TextField implements FieldInterface {
     }
 
     @Override
-    public void setMaximumLength(int maximumLength) {
-        throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
+    public void addFocusListener(ChangeListener<Boolean> changeListener) {
+        this.focusedProperty().addListener(changeListener);
     }
 
     @Override
@@ -120,16 +124,6 @@ public class FieldNumeric extends TextField implements FieldInterface {
         } else {
             throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
         }
-    }
-
-    @Override
-    public void setDateFormat(String dateFormat) {
-        throw new UnsupportedOperationException("This method is not allowed for " + this.dataType + " fields.");
-    }
-
-    @Override
-    public void addFocusListener(ChangeListener<Boolean> changeListener) {
-        this.focusedProperty().addListener(changeListener);
     }
 
 }

@@ -1,6 +1,11 @@
 package com.leandrotacioli.libs.javafx.field;
 
 import com.leandrotacioli.libs.LTDataTypes;
+import com.leandrotacioli.libs.javafx.field.interfaces.IField;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldComboBox;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldDate;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldNumeric;
+import com.leandrotacioli.libs.javafx.field.interfaces.IFieldText;
 import javafx.beans.value.ChangeListener;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
@@ -10,9 +15,7 @@ import javafx.scene.layout.AnchorPane;
 /**
  * Custom fields using JavaFX.
  */
-public class LTField implements FieldInterface {
-
-    private final int MINIMUM_HEIGHT = 26;
+public class LTField implements IField, IFieldComboBox, IFieldDate, IFieldNumeric, IFieldText {
 
     private AnchorPane fieldPane;
     private Label labelField;
@@ -23,6 +26,7 @@ public class LTField implements FieldInterface {
     private FieldDate fieldDate;
     private FieldTime fieldTime;
     private FieldBoolean fieldBoolean;
+    private FieldComboBox fieldComboBox;
 
     private LTDataTypes dataType;
     private boolean isEnabled;
@@ -86,11 +90,14 @@ public class LTField implements FieldInterface {
             fieldBoolean = new FieldBoolean(labelField.getText(), isEnabled);
             labelField.setText("");
 
+        } else if (this.dataType == LTDataTypes.COMBOBOX) {
+            fieldComboBox = new FieldComboBox(isEnabled);
+
         } else {
             throw new UnsupportedOperationException("Not supported yet for " + this.dataType + " field.");
         }
 
-        setMinHeight(MINIMUM_HEIGHT);
+        setMinHeight(FieldStyles.MINIMUM_HEIGHT);
 
         addFieldToPane(fieldNumeric);
         addFieldToPane(fieldString);
@@ -98,6 +105,7 @@ public class LTField implements FieldInterface {
         addFieldToPane(fieldDate);
         addFieldToPane(fieldTime);
         addFieldToPane(fieldBoolean);
+        addFieldToPane(fieldComboBox);
     }
 
     private void addFieldToPane(Node field) {
@@ -126,8 +134,8 @@ public class LTField implements FieldInterface {
      * @param minHeight
      */
     public void setMinHeight(int minHeight) {
-        if (minHeight < MINIMUM_HEIGHT) {
-            System.err.println("setMinHeight - Height not allowed for the field '" + labelField.getText() + "'. The minimum height required is " + MINIMUM_HEIGHT + ".");
+        if (minHeight < FieldStyles.MINIMUM_HEIGHT) {
+            System.err.println("setMinHeight - Height not allowed for the field '" + labelField.getText() + "'. The minimum height required is " + FieldStyles.MINIMUM_HEIGHT + ".");
             return;
         }
 
@@ -137,6 +145,7 @@ public class LTField implements FieldInterface {
         else if (fieldDate != null) fieldDate.setMinHeight(minHeight);
         else if (fieldTime != null) fieldTime.setMinHeight(minHeight);
         else if (fieldBoolean != null) fieldBoolean.setMinHeight(minHeight);
+        else if (fieldComboBox != null) fieldComboBox.setMinHeight(minHeight);
     }
 
     /**
@@ -160,6 +169,7 @@ public class LTField implements FieldInterface {
         else if (fieldDate != null) fieldDate.setEnabled(isEnabled);
         else if (fieldTime != null) fieldTime.setEnabled(isEnabled);
         else if (fieldBoolean != null) fieldBoolean.setEnabled(isEnabled);
+        else if (fieldComboBox != null) fieldComboBox.setEnabled(isEnabled);
     }
 
     @Override
@@ -170,6 +180,7 @@ public class LTField implements FieldInterface {
         else if (fieldDate != null) return fieldDate.getValue();
         else if (fieldTime != null) return fieldTime.getValue();
         else if (fieldBoolean != null) return fieldBoolean.getValue();
+        else if (fieldComboBox != null) return fieldComboBox.getValue();
 
         throw new UnsupportedOperationException("getValue - Not supported yet for " + this.dataType + " field.");
     }
@@ -182,15 +193,35 @@ public class LTField implements FieldInterface {
         else if (fieldDate != null) fieldDate.setValue(value);
         else if (fieldTime != null) fieldTime.setValue(value);
         else if (fieldBoolean != null) fieldBoolean.setValue(value);
+        else if (fieldComboBox != null) fieldComboBox.setValue(value);
     }
 
     @Override
-    public void setMaximumLength(int maximumLength) {
-        if (this.dataType == LTDataTypes.STRING || this.dataType == LTDataTypes.TEXT) {
-            if (fieldString != null) fieldString.setMaximumLength(maximumLength);
-            else if (fieldText != null) fieldText.setMaximumLength(maximumLength);
+    public void addFocusListener(ChangeListener<Boolean> changeListener) {
+        if (fieldNumeric != null) fieldNumeric.addFocusListener(changeListener);
+        else if (fieldString != null) fieldString.addFocusListener(changeListener);
+        else if (fieldText != null) fieldText.addFocusListener(changeListener);
+        else if (fieldDate != null) fieldDate.addFocusListener(changeListener);
+        else if (fieldTime != null) fieldTime.addFocusListener(changeListener);
+        else if (fieldBoolean != null) fieldBoolean.addFocusListener(changeListener);
+        else if (fieldComboBox != null) fieldComboBox.addFocusListener(changeListener);
+    }
+
+    @Override
+    public void addValues(String key, String description) {
+        if (this.dataType == LTDataTypes.COMBOBOX) {
+            fieldComboBox.addValues(key, description);
         } else {
-            System.err.println("setMaximumLength - This method is not allowed for " + this.dataType + " fields.");
+            System.err.println("addValues - This method is not allowed for " + this.dataType + " fields.");
+        }
+    }
+
+    @Override
+    public void setDateFormat(String dateFormat) {
+        if (this.dataType == LTDataTypes.DATE) {
+            fieldDate.setDateFormat(dateFormat);
+        } else {
+            System.err.println("setDateFormat - This method is not allowed for " + this.dataType + " fields.");
         }
     }
 
@@ -204,22 +235,12 @@ public class LTField implements FieldInterface {
     }
 
     @Override
-    public void setDateFormat(String dateFormat) {
-        if (this.dataType == LTDataTypes.DATE) {
-            fieldDate.setDateFormat(dateFormat);
+    public void setMaximumLength(int maximumLength) {
+        if (this.dataType == LTDataTypes.STRING || this.dataType == LTDataTypes.TEXT) {
+            if (fieldString != null) fieldString.setMaximumLength(maximumLength);
+            else if (fieldText != null) fieldText.setMaximumLength(maximumLength);
         } else {
-            System.err.println("setFractionDigits - This method is not allowed for " + this.dataType + " fields.");
+            System.err.println("setMaximumLength - This method is not allowed for " + this.dataType + " fields.");
         }
     }
-
-    @Override
-    public void addFocusListener(ChangeListener<Boolean> changeListener) {
-        if (fieldNumeric != null) fieldNumeric.addFocusListener(changeListener);
-        else if (fieldString != null) fieldString.addFocusListener(changeListener);
-        else if (fieldText != null) fieldText.addFocusListener(changeListener);
-        else if (fieldDate != null) fieldDate.addFocusListener(changeListener);
-        else if (fieldTime != null) fieldTime.addFocusListener(changeListener);
-        else if (fieldBoolean != null) fieldBoolean.addFocusListener(changeListener);
-    }
-
 }

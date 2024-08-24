@@ -18,6 +18,7 @@ import javax.swing.table.TableCellEditor;
 import javax.swing.table.TableCellRenderer;
 
 import com.leandrotacioli.libs.swing.LTSwing;
+import com.leandrotacioli.libs.swing.table.TableButton;
 import com.leandrotacioli.libs.swing.table.TableExtension;
 
 /**
@@ -34,7 +35,6 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 	private TableExtension objTable;
 	private Action action;
 	private Border originalBorder;
-	private Border focusBorder;
 	
 	private JButton btnRenderer;
 	private JButton btnEditor;
@@ -67,10 +67,10 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 		this.action = action;
 		
 		btnRenderer = new JButton();
-		btnRenderer.setToolTipText("");
+		btnRenderer.setToolTipText(null);
 		
 		btnEditor = new JButton();
-		btnEditor.setToolTipText("");
+		btnEditor.setToolTipText(null);
 		btnEditor.setFocusPainted(false);
 		btnEditor.addActionListener(this);
 		
@@ -92,25 +92,39 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 			btnRenderer.setBackground(Color.WHITE);
 		}
 		
-		if (hasFocus) {
-			btnRenderer.setBorder(focusBorder);
-		} else {
+		if (!hasFocus) {
 			btnRenderer.setBorder(originalBorder);
 		}
 		
 		if (value == null) {
 			btnRenderer.setText("");
+			btnRenderer.setToolTipText(null);
 			btnRenderer.setIcon(null);
+			btnRenderer.setBorder(null);
 			btnRenderer.setContentAreaFilled(true);
+			btnRenderer.setVisible(false);
 		} else if (value instanceof Icon) {
 			btnRenderer.setText("");
+			btnRenderer.setToolTipText(null);
 			btnRenderer.setIcon((Icon) value);
 			btnRenderer.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
 			btnRenderer.setContentAreaFilled(false);
+			btnRenderer.setVisible(true);
+		} else if (value instanceof TableButton) {
+			btnRenderer.setText("");
+			btnRenderer.setToolTipText(((TableButton) value).getTooltip());
+			btnRenderer.setIcon(((TableButton) value).getIcon());
+			btnRenderer.setBorder(BorderFactory.createEmptyBorder(4, 4, 4, 4));
+			btnRenderer.setBorderPainted(((TableButton) value).isClickEnabled());
+			btnRenderer.setFocusPainted(((TableButton) value).isClickEnabled());
+			btnRenderer.setContentAreaFilled(false);
+			btnRenderer.setVisible(true);
 		} else {
 			btnRenderer.setText(value.toString());
+			btnRenderer.setToolTipText(value.toString());
 			btnRenderer.setIcon(null);
 			btnRenderer.setContentAreaFilled(true);
+			btnRenderer.setVisible(true);
 		}
 		
 		btnRenderer.setOpaque(true);
@@ -124,13 +138,26 @@ public class TableRendererButton extends AbstractCellEditor implements TableCell
 	public Component getTableCellEditorComponent(JTable table, Object value, boolean isSelected, int row, int column) {
 		if (value == null) {
 			btnEditor.setText("");
+			btnEditor.setToolTipText(null);
 			btnEditor.setIcon(null);
+			btnEditor.setVisible(false);
 		} else if (value instanceof Icon) {
 			btnEditor.setText("");
+			btnEditor.setToolTipText(null);
 			btnEditor.setIcon((Icon) value);
+			btnEditor.setVisible(true);
+		} else if (value instanceof TableButton) {
+			btnEditor.setText("");
+			btnEditor.setToolTipText(((TableButton) value).getTooltip());
+			btnEditor.setIcon(((TableButton) value).getIcon());
+			btnEditor.setBorderPainted(((TableButton) value).isClickEnabled());
+			btnEditor.setFocusPainted(((TableButton) value).isClickEnabled());
+			btnEditor.setVisible(true);
 		} else {
 			btnEditor.setText(value.toString());
+			btnEditor.setToolTipText(value.toString());
 			btnEditor.setIcon(null);
+			btnEditor.setVisible(true);
 		}
 
 		this.editorValue = value;

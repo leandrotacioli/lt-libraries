@@ -9,6 +9,7 @@ import javax.swing.SwingConstants;
 
 import com.leandrotacioli.libs.swing.LTSwing;
 import com.leandrotacioli.libs.swing.comboboxfield.LTComboBoxField;
+import com.leandrotacioli.libs.swing.table.TableButton;
 import com.leandrotacioli.libs.swing.textfield.LTTextField;
 import net.miginfocom.swing.MigLayout;
 
@@ -360,6 +361,8 @@ public class LTLibrariesSwing implements TableListener {
 	
 	private void addRows() {
 		ImageIcon imageExample = new ImageIcon(LTParameters.getInstance().getResourcesFolder() + "images/search.png");
+		ImageIcon imageAlert = new ImageIcon(LTParameters.getInstance().getResourcesFolder() + "images/alert.png");
+		ImageIcon imageSave = new ImageIcon(LTParameters.getInstance().getResourcesFolder() + "images/save.png");
 
 		objTable.addRow();
 		objTable.addRowData("image", imageExample);
@@ -391,7 +394,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("boolean", false);
 		
 		objTable.addRow();
-		objTable.addRowData("image", imageExample);
+		objTable.addRowData("image", new TableButton(imageAlert, "Este é um alerta", false));
 		objTable.addRowData("integer", 300);
 		objTable.addRowData("long", 3000);
 		objTable.addRowData("double", 30);
@@ -429,7 +432,7 @@ public class LTLibrariesSwing implements TableListener {
 		objTable.addRowData("boolean", true);
 		
 		objTable.addRow();
-		objTable.addRowData("image", imageExample);
+		objTable.addRowData("image", new TableButton(imageSave, "Gravar", true));
 		//objTable.addRowData("integer", 600);
 		//objTable.addRowData("long", 6000);
 		//objTable.addRowData("double", 60.60);

@@ -111,6 +111,7 @@ public class LTComboBoxField extends JPanel implements LTComboBoxFieldInterface,
 		}
 		
 		comboBox.setForeground(LTSwing.getInstance().getColorComponentForeground());
+		comboBox.setBorder(LTSwing.getInstance().getBorderComponent());
 		comboBox.setFont(LTSwing.getInstance().getFontComponentTextField());
 		
 		comboBox.addMouseListener(this);

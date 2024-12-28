@@ -21,7 +21,7 @@ public class TableColumnParameters {
 	private int intColumnWidth;
 	private boolean blnColumnEditable;
 	private boolean blnColumnShowZeroValues;
-	private int intColumnHorizonalAlignment;
+	private int intColumnHorizontalAlignment;
 	private Color colorColumn;
 	private int intColumnStringMaximumLength;
 	private int intColumnDoubleFractionDigits;
@@ -39,7 +39,7 @@ public class TableColumnParameters {
 	/**
 	 * Altera o 'TableCellRenderer' da coluna.
 	 * 
-	 * @param objTableRenderer
+	 * @param objTableCellRenderer
 	 */
 	protected void setTableCellRenderer(TableCellRenderer objTableCellRenderer) {
 		this.objTableCellRenderer = objTableCellRenderer;
@@ -106,6 +106,15 @@ public class TableColumnParameters {
 	 */
 	protected int getColumnWidth() {
 		return intColumnWidth;
+	}
+
+	/**
+	 * Altera o comprimento da coluna na visualização da tabela.
+	 *
+	 * @param intColumnWidth
+	 */
+	protected void setColumnWidth(int intColumnWidth) {
+		this.intColumnWidth = intColumnWidth;
 	}
 	
 	/**
@@ -205,39 +214,40 @@ public class TableColumnParameters {
 	/**
 	 * Retorna o alinhamento horizontal da coluna.
 	 * 
-	 * @return intColumnHorizonalAlignment
+	 * @return intColumnHorizontalAlignment
 	 * <br>
 	 * <i>0 - Centralizado | 2 - Esquerda | 4 - Direita</i>
 	 */
 	protected int getColumnHorizontalAlignment() {
-		return intColumnHorizonalAlignment;
+		return intColumnHorizontalAlignment;
 	}
 	
 	/**
 	 * Altera o alinhamento horizontal da coluna
 	 * 
-	 * @param intColumnHorizonalAlignment
+	 * @param intColumnHorizontalAlignment
 	 * <br>
 	 * <i>0 - Centralizado | 2 - Esquerda | 4 - Direita</i>
 	 */
-	protected void setColumnHorizontalAlignment(int intColumnHorizonalAlignment) {
-		this.intColumnHorizonalAlignment = intColumnHorizonalAlignment;
+	protected void setColumnHorizontalAlignment(int intColumnHorizontalAlignment) {
+		this.intColumnHorizontalAlignment = intColumnHorizontalAlignment;
 	}
-	
+
 	/**
 	 * Estabelece as colunas que serão inseridas no LTTable.
-	 * 
-	 * @param objTableCellRenderer  - Renderer das células da coluna
-	 * @param objTableCellEditor    - Editor das células da coluna
-	 * @param strColumnName         - Nome da coluna 
-	 * @param strColumnDescription  - Descrição da coluna que será apresentada ao usuário
-	 * @param objColumnDataType     - Tipo de dado da coluna
-	 * @param intColumnWidth        - Comprimento da coluna na visualização da tabela
-	 * @param blnColumnEditable     - Status das células da coluna (True = Editável)
-	 * @param blnColumnMandatory    - Status das células da coluna (True = Editável)
-	 * @param colorColumn           - Cor da coluna
+	 *
+	 * @param objTableCellRenderer         - Renderer das células da coluna
+	 * @param objTableCellEditor           - Editor das células da coluna
+	 * @param strColumnName                - Nome da coluna
+	 * @param strColumnDescription         - Descrição da coluna que será apresentada ao usuário
+	 * @param objColumnDataType            - Tipo de dado da coluna
+	 * @param intColumnWidth               - Comprimento da coluna na visualização da tabela
+	 * @param blnColumnEditable            - Status das células da coluna (True = Editável)
+	 * @param blnColumnShowZeroValues      - Status das células da coluna para exibor valores zerados em campos numéricos
+	 * @param intColumnHorizontalAlignment - Alinhamento horizontal da coluna
+	 * @param colorColumn                  - Cor da coluna
 	 */
-	protected TableColumnParameters(TableCellRenderer objTableCellRenderer, TableCellEditor objTableCellEditor, String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, boolean blnColumnShowZeroValues, int intColumnHorizonalAlignment, Color colorColumn) {
+	protected TableColumnParameters(TableCellRenderer objTableCellRenderer, TableCellEditor objTableCellEditor, String strColumnName, String strColumnDescription, LTDataTypes objColumnDataType, int intColumnWidth, boolean blnColumnEditable, boolean blnColumnShowZeroValues, int intColumnHorizontalAlignment, Color colorColumn) {
 		this.objTableCellRenderer = objTableCellRenderer;
 		this.objTableCellEditor = objTableCellEditor;
 		this.strColumnName = strColumnName;
@@ -246,7 +256,7 @@ public class TableColumnParameters {
 		this.intColumnWidth = intColumnWidth;
 		this.blnColumnEditable = blnColumnEditable;
 		this.blnColumnShowZeroValues = blnColumnShowZeroValues;
-		this.intColumnHorizonalAlignment = intColumnHorizonalAlignment;
+		this.intColumnHorizontalAlignment = intColumnHorizontalAlignment;
 		this.colorColumn = colorColumn;
 		
 		// Campos DOUBLE tem 2 casas decimais como padrão

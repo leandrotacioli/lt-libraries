@@ -138,7 +138,17 @@ public class LTTable extends JScrollPane implements TableInterface {
     public Class<?> getColumnClass(int intColumnIndex) {
 		return objTable.getColumnClass(intColumnIndex);
 	}
-	
+
+	@Override
+	public void setColumnWidth(int intColumnIndex, int intColumnWidth) {
+		objTable.setColumnWidth(intColumnIndex, intColumnWidth);
+	}
+
+	@Override
+	public void setColumnWidth(String strColumnName, int intColumnWidth) {
+		objTable.setColumnWidth(strColumnName, intColumnWidth);
+	}
+
 	@Override
 	public void setColumnColor(int intColumnIndex, Color color) {
 		objTable.setColumnColor(intColumnIndex, color);

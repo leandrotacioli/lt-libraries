@@ -121,7 +121,23 @@ public interface TableInterface {
 	 * @return classType
 	 */
 	public Class<?> getColumnClass(int intColumnIndex);
-	
+
+	/**
+	 * Altera o comprimento da coluna na visualização da tabela.
+	 *
+	 * @param intColumnIndex - Índice da coluna
+	 * @param intColumnWidth - Comprimento da coluna
+	 */
+	public void setColumnWidth(int intColumnIndex, int intColumnWidth);
+
+	/**
+	 * Altera o comprimento da coluna na visualização da tabela.
+	 *
+	 * @param strColumnName  - Nome da coluna
+	 * @param intColumnWidth - Comprimento da coluna
+	 */
+	public void setColumnWidth(String strColumnName, int intColumnWidth);
+
 	/**
 	 * Altera a cor de uma coluna da LTTable.
 	 * 

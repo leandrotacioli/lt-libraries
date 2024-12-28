@@ -282,6 +282,9 @@ public class LTLibrariesSwing implements TableListener {
 			comboBox.addValues("MNO", "MNO-5");
 			comboBox.addValues("PQR", "PQR-6");
 			comboBox.setValue("MNO");
+
+			objTable.setColumnDescription("image", getLabelFromBundle("column") + " - " + getLabelFromBundle("image"));
+			objTable.setColumnWidth("image", 125);
 		});
 		
 		btnEnableDisable = new JButton("Habilita/Desabilita");
@@ -326,6 +329,9 @@ public class LTLibrariesSwing implements TableListener {
 			objTable.addRowData("nova_string", "AAA " + 3);
 			objTable.addRowData("nova_integer", 10);
 			objTable.addRowData("nova_double", 1 * 10.5);
+
+			objTable.setColumnWidth("nova_integer", 150);
+			objTable.setColumnWidth("nova_double", 250);
 		});
 		
 		btnChangeLocaleEnglishUs = new JButton("Locale - English US");

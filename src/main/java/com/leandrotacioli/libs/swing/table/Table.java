@@ -357,6 +357,8 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
 				objTable.getColumnModel().getColumn(columnIndex).setMaxWidth(0);
 			} else {
 				objTable.getColumnModel().getColumn(columnIndex).setPreferredWidth(lstColumnParameters.get(columnIndex).getColumnWidth());
+				objTable.getColumnModel().getColumn(columnIndex).setMinWidth(lstColumnParameters.get(columnIndex).getColumnWidth());
+				objTable.getColumnModel().getColumn(columnIndex).setMaxWidth(1000);
 			}
 		}
 	}
@@ -813,6 +815,22 @@ public class Table extends AbstractTableModel implements TableInterface, ActionL
     	}
   		
     	return classType;
+    }
+
+	@Override
+	public void setColumnWidth(int intColumnIndex, int intColumnWidth) {
+		lstColumnParameters.get(intColumnIndex).setColumnWidth(intColumnWidth);
+		setTableColumnWidth();
+	}
+
+	@Override
+	public void setColumnWidth(String strColumnName, int intColumnWidth) {
+		for (int columnIndex = 0; columnIndex < getColumnCount(); columnIndex++) {
+			if (lstColumnParameters.get(columnIndex).getColumnName().equals(strColumnName)) {
+				setColumnWidth(columnIndex, intColumnWidth);
+				break;
+			}
+		}
     }
 	
 	@Override
